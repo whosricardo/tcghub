@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import BackgroundImage from '../../../public/background2.png'
-import { Formprovider } from '@/components/auth/provider/form-provider'
 
 export default function AuthLayout({
     children,
@@ -17,7 +16,7 @@ export default function AuthLayout({
                     quality={100}
                     priority
                 />
-                <div className="absolute inset-0 bg-black opacity-10"></div>
+                <div className="absolute inset-0 bg-black opacity-20"></div>
             </section>
 
             <section className="flex w-full lg:w-[35%] flex-col items-center justify-center p-8 md:p-6 lg:p-10">

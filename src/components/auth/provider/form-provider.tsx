@@ -18,7 +18,7 @@ export function Formprovider({ children, className }: FormproviderProps) {
         <>
             <section
                 className={cn(
-                    `flex w-full h-full max-w-md flex-col justify-between`,
+                    `flex w-full h-full max-w-md flex-col justify-between p-2`,
                     className
                 )}
             >
@@ -26,13 +26,13 @@ export function Formprovider({ children, className }: FormproviderProps) {
                     <LogoLink />
 
                     {isLoginPage ? (
-                        <div className="flex flex-row items-center justify-center gap-1 text-xs">
+                        <div className="flex flex-col md:flex-row items-center justify-center gap-1 text-xs">
                             <div className="font-light text-gray-300">
                                 Ainda não tem uma conta?
                             </div>
                             <Link
                                 href={'/cadastro'}
-                                className="cursor-pointer text-sky-600 font-medium text-shadow-2xs"
+                                className="cursor-pointer text-sky-600  hover:text-sky-700 transition-all ease-in-out delay-200 font-medium text-shadow-2xs"
                             >
                                 Cadastre-se
                             </Link>
@@ -44,7 +44,7 @@ export function Formprovider({ children, className }: FormproviderProps) {
                             </div>
                             <Link
                                 href={'/login'}
-                                className="cursor-pointer text-sky-600 font-medium text-shadow-2xs"
+                                className="cursor-pointer text-sky-600  hover:text-sky-700 transition-all ease-in-out delay-200 font-medium text-shadow-2xs"
                             >
                                 Faça o Login
                             </Link>
@@ -55,12 +55,6 @@ export function Formprovider({ children, className }: FormproviderProps) {
                 <section className="flex-1 py-8 flex flex-col justify-center">
                     {children}
                 </section>
-
-                <footer className="flex justify-center items-center pt-4 border-t border-zinc-800">
-                    <p className="text-xs text-gray-300 font-light">
-                        Desenvolvido por Lucas , Ricardo e Thiago :)
-                    </p>
-                </footer>
             </section>
         </>
     )
