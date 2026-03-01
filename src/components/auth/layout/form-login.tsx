@@ -49,7 +49,7 @@ export default function FormLogin() {
                                 id="senha"
                                 type={!isVisible ? 'text' : 'password'}
                                 placeholder="Senha"
-                                className="pl-10 border-gray-600 border py-5 bg-slate-900"
+                                className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
                                 required
                             />

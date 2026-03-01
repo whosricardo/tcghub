@@ -24,7 +24,7 @@ const initialUserState: Usercredentials = {
 
 const initialStepState: number = 1
 
-const useAuth = create<AuthProps>((set) => ({
+export const useAuth = create<AuthProps>((set) => ({
     user: initialUserState,
 
     currentRegisterStep: 1,
