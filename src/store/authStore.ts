@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 type Usercredentials = {
     userName: string | null
@@ -24,35 +25,43 @@ const initialUserState: Usercredentials = {
 
 const initialStepState: number = 1
 
-export const useAuth = create<AuthProps>((set) => ({
-    user: initialUserState,
-
-    currentRegisterStep: 1,
-    updateUserCredentials: (credentials) =>
-        set((state) => ({
-            user: {
-                ...state.user,
-                ...credentials,
-            },
-        })),
-
-    resetUser: () =>
-        set(() => ({
+export const useAuth = create<AuthProps>()(
+    persist(
+        (set) => ({
             user: initialUserState,
-        })),
+            currentRegisterStep: 1,
 
-    incrementStep: () =>
-        set((state) => ({
-            currentRegisterStep: state.currentRegisterStep + 1,
-        })),
+            updateUserCredentials: (credentials) =>
+                set((state) => ({
+                    user: {
+                        ...state.user,
+                        ...credentials,
+                    },
+                })),
 
-    decrementStep: () =>
-        set((state) => ({
-            currentRegisterStep: state.currentRegisterStep - 1,
-        })),
+            resetUser: () =>
+                set(() => ({
+                    user: initialUserState,
+                })),
 
-    resetStep: () =>
-        set(() => ({
-            currentRegisterStep: initialStepState,
-        })),
-}))
+            incrementStep: () =>
+                set((state) => ({
+                    currentRegisterStep: state.currentRegisterStep + 1,
+                })),
+
+            decrementStep: () =>
+                set((state) => ({
+                    currentRegisterStep: state.currentRegisterStep - 1,
+                })),
+
+            resetStep: () =>
+                set(() => ({
+                    currentRegisterStep: initialStepState,
+                })),
+        }),
+        {
+            name: 'register-auth-storage',
+            storage: createJSONStorage(() => sessionStorage),
+        }
+    )
+)
