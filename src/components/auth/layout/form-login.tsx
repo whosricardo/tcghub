@@ -13,7 +13,7 @@ export default function FormLogin() {
     const [isVisible, setIsVisible] = useState<boolean>(true)
 
     return (
-        <section className="text-white space-y-7">
+        <section className="text-white space-y-7 p-4 md:p-6">
             <section className="flex flex-col gap-2">
                 <h2 className="text-2xl font-bold text-white text-shadow-md">
                     Bem vindo de volta!

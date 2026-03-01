@@ -56,8 +56,9 @@ export default function StepEmail() {
 
                     <section className="w-full flex flex-col lg:flex-row-reverse gap-2">
                         <Button
+                            disabled={!email}
                             type="submit"
-                            className="flex flex-row justify-center items-center"
+                            className="flex flex-row justify-center items-center shadow-2xl"
                         >
                             <span>Ir para o próximo passo</span>
                             <ArrowRight className="mt-1" />

@@ -16,10 +16,10 @@ export default function AuthLayout({
                     quality={100}
                     priority
                 />
-                <div className="absolute inset-0 bg-black opacity-20"></div>
+                <div className="absolute inset-0 bg-black opacity-15"></div>
             </section>
 
-            <section className="flex w-full lg:w-[35%] flex-col items-center justify-center p-8 md:p-6 lg:p-10">
+            <section className="flex w-full lg:w-[35%] flex-col items-center justify-center p-2 md:p-4 lg:p-6">
                 <div className="w-full max-w-md h-full mx-auto">{children}</div>
             </section>
         </main>
