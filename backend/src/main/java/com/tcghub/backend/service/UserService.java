@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public User registerUser(RegisterRequest request) {
-        if (userRepository.existByEmail(request.email())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new DuplicateResourceException("Email já existente");
         }
 
