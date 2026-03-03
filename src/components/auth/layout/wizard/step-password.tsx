@@ -26,8 +26,8 @@ export default function StepPassword() {
     const { incrementStep, decrementStep, updateUserCredentials, user } =
         useAuth()
     const [credentials, setCredentials] = useState<PasswordState>({
-        password: '',
-        confirmPassword: '',
+        password: user.password || '',
+        confirmPassword: user.password || '',
     })
     const [isVisible, setIsVisible] = useState<PasswordVisible>({
         password: true,
@@ -35,15 +35,6 @@ export default function StepPassword() {
     })
     const [error, setError] = useState<string>('')
     const passwordIntense = passwordCheck(credentials.password)
-
-    useEffect(() => {
-        if (user.password) {
-            setCredentials({
-                password: user.password,
-                confirmPassword: user.password,
-            })
-        }
-    }, [credentials.password])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
