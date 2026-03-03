@@ -14,6 +14,7 @@ interface AuthProps {
     resetUser: () => void
     incrementStep: () => void
     decrementStep: () => void
+    setStep: (step: number) => void
     resetStep: () => void
 }
 
@@ -52,6 +53,11 @@ export const useAuth = create<AuthProps>()(
             decrementStep: () =>
                 set((state) => ({
                     currentRegisterStep: state.currentRegisterStep - 1,
+                })),
+
+            setStep: (step) =>
+                set(() => ({
+                    currentRegisterStep: step,
                 })),
 
             resetStep: () =>

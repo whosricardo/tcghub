@@ -4,12 +4,11 @@ import { Button } from '@/components/ui/button'
 import { User } from 'lucide-react'
 import { ArrowRight } from 'lucide-react'
 import { useAuth } from '@/store/authStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function StepUsername() {
-    const { incrementStep, updateUserCredentials } = useAuth()
+    const { incrementStep, updateUserCredentials, user } = useAuth()
     const [userName, setUserName] = useState<any>('')
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (userName.trim() !== '') {

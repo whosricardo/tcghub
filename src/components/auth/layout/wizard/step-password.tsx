@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { ArrowRight } from 'lucide-react'
 import { useAuth } from '@/store/authStore'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { UserLock } from 'lucide-react'
 import { Eye } from 'lucide-react'
 import { EyeOff } from 'lucide-react'
@@ -13,7 +13,8 @@ import { passwordCheck } from '@/utils/passwordCheck'
 import { cn } from '@/lib/utils'
 
 export default function StepPassword() {
-    const { incrementStep, decrementStep, updateUserCredentials } = useAuth()
+    const { incrementStep, decrementStep, updateUserCredentials, user } =
+        useAuth()
     const [credentials, setCredentials] = useState<any>({
         password: '',
         confirmPassword: '',
@@ -25,6 +26,15 @@ export default function StepPassword() {
     const [error, setError] = useState<string>('')
     const passwordIntense = passwordCheck(credentials.password)
 
+    useEffect(() => {
+        if (user.password) {
+            setCredentials({
+                password: user.password,
+                confirmPassword: user.password,
+            })
+        }
+    }, [user.password])
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (
@@ -35,7 +45,7 @@ export default function StepPassword() {
                 credentials.password.trim() ===
                 credentials.confirmPassword.trim()
             ) {
-                updateUserCredentials(credentials.password)
+                updateUserCredentials({ password: credentials.password })
                 incrementStep()
             } else {
                 setError('Senha e confirmar senha estão diferentes.')
@@ -44,6 +54,11 @@ export default function StepPassword() {
         } else {
             setError('Por favor, preencha ambos os campos de senha.')
         }
+    }
+
+    const handleBack = () => {
+        updateUserCredentials({ password: null })
+        decrementStep()
     }
 
     const ChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +109,7 @@ export default function StepPassword() {
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
                                 onChange={(e) => ChangePassword(e)}
+                                value={credentials?.password}
                                 required
                             />
                             {isVisible.password ? (
@@ -158,6 +174,7 @@ export default function StepPassword() {
                                 placeholder="Confirmar senha"
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
+                                value={credentials?.confirmPassword}
                                 onChange={(e) => ChangePasswordConfirm(e)}
                                 required
                             />
@@ -203,7 +220,8 @@ export default function StepPassword() {
                             <ArrowRight className="mt-1" />
                         </Button>
                         <Button
-                            onClick={decrementStep}
+                            type="button"
+                            onClick={handleBack}
                             className="flex-1 bg-gray-300 hover:bg-gray-400 text-accent-foreground"
                         >
                             Voltar

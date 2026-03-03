@@ -4,11 +4,19 @@ import { Button } from '@/components/ui/button'
 import { Mail } from 'lucide-react'
 import { ArrowRight } from 'lucide-react'
 import { useAuth } from '@/store/authStore'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function StepEmail() {
-    const { incrementStep, decrementStep, updateUserCredentials } = useAuth()
+    const { incrementStep, decrementStep, updateUserCredentials, user } =
+        useAuth()
     const [email, setEmail] = useState<any>('')
+
+    useEffect(() => {
+        if (user.email !== '' && user.email !== null) {
+            setEmail(user.email)
+        }
+        return
+    }, [])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -20,6 +28,11 @@ export default function StepEmail() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
+    }
+
+    const handleBack = () => {
+        updateUserCredentials({ email: null })
+        decrementStep()
     }
 
     return (
@@ -48,6 +61,7 @@ export default function StepEmail() {
                                 className="pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
                                 onChange={(e) => handleChange(e)}
+                                value={email}
                                 required
                             />
                             <Mail className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -64,7 +78,7 @@ export default function StepEmail() {
                             <ArrowRight className="mt-1" />
                         </Button>
                         <Button
-                            onClick={decrementStep}
+                            onClick={handleBack}
                             className="flex-1 bg-gray-300 hover:bg-gray-400 text-accent-foreground"
                         >
                             Voltar

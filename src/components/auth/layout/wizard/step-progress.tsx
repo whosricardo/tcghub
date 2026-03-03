@@ -13,7 +13,7 @@ export default function StepProgress({
                 return (
                     <div
                         key={stepIndex}
-                        className={`h-3 w-3 rounded-full transition-colors ease-in-out delay-300 ${stepNumber >= stepIndex ? 'bg-blue-500' : 'bg-gray-300'} `}
+                        className={`h-3 w-3 rounded-full transition-colors ease-in-out delay-300 ${stepNumber >= stepIndex ? 'bg-blue-500' : 'bg-gray-300'} ${stepNumber === stepIndex ? 'scale-120 border-2 border-white' : ''} `}
                     ></div>
                 )
             })}
