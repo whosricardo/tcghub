@@ -9,14 +9,14 @@ import { useState, useEffect } from 'react'
 export default function StepEmail() {
     const { incrementStep, decrementStep, updateUserCredentials, user } =
         useAuth()
-    const [email, setEmail] = useState<any>('')
+    const [email, setEmail] = useState<string>('')
 
     useEffect(() => {
         if (user.email !== '' && user.email !== null) {
             setEmail(user.email)
         }
         return
-    }, [user.email])
+    }, [email])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()

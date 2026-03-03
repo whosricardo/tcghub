@@ -43,7 +43,7 @@ export default function StepPassword() {
                 confirmPassword: user.password,
             })
         }
-    }, [user.password])
+    }, [credentials.password])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
