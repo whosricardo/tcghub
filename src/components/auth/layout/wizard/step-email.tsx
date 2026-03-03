@@ -16,7 +16,7 @@ export default function StepEmail() {
             setEmail(user.email)
         }
         return
-    }, [])
+    }, [user.email])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()

@@ -12,14 +12,24 @@ import { Repeat } from 'lucide-react'
 import { passwordCheck } from '@/utils/passwordCheck'
 import { cn } from '@/lib/utils'
 
+type PasswordState = {
+    password: string
+    confirmPassword: string
+}
+
+type PasswordVisible = {
+    password: boolean
+    confirmPassword: boolean
+}
+
 export default function StepPassword() {
     const { incrementStep, decrementStep, updateUserCredentials, user } =
         useAuth()
-    const [credentials, setCredentials] = useState<any>({
+    const [credentials, setCredentials] = useState<PasswordState>({
         password: '',
         confirmPassword: '',
     })
-    const [isVisible, setIsVisible] = useState<any>({
+    const [isVisible, setIsVisible] = useState<PasswordVisible>({
         password: true,
         confirmPassword: true,
     })
