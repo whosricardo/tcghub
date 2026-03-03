@@ -1,5 +1,6 @@
 package com.tcghub.backend.service;
 
+import com.tcghub.backend.dto.RegisterRequest;
 import com.tcghub.backend.model.User;
 import com.tcghub.backend.repository.UserRepository;
 
@@ -16,9 +17,5 @@ public class UserService {
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public User registerUser() {
-        return new User();
     }
 }
