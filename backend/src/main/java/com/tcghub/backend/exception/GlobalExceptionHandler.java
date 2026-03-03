@@ -8,8 +8,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<?> handleDuplicateResource(DuplicateResourceException dException) {
-        ApiError aError = new ApiError(HttpStatus.CONFLICT, dException.getMessage());
+    public ResponseEntity<?> handleDuplicateResource(DuplicateResourceException duplicateException) {
+        ApiError aError = new ApiError(HttpStatus.CONFLICT, duplicateException.getMessage());
         return new ResponseEntity<>(aError, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException notFoundException) {
+        ApiError aError = new ApiError(HttpStatus.NOT_FOUND, notFoundException.getMessage());
+        return new ResponseEntity<>(aError, HttpStatus.NOT_FOUND);
     }
 }
