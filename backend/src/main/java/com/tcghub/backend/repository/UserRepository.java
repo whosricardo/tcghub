@@ -4,9 +4,14 @@ import com.tcghub.backend.model.User;
 
 import java.util.Optional;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,9 +23,20 @@ public class UserRepository {
         this.jTemplate = jTemplate;
     }
 
-    public void save(User user) {
+    public User save(User user) {
         String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-        jTemplate.update(sql, user.getUsername(), user.getEmail(), user.getPassword());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            return ps;
+        }, keyHolder);
+
+        user.setId(keyHolder.getKey().intValue());
+
     }
 
     public Optional<User> findByEmail(String email) {
@@ -35,6 +51,7 @@ public class UserRepository {
             String u_email = rs.getString("email");
             String password = rs.getString("password");
 
+            // populating user entity
             user.setId(id);
             user.setUsername(username);
             user.setEmail(u_email);
@@ -44,5 +61,11 @@ public class UserRepository {
         };
 
         return jTemplate.query(sql, rowMapper, email).stream().findFirst();
+    }
+
+    public boolean existByEmail(String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        Integer count = jTemplate.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 }
