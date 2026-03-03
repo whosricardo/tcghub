@@ -22,11 +22,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
 
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    public JwtFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
-        this.jwtUtil = jwtUtil;
+    public JwtFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
@@ -47,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String username;
         try {
-            username = jwtUtil.extractUsername(token);
+            username = jwtService.extractUsername(token);
         } catch (Exception e) {
             log.warn("JWT extraction failed. path='{}' message='{}'",
                     request.getRequestURI(),
@@ -63,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (!jwtUtil.validateJwtToken(token, userDetails)) {
+        if (!jwtService.validateJwtToken(token, userDetails)) {
             log.warn("JWT validation failed. user='{}' path='{}'", username, request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
