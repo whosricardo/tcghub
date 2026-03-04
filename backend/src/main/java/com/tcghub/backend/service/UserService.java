@@ -1,6 +1,7 @@
 package com.tcghub.backend.service;
 
 import com.tcghub.backend.exception.DuplicateResourceException;
+import com.tcghub.backend.exception.NotFoundException;
 import com.tcghub.backend.dto.RegisterRequest;
 import com.tcghub.backend.model.User;
 import com.tcghub.backend.repository.UserRepository;
@@ -31,5 +32,10 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.password()));
 
         return userRepository.save(user);
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User with this email not found"));
     }
 }
