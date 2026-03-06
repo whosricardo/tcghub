@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev -p 3000",
         "build": "next build",
         "start": "next start",
         "format": "prettier --write",
@@ -14,6 +14,7 @@
         "test:coverage": "jest --coverage"
     },
     "dependencies": {
+        "@tanstack/react-query": "^5.90.21",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "lucide-react": "^0.575.0",

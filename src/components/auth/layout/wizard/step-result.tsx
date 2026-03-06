@@ -1,11 +1,34 @@
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/store/authStore'
 import { Pencil } from 'lucide-react'
+import { useUserRegister } from '../../hooks/useUserRegister'
+import { Spinner } from '@/components/ui/spinner'
+import { useRouter } from 'next/navigation'
 
 export default function StepResult() {
-    const { decrementStep, user, setStep } = useAuth()
+    const { decrementStep, user, setStep, resetStep, resetUser } = useAuth()
+    const {
+        mutate: registerUser,
+        isPending,
+        isError,
+        error,
+    } = useUserRegister()
+    const router = useRouter()
+
+    const handleConfirm = () => {
+        registerUser(user, {
+            onSuccess: () => {
+                resetUser()
+                resetStep()
+                setTimeout(() => {
+                    router.push('/')
+                }, 2000)
+            },
+        })
+    }
+
     return (
-        <form className="flex flex-col h-full w-full gap-8 sm:gap-10 md:gap-4">
+        <section className="flex flex-col h-full w-full gap-8 sm:gap-10 md:gap-2">
             <section className="flex flex-col gap-1">
                 <h2 className="text-2xl font-bold text-white text-shadow-md">
                     Revise seus dados
@@ -36,7 +59,7 @@ export default function StepResult() {
                             Nome completo:
                         </span>
                         <span className="text-sm font-medium">
-                            {user.userName}
+                            {user.username}
                         </span>
                     </section>
 
@@ -76,13 +99,19 @@ export default function StepResult() {
                     </section>
                 </section>
             </section>
+            {isError && <p className="text-red-500 text-xs">{error.message}</p>}
 
             <section className="w-full flex flex-col lg:flex-row-reverse gap-2">
                 <Button
-                    type="submit"
-                    className=" flex-1 flex flex-row justify-center items-center shadow-2xl"
+                    type="button"
+                    className=" flex-1 flex flex-row justify-center items-center shadow-2xl transition-all"
+                    onClick={handleConfirm}
                 >
-                    <span>Cadastrar</span>
+                    {isPending ? (
+                        <Spinner className="text-white/80 h-6 w-6" />
+                    ) : (
+                        <span>Cadastrar</span>
+                    )}
                 </Button>
                 <Button
                     onClick={decrementStep}
@@ -91,6 +120,6 @@ export default function StepResult() {
                     Voltar
                 </Button>
             </section>
-        </form>
+        </section>
     )
 }

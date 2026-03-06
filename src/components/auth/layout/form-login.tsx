@@ -8,9 +8,37 @@ import { UserLock } from 'lucide-react'
 import { Eye } from 'lucide-react'
 import { EyeOff } from 'lucide-react'
 import { useState } from 'react'
+import { useUserLogin } from '../hooks/useUserLogin'
+import { useRouter } from 'next/navigation'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function FormLogin() {
     const [isVisible, setIsVisible] = useState<boolean>(true)
+    const [data, setData] = useState({
+        email: '',
+        password: '',
+    })
+    const { mutate: loginUser, isPending, isError, error } = useUserLogin()
+    const router = useRouter()
+
+    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData({ ...data, email: e.target.value })
+    }
+
+    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setData({ ...data, password: e.target.value })
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        loginUser(data, {
+            onSuccess: () => {
+                setTimeout(() => {
+                    router.push('/')
+                }, 2000)
+            },
+        })
+    }
 
     return (
         <section className="text-white space-y-7 p-4 md:p-6">
@@ -24,7 +52,7 @@ export default function FormLogin() {
                 </h3>
             </section>
 
-            <form>
+            <form onSubmit={handleSubmit}>
                 <FieldGroup>
                     <Field>
                         <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -36,6 +64,7 @@ export default function FormLogin() {
                                 placeholder="luffy@exemplo.com"
                                 className="pl-10 border-gray-600 border py-5 bg-slate-900"
                                 autoComplete="off"
+                                onChange={handleChangeEmail}
                                 required
                             />
                         </section>
@@ -51,6 +80,7 @@ export default function FormLogin() {
                                 placeholder="Senha"
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
+                                onChange={handleChangePassword}
                                 required
                             />
                             {isVisible ? (
@@ -65,9 +95,18 @@ export default function FormLogin() {
                                 />
                             )}
                         </section>
+                        {isError && (
+                            <p className="text-red-500 text-xs">
+                                {error.message}
+                            </p>
+                        )}
                     </Field>
                     <Button type="submit" className="">
-                        Entrar
+                        {isPending ? (
+                            <Spinner className="text-white/80 h-6 w-6" />
+                        ) : (
+                            <span>Entrar</span>
+                        )}
                     </Button>
                     <section className="w-full flex justify-center pt-4 border-t border-gray-400">
                         <span className="font-light text-xs">

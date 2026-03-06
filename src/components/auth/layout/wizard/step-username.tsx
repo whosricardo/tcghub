@@ -8,11 +8,11 @@ import { useState } from 'react'
 
 export default function StepUsername() {
     const { incrementStep, updateUserCredentials } = useAuth()
-    const [userName, setUserName] = useState<string>('')
+    const [username, setUserName] = useState<string>('')
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (userName.trim() !== '') {
-            updateUserCredentials({ userName })
+        if (username.trim() !== '') {
+            updateUserCredentials({ username })
             incrementStep()
         }
     }
@@ -53,7 +53,7 @@ export default function StepUsername() {
                     </Field>
 
                     <Button
-                        disabled={!userName}
+                        disabled={!username}
                         type="submit"
                         className="flex flex-row justify-center items-center shadow-2xl"
                     >

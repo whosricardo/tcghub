@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-type Usercredentials = {
-    userName: string | null
+export type Usercredentials = {
+    username: string | null
     email: string | null
     password: string | null
 }
@@ -19,7 +19,7 @@ interface AuthProps {
 }
 
 const initialUserState: Usercredentials = {
-    userName: null,
+    username: null,
     email: null,
     password: null,
 }

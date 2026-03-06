@@ -13,8 +13,8 @@ export default function AuthLayout({
                     className="object-cover object-center"
                     alt="Imagem da carta do luffy gear 4"
                     sizes="(min-width: 1024px) 65vw, 100vw"
-                    quality={100}
-                    priority
+                    quality={75}
+                    preload
                 />
                 <div className="absolute inset-0 bg-black opacity-15"></div>
             </section>
