@@ -1,5 +1,5 @@
 export async function sendLogin(data: any) {
-    const url = 'http://localhost:8080/auth/login'
+    const url = 'api/auth/login'
     try {
         const res = await fetch(url, {
             method: 'POST',
@@ -10,7 +10,8 @@ export async function sendLogin(data: any) {
         })
 
         if (!res.ok) {
-            throw new Error('erro:' + res.status)
+            const error = await res.json().catch(() => ({}))
+            throw new Error(error.error || 'Erro ao realizar o login')
         }
 
         const resData = await res.json()

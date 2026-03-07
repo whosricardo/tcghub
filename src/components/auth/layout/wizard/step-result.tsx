@@ -21,7 +21,7 @@ export default function StepResult() {
                 resetUser()
                 resetStep()
                 setTimeout(() => {
-                    router.push('/')
+                    router.push('/login')
                 }, 2000)
             },
         })
