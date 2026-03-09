@@ -4,24 +4,32 @@ import { Button } from '@/components/ui/button'
 import { Mail } from 'lucide-react'
 import { ArrowRight } from 'lucide-react'
 import { useAuth } from '@/store/authStore'
-import { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {z} from 'zod';
+import { registerSchema } from '../../schemas/registerSchema'
+
+const emailSchema = registerSchema.pick({
+    email: true,
+})
+
+type EmailFormType = z.infer<typeof emailSchema> 
+
 
 export default function StepEmail() {
     const { incrementStep, decrementStep, updateUserCredentials, user } =
         useAuth()
-    const [email, setEmail] = useState<string>(user.email || '')
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (email.trim() !== '') {
-            updateUserCredentials({ email })
-            incrementStep()
+    const {register , handleSubmit , formState: {errors}} = useForm<EmailFormType>({
+        resolver: zodResolver(emailSchema),
+        defaultValues: {
+            email: user?.email || '',
         }
-    }
+    })
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
+    const onSubmit = (data: EmailFormType ) => {
+        updateUserCredentials({ email: data.email })
+        incrementStep()
     }
-
     const handleBack = () => {
         updateUserCredentials({ email: null })
         decrementStep()
@@ -39,7 +47,7 @@ export default function StepEmail() {
                 </p>
             </section>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <FieldGroup>
                     <Field>
                         <FieldLabel htmlFor="email">
@@ -52,8 +60,7 @@ export default function StepEmail() {
                                 placeholder="zorosola@exemplo.com"
                                 className="pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
-                                onChange={(e) => handleChange(e)}
-                                value={email}
+                                {...register('email')}
                                 required
                             />
                             <Mail className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -62,7 +69,6 @@ export default function StepEmail() {
 
                     <section className="w-full flex flex-col lg:flex-row-reverse gap-2">
                         <Button
-                            disabled={!email}
                             type="submit"
                             className="flex flex-row justify-center items-center shadow-2xl"
                         >
