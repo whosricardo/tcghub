@@ -65,6 +65,11 @@ export default function StepEmail() {
                             />
                             <Mail className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         </section>
+                        {errors.email && (
+                            <p className="text-red-500 text-xs">
+                                {errors.email.message}
+                            </p>
+                        )}
                     </Field>
 
                     <section className="w-full flex flex-col lg:flex-row-reverse gap-2">
