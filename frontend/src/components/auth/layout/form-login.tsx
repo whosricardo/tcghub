@@ -11,31 +11,23 @@ import { useState } from 'react'
 import { useUserLogin } from '../hooks/useUserLogin'
 import { useRouter } from 'next/navigation'
 import { Spinner } from '@/components/ui/spinner'
+import { loginSchema, type LoginType } from '../schemas/loginSchema'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
 
 export default function FormLogin() {
     const [isVisible, setIsVisible] = useState<boolean>(true)
-    const [data, setData] = useState({
-        email: '',
-        password: '',
+    const {register , handleSubmit , formState: {errors}} = useForm<LoginType>({
+        resolver: zodResolver(loginSchema)
     })
     const { mutate: loginUser, isPending, isError, error } = useUserLogin()
     const router = useRouter()
 
-    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setData({ ...data, email: e.target.value })
-    }
-
-    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setData({ ...data, password: e.target.value })
-    }
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const onSubmit = (data: LoginType) => {
         loginUser(data, {
             onSuccess: () => {
-                setTimeout(() => {
-                    router.push('/')
-                }, 2000)
+                router.push('/')
             },
         })
     }
@@ -52,7 +44,7 @@ export default function FormLogin() {
                 </h3>
             </section>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <FieldGroup>
                     <Field>
                         <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -64,11 +56,15 @@ export default function FormLogin() {
                                 placeholder="luffy@exemplo.com"
                                 className="pl-10 border-gray-600 border py-5 bg-slate-900"
                                 autoComplete="off"
-                                onChange={handleChangeEmail}
+                                {...register('email')}
                                 required
                             />
                         </section>
                     </Field>
+
+                    {errors.email && (
+                        <p className="text-red-500 text-xs">{errors.email.message}</p>
+                    )}
 
                     <Field>
                         <FieldLabel htmlFor="senha">Senha</FieldLabel>
@@ -80,7 +76,7 @@ export default function FormLogin() {
                                 placeholder="Senha"
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
-                                onChange={handleChangePassword}
+                                {...register('password')}
                                 required
                             />
                             {isVisible ? (
@@ -95,6 +91,9 @@ export default function FormLogin() {
                                 />
                             )}
                         </section>
+                        {errors.password && (
+                            <p className="text-red-500 text-xs">{errors.password.message}</p>
+                        )}
                         {isError && (
                             <p className="text-red-500 text-xs">
                                 {error.message}
