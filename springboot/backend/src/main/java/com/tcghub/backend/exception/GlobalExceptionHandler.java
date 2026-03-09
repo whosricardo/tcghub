@@ -38,4 +38,10 @@ public class GlobalExceptionHandler {
         ApiError aError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno do servidor");
         return new ResponseEntity<>(aError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<?> handleInvalidTokenException(Exception ex) {
+        ApiError aError = new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        return new ResponseEntity<>(aError, HttpStatus.UNAUTHORIZED);
+    }
 }
