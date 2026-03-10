@@ -14,6 +14,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { loginSchema, type LoginType } from '../schemas/loginSchema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { motion } from 'motion/react'
+import { gentle } from '@/motion/transitions'
 
 
 export default function FormLogin() {
@@ -33,7 +35,14 @@ export default function FormLogin() {
     }
 
     return (
-        <section className="text-white space-y-7 p-4 md:p-6">
+        <motion.section 
+            initial={{opacity: 0 , y: 20}}
+            animate={{opacity: 1 , y: 0}}
+            transition={gentle}
+            
+
+            className="text-white space-y-7 p-4 md:p-6"
+        >
             <section className="flex flex-col gap-2">
                 <h2 className="text-2xl font-bold text-white text-shadow-md">
                     Bem vindo de volta!
@@ -117,6 +126,6 @@ export default function FormLogin() {
                     </section>
                 </FieldGroup>
             </form>
-        </section>
+        </motion.section>
     )
 }

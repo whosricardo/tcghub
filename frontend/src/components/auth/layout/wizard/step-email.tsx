@@ -17,7 +17,7 @@ type EmailFormType = z.infer<typeof emailSchema>
 
 
 export default function StepEmail() {
-    const { incrementStep, decrementStep, updateUserCredentials, user } =
+    const { incrementStep, decrementStep, updateUserCredentials, user} =
         useAuth()
     const {register , handleSubmit , formState: {errors}} = useForm<EmailFormType>({
         resolver: zodResolver(emailSchema),
@@ -35,7 +35,7 @@ export default function StepEmail() {
         decrementStep()
     }
 
-    return (
+    return (    
         <section className="space-y-10">
             <section className="flex flex-col gap-2">
                 <h2 className="text-2xl font-bold text-white text-shadow-md">
@@ -80,7 +80,9 @@ export default function StepEmail() {
                             <span>Ir para o próximo passo</span>
                             <ArrowRight className="mt-1" />
                         </Button>
+
                         <Button
+                            type='button'
                             onClick={handleBack}
                             className="flex-1 bg-gray-300 hover:bg-gray-400 text-accent-foreground"
                         >
