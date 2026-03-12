@@ -39,7 +39,7 @@ export function ModalForgotPassword ({isOpen , isClose} : ModalForgotPasswordPro
                         
                         
                         {step === 1 && <ModalSharedEmail isClosed={isClose} setStep={setStep}/>}
-                        {step === 2 && <ModalSharedValidation/> }
+                        {step === 2 && <ModalSharedValidation isClosed={isClose} setStep={setStep}/> }
                         
                         
 
