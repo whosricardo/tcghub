@@ -16,7 +16,7 @@ export default function AuthLayout({
                     quality={75}
                     preload
                 />
-                <div className="absolute inset-0 bg-black opacity-15"></div>
+                <div className="absolute inset-0 bg-black opacity-5"></div>
             </section>
 
             <section className="flex w-full lg:w-[35%] flex-col items-center justify-center p-2 md:p-4 lg:p-6">

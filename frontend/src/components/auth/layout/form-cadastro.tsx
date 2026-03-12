@@ -23,9 +23,9 @@ export default function FormCadastro() {
             <AnimatePresence mode='wait'>
                 <motion.section 
                     key={currentRegisterStep}
-                    initial={{opacity: 0 , y: 8}}
-                    animate={{opacity: 1 , y: 0}}
-                    exit={{opacity:0 , y: -8}}
+                    initial={{opacity: 0 , x: -8}}
+                    animate={{opacity: 1 , x: 0}}
+                    exit={{opacity:0 , x: 8}}
                     transition={smooth}
                 >
                     {currentRegisterStep === 1 && <StepUsername />}

@@ -18,12 +18,17 @@ import { motion } from 'motion/react'
 import { gentle } from '@/motion/transitions'
 
 
-export default function FormLogin() {
+interface FormLoginProps {
+    modalOpen : boolean
+    setModalOpen : () => void
+}
+
+export default function FormLogin({modalOpen , setModalOpen}: FormLoginProps) {
     const [isVisible, setIsVisible] = useState<boolean>(true)
     const {register , handleSubmit , formState: {errors}} = useForm<LoginType>({
         resolver: zodResolver(loginSchema)
     })
-    const { mutate: loginUser, isPending, isError, error } = useUserLogin()
+    const { mutate: loginUser, isPending, isError, error } = useUserLogin();
     const router = useRouter()
 
     const onSubmit = (data: LoginType) => {
@@ -119,9 +124,13 @@ export default function FormLogin() {
                     <section className="w-full flex justify-center pt-4 border-t border-gray-400">
                         <span className="font-light text-xs">
                             Esqueceu senha?{' '}
-                            <span className="font-medium cursor-pointer hover:text-gray-300  transition-all ease-in-out delay-200">
+                            <button 
+                                type='button' 
+                                className="font-medium cursor-pointer hover:text-gray-300  transition-all ease-in-out delay-200"
+                                onClick={setModalOpen}
+                            >
                                 Clique aqui!
-                            </span>
+                            </button>
                         </span>
                     </section>
                 </FieldGroup>
