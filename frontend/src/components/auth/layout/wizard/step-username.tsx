@@ -4,21 +4,27 @@ import { Button } from '@/components/ui/button'
 import { User } from 'lucide-react'
 import { ArrowRight } from 'lucide-react'
 import { useAuth } from '@/store/authStore'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { registerSchema } from '../../schemas/registerSchema'
+import z from 'zod'
+
+
+const userSchema = registerSchema.pick({
+    username: true
+}) 
+
+type UserFormType = z.infer<typeof userSchema>
 
 export default function StepUsername() {
     const { incrementStep, updateUserCredentials } = useAuth()
-    const [username, setUserName] = useState<string>('')
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (username.trim() !== '') {
-            updateUserCredentials({ username })
-            incrementStep()
-        }
-    }
+    const {register , handleSubmit , formState: {errors}} = useForm<UserFormType>({
+        resolver: zodResolver(userSchema)
+    })
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserName(e.target.value)
+    const onSubmit = (data: UserFormType) => {
+            updateUserCredentials({ username: data.username })
+            incrementStep()
     }
 
     return (
@@ -32,7 +38,7 @@ export default function StepUsername() {
                 </p>
             </section>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <FieldGroup>
                     <Field>
                         <FieldLabel htmlFor="username">
@@ -45,15 +51,20 @@ export default function StepUsername() {
                                 placeholder="Username"
                                 className="pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
-                                onChange={(e) => handleChange(e)}
+                                {...register('username')}
                                 required
                             />
                             <User className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         </section>
+
+                        {errors.username && (
+                            <p className="text-red-500 text-xs">
+                                {errors.username.message}
+                            </p>
+                        )}
                     </Field>
 
                     <Button
-                        disabled={!username}
                         type="submit"
                         className="flex flex-row justify-center items-center shadow-2xl"
                     >

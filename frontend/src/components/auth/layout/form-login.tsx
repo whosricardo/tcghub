@@ -11,37 +11,43 @@ import { useState } from 'react'
 import { useUserLogin } from '../hooks/useUserLogin'
 import { useRouter } from 'next/navigation'
 import { Spinner } from '@/components/ui/spinner'
+import { loginSchema, type LoginType } from '../schemas/loginSchema'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { motion } from 'motion/react'
+import { gentle } from '@/motion/transitions'
 
-export default function FormLogin() {
+
+interface FormLoginProps {
+    modalOpen : boolean
+    setModalOpen : () => void
+}
+
+export default function FormLogin({modalOpen , setModalOpen}: FormLoginProps) {
     const [isVisible, setIsVisible] = useState<boolean>(true)
-    const [data, setData] = useState({
-        email: '',
-        password: '',
+    const {register , handleSubmit , formState: {errors}} = useForm<LoginType>({
+        resolver: zodResolver(loginSchema)
     })
-    const { mutate: loginUser, isPending, isError, error } = useUserLogin()
+    const { mutate: loginUser, isPending, isError, error } = useUserLogin();
     const router = useRouter()
 
-    const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setData({ ...data, email: e.target.value })
-    }
-
-    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setData({ ...data, password: e.target.value })
-    }
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const onSubmit = (data: LoginType) => {
         loginUser(data, {
             onSuccess: () => {
-                setTimeout(() => {
-                    router.push('/')
-                }, 2000)
+                router.push('/')
             },
         })
     }
 
     return (
-        <section className="text-white space-y-7 p-4 md:p-6">
+        <motion.section 
+            initial={{opacity: 0 , y: 20}}
+            animate={{opacity: 1 , y: 0}}
+            transition={gentle}
+            
+
+            className="text-white space-y-7 p-4 md:p-6"
+        >
             <section className="flex flex-col gap-2">
                 <h2 className="text-2xl font-bold text-white text-shadow-md">
                     Bem vindo de volta!
@@ -52,7 +58,7 @@ export default function FormLogin() {
                 </h3>
             </section>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <FieldGroup>
                     <Field>
                         <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -64,11 +70,15 @@ export default function FormLogin() {
                                 placeholder="luffy@exemplo.com"
                                 className="pl-10 border-gray-600 border py-5 bg-slate-900"
                                 autoComplete="off"
-                                onChange={handleChangeEmail}
+                                {...register('email')}
                                 required
                             />
                         </section>
                     </Field>
+
+                    {errors.email && (
+                        <p className="text-red-500 text-xs">{errors.email.message}</p>
+                    )}
 
                     <Field>
                         <FieldLabel htmlFor="senha">Senha</FieldLabel>
@@ -80,7 +90,7 @@ export default function FormLogin() {
                                 placeholder="Senha"
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
-                                onChange={handleChangePassword}
+                                {...register('password')}
                                 required
                             />
                             {isVisible ? (
@@ -95,6 +105,9 @@ export default function FormLogin() {
                                 />
                             )}
                         </section>
+                        {errors.password && (
+                            <p className="text-red-500 text-xs">{errors.password.message}</p>
+                        )}
                         {isError && (
                             <p className="text-red-500 text-xs">
                                 {error.message}
@@ -111,13 +124,17 @@ export default function FormLogin() {
                     <section className="w-full flex justify-center pt-4 border-t border-gray-400">
                         <span className="font-light text-xs">
                             Esqueceu senha?{' '}
-                            <span className="font-medium cursor-pointer hover:text-gray-300  transition-all ease-in-out delay-200">
+                            <button 
+                                type='button' 
+                                className="font-medium cursor-pointer hover:text-gray-300  transition-all ease-in-out delay-200"
+                                onClick={setModalOpen}
+                            >
                                 Clique aqui!
-                            </span>
+                            </button>
                         </span>
                     </section>
                 </FieldGroup>
             </form>
-        </section>
+        </motion.section>
     )
 }
