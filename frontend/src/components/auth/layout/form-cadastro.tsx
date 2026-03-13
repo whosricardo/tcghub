@@ -5,6 +5,9 @@ import StepUsername from './wizard/step-username'
 import StepEmail from './wizard/step-email'
 import StepPassword from './wizard/step-password'
 import StepResult from './wizard/step-result'
+import { AnimatePresence } from 'motion/react'
+import { motion } from 'motion/react'
+import { smooth } from '@/motion/transitions'
 
 export default function FormCadastro() {
     const { currentRegisterStep } = useAuth()
@@ -17,12 +20,21 @@ export default function FormCadastro() {
                 <StepProgress currentStep={currentRegisterStep} />
             </section>
 
-            <section>
-                {currentRegisterStep === 1 && <StepUsername />}
-                {currentRegisterStep === 2 && <StepEmail />}
-                {currentRegisterStep === 3 && <StepPassword />}
-                {currentRegisterStep === 4 && <StepResult />}
-            </section>
+            <AnimatePresence mode='wait'>
+                <motion.section 
+                    key={currentRegisterStep}
+                    initial={{opacity: 0 , x: -8}}
+                    animate={{opacity: 1 , x: 0}}
+                    exit={{opacity:0 , x: 8}}
+                    transition={smooth}
+                >
+                    {currentRegisterStep === 1 && <StepUsername />}
+                    {currentRegisterStep === 2 && <StepEmail />}
+                    {currentRegisterStep === 3 && <StepPassword />}
+                    {currentRegisterStep === 4 && <StepResult />}
+                </motion.section>
+            </AnimatePresence>
+            
         </section>
     )
 }

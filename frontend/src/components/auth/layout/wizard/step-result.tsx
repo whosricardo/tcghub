@@ -20,9 +20,7 @@ export default function StepResult() {
             onSuccess: () => {
                 resetUser()
                 resetStep()
-                setTimeout(() => {
-                    router.push('/login')
-                }, 2000)
+                router.push('/login')
             },
         })
     }

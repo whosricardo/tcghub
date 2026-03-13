@@ -2,20 +2,25 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, UserLock, Eye, EyeOff, Repeat } from 'lucide-react'
 import { useAuth } from '@/store/authStore'
-import { useState, useEffect } from 'react'
-import { UserLock } from 'lucide-react'
-import { Eye } from 'lucide-react'
-import { EyeOff } from 'lucide-react'
-import { Repeat } from 'lucide-react'
+import { useState } from 'react'
 import { passwordCheck } from '@/utils/passwordCheck'
 import { cn } from '@/lib/utils'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-type PasswordState = {
-    password: string
-    confirmPassword: string
-}
+
+const passwordStepSchema = z.object({
+    password: z.string().min(1, 'A senha é obrigatória'), 
+    confirmPassword: z.string().min(1, 'Confirme sua senha'),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: 'Senhas informadas estão diferentes.',
+    path: ['confirmPassword'],
+})
+
+type PasswordFormType = z.infer<typeof passwordStepSchema>
 
 type PasswordVisible = {
     password: boolean
@@ -23,53 +28,31 @@ type PasswordVisible = {
 }
 
 export default function StepPassword() {
-    const { incrementStep, decrementStep, updateUserCredentials, user } =
-        useAuth()
-    const [credentials, setCredentials] = useState<PasswordState>({
-        password: user.password || '',
-        confirmPassword: user.password || '',
-    })
-    const [isVisible, setIsVisible] = useState<PasswordVisible>({
-        password: true,
-        confirmPassword: true,
-    })
-    const [error, setError] = useState<string>('')
-    const passwordIntense = passwordCheck(credentials.password)
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (
-            credentials.password.trim() !== '' &&
-            credentials.confirmPassword.trim() !== ''
-        ) {
-            if (
-                credentials.password.trim() ===
-                credentials.confirmPassword.trim()
-            ) {
-                updateUserCredentials({ password: credentials.password })
-                incrementStep()
-            } else {
-                setError('Senha e confirmar senha estão diferentes.')
-                return
-            }
-        } else {
-            setError('Por favor, preencha ambos os campos de senha.')
+    const { incrementStep, decrementStep, updateUserCredentials, user } = useAuth()
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<PasswordFormType>({
+        resolver: zodResolver(passwordStepSchema),
+        defaultValues: {
+            password: user?.password || '',
+            confirmPassword: user?.password || ''
         }
+    })
+
+    const [isVisible, setIsVisible] = useState<PasswordVisible>({
+        password: false,
+        confirmPassword: false,
+    })
+
+    const currentPassword = watch('password') || ''
+    const currentConfirmPassword = watch('confirmPassword') || ''
+    const passwordIntense = passwordCheck(currentPassword)
+
+    const onSubmit = (data: PasswordFormType) => {
+        updateUserCredentials({ password: data.password })
+        incrementStep()
     }
 
     const handleBack = () => {
-        updateUserCredentials({ password: null })
         decrementStep()
-    }
-
-    const ChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCredentials({ ...credentials, password: e.target.value })
-        setError('')
-    }
-
-    const ChangePasswordConfirm = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCredentials({ ...credentials, confirmPassword: e.target.value })
-        setError('')
     }
 
     const progressColor = (score: number) => {
@@ -97,7 +80,7 @@ export default function StepPassword() {
                 </p>
             </section>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <FieldGroup>
                     <Field>
                         <FieldLabel htmlFor="senha">Senha</FieldLabel>
@@ -105,49 +88,31 @@ export default function StepPassword() {
                             <UserLock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 id="senha"
-                                type={!isVisible.password ? 'text' : 'password'}
+                                type={isVisible.password ? 'text' : 'password'}
                                 placeholder="Senha"
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
-                                onChange={(e) => ChangePassword(e)}
-                                value={credentials?.password}
+                                {...register('password')}
                                 required
                             />
                             {isVisible.password ? (
-                                <Eye
-                                    className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground cursor-pointer"
-                                    onClick={() =>
-                                        setIsVisible({
-                                            ...isVisible,
-                                            password: false,
-                                        })
-                                    }
-                                />
-                            ) : (
                                 <EyeOff
                                     className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground cursor-pointer"
-                                    onClick={() =>
-                                        setIsVisible({
-                                            ...isVisible,
-                                            password: true,
-                                        })
-                                    }
+                                    onClick={() => setIsVisible({ ...isVisible, password: false })}
+                                />
+                            ) : (
+                                <Eye
+                                    className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground cursor-pointer"
+                                    onClick={() => setIsVisible({ ...isVisible, password: true })}
                                 />
                             )}
                         </section>
+                        
                         <Field>
-                            <FieldLabel
-                                htmlFor="progress-pass"
-                                className="flex flex-row justify-between"
-                            >
-                                <span className="text-xs text-gray-300 text-light">
-                                    Intensidade da senha
-                                </span>
-                                <span className="text-xs">
-                                    {progressName(passwordIntense)}
-                                </span>
+                            <FieldLabel htmlFor="progress-pass" className="flex flex-row justify-between mt-2">
+                                <span className="text-xs text-gray-300 text-light">Intensidade da senha</span>
+                                <span className="text-xs">{progressName(passwordIntense)}</span>
                             </FieldLabel>
-
                             <Progress
                                 value={passwordIntense}
                                 id="progress-pass"
@@ -160,65 +125,46 @@ export default function StepPassword() {
                     </Field>
 
                     <Field>
-                        <FieldLabel htmlFor="confirmarSenha">
-                            Confirmar senha
-                        </FieldLabel>
+                        <FieldLabel htmlFor="confirmarSenha">Confirmar senha</FieldLabel>
                         <section className="relative">
                             <Repeat className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 id="confirmarSenha"
-                                type={
-                                    !isVisible.confirmPassword
-                                        ? 'text'
-                                        : 'password'
-                                }
+                                type={isVisible.confirmPassword ? 'text' : 'password'}
                                 placeholder="Confirmar senha"
                                 className="pl-10 pr-10 border-gray-600 border py-5 bg-slate-900 overflow-hidden"
                                 autoComplete="off"
-                                value={credentials?.confirmPassword}
-                                onChange={(e) => ChangePasswordConfirm(e)}
+                                {...register('confirmPassword')}
                                 required
                             />
                             {isVisible.confirmPassword ? (
-                                <Eye
-                                    className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground cursor-pointer"
-                                    onClick={() =>
-                                        setIsVisible({
-                                            ...isVisible,
-                                            confirmPassword: false,
-                                        })
-                                    }
-                                />
-                            ) : (
                                 <EyeOff
                                     className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground cursor-pointer"
-                                    onClick={() =>
-                                        setIsVisible({
-                                            ...isVisible,
-                                            confirmPassword: true,
-                                        })
-                                    }
+                                    onClick={() => setIsVisible({ ...isVisible, confirmPassword: false })}
+                                />
+                            ) : (
+                                <Eye
+                                    className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground cursor-pointer"
+                                    onClick={() => setIsVisible({ ...isVisible, confirmPassword: true })}
                                 />
                             )}
                         </section>
-                        {error && (
-                            <span className="text-red-600 text-xs">
-                                {error}
+
+                        {errors.confirmPassword && (
+                            <span className="text-red-600 text-xs mt-1">
+                                {errors.confirmPassword.message}
                             </span>
                         )}
                     </Field>
 
-                    <section className="w-full flex flex-col lg:flex-row-reverse gap-2">
+                    <section className="w-full flex flex-col lg:flex-row-reverse gap-2 mt-4">
                         <Button
-                            disabled={
-                                !credentials.password ||
-                                !credentials.confirmPassword
-                            }
+                            disabled={!currentPassword || !currentConfirmPassword}
                             type="submit"
-                            className="flex flex-row justify-center items-center shadow-2xl "
+                            className="flex flex-row justify-center items-center shadow-2xl"
                         >
                             <span>Ir para o próximo passo</span>
-                            <ArrowRight className="mt-1" />
+                            <ArrowRight className="mt-1 ml-2" />
                         </Button>
                         <Button
                             type="button"
