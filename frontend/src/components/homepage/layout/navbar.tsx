@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import CartButton from "../common/cart-button";
 import PerfilButton from "../common/perfil-button";
 import SearchBar from "../common/search-bar";
+import { LogoutButton } from "@/components/homepage/common/logout-button";
 
 export default async function Navbar (){
     
@@ -16,9 +17,12 @@ export default async function Navbar (){
             <NavLogoLink/>
             
             <section className="flex items-center gap-4 ml-auto md:order-last">
-                {!isAuthenticated && (
+                {!isAuthenticated ? (
                     <LoginButton/>
-                )}
+                ):(
+                    <LogoutButton/>
+                )
+            }
                 <PerfilButton/>
                 <CartButton/>
             </section>
