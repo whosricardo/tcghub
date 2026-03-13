@@ -39,7 +39,6 @@ export async function fetchData (endpoint: string , options: RequestInit = {}){
         ;(await cookieStore).set({
             name: 'access_token',
             value: refreshData,
-
         })
 
 
