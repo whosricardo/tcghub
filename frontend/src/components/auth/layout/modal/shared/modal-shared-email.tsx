@@ -47,7 +47,7 @@ export function ModalSharedEmail({isClosed , setStep}: ModalSharedEmailProps) {
                         <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             id="email"
-                            type="email"
+                            type="text"
                             placeholder="luffy@exemplo.com"
                             className="pl-10 border-gray-400 border py-5"
                             autoComplete="off"
@@ -57,15 +57,15 @@ export function ModalSharedEmail({isClosed , setStep}: ModalSharedEmailProps) {
                     </section>
                     
                     {errors.email && (
-                        <p className="text-red-500 text-xs">
+                        <p className="absolute text-red-500 text-xs">
                             {errors.email.message}
                         </p>
                     )}
 
-                    <section className="w-full flex flex-col gap-2">
+                    <section className="w-full flex flex-col gap-2 mt-3">
                         <Button
                             type="submit"
-                            className="flex flex-row justify-center items-center shadow-2xl py-6 mb-5"
+                            className="flex flex-row justify-center items-center shadow-2xl py-6"
                         >
                             <span>Ir para o próximo passo</span>
                             <ArrowRight className="mt-1" />
@@ -76,7 +76,7 @@ export function ModalSharedEmail({isClosed , setStep}: ModalSharedEmailProps) {
                             onClick={isClosed}
                             className="flex-1 text-gray-400 hover:text-gray-500"
                         >
-                            <section className="flex flex-row justify-center items-center gap-2 cursor-pointer">
+                            <section className="flex flex-row justify-center items-center gap-2 cursor-pointer mt-2">
                                 <ArrowLeft size={15} className="mt-1" />
                                 <p>voltar para login</p>
                             </section>

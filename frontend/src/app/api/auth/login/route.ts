@@ -22,6 +22,7 @@ export async function POST(request: Request) {
         const resData = await res.json()
         console.log('Resposta do Java:', resData)
         const token = resData.accessToken
+        const refreshToken = resData.refreshToken
 
         const response = NextResponse.json({
             success: true,
@@ -29,12 +30,21 @@ export async function POST(request: Request) {
         })
 
         response.cookies.set({
-            name: 'auth_token',
+            name: 'access_token',
             value: token,
             httpOnly: true,
             sameSite: 'lax',
             path: '/',
-            maxAge: 60 * 60 * 24,
+            maxAge: 60 * 60,
+        })
+
+        response.cookies.set({
+            name: 'refresh_token',
+            value: refreshToken,
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/',
+            maxAge: 60 * 60 * 24  * 7
         })
 
         return response
