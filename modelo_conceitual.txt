@@ -1,0 +1,123 @@
+DOCUMENTAÇÃO DO MODELO CONCEITUAL: HUB DE CARTAS (MARKETPLACE)
+
+Este documento descreve as entidades, atributos, relacionamentos e justificativas 
+de negócio do diagrama Entidade-Relacionamento (Padrão Peter Chen).
+
+--------------------------------------------------------------------------------
+1. ENTIDADES, ATRIBUTOS E JUSTIFICATIVAS
+--------------------------------------------------------------------------------
+
+[1] USUÁRIO (Entidade Forte)
+- Por que existe: É o cliente final que compra na plataforma. Sem ele, não há negócio.
+- Justificativa: Centraliza os dados de login e contato de quem está pagando.
+- Atributos: 
+  * id_usuario (Chave Primária)
+  * nome
+  * email
+  * cpf
+  * senha
+
+[2] ENDEREÇO (Entidade Forte)
+- Por que existe: Guarda os locais físicos para onde as caixas serão enviadas.
+- Justificativa: Evita que o endereço seja um atributo multivalorado no Pedido, o que engessaria o sistema. Criamos uma entidade separada para criar uma "Agenda de Endereços", permitindo que o usuário reutilize locais salvos.
+- Atributos:
+  * id_endereco (Chave Primária)
+  * cep
+  * rua
+  * numero
+  * complemento
+  * cidade
+  * estado
+
+[3] PEDIDO (Entidade Forte)
+- Por que existe: Representa o "carrinho de compras" finalizado.
+- Justificativa: É o documento financeiro e lógico da compra. Necessário para agrupar tudo o que o usuário comprou em um único momento.
+- Atributos:
+  * id_pedido (Chave Primária)
+  * data_compra
+  * valor_total
+  * status_pagamento
+
+[4] PARCELA_PAGAMENTO (Entidade Fraca)
+- Por que existe: Registra como o usuário dividiu o pagamento no cartão.
+- Justificativa: É a nossa entidade fraca. Sua existência depende totalmente do Pedido. Se o pedido for cancelado, as parcelas deixam de existir.
+- Atributos:
+  * numero_parcela (Chave Parcial - sublinhado tracejado)
+  * valor_parcela
+  * data_vencimento
+  * status_parcela
+
+[5] REMESSA (Entidade Forte)
+- Por que existe: Representa a caixa física que vai viajar via transportadora.
+- Justificativa: Separada do Pedido para isolar a "logística" do "financeiro". Tem identidade própria e permite que um único Pedido seja enviado em várias caixas separadas (envios parciais), se necessário.
+- Atributos:
+  * codigo_rastreio (Chave Primária)
+  * data_envio
+  * status_entrega
+  * transportadora
+
+[6] PRODUTO (Entidade Forte)
+- Por que existe: É o catálogo base da plataforma (ex: "Charizard Base Set").
+- Justificativa: Padroniza o que está sendo vendido, independente de quem seja o vendedor.
+- Atributos:
+  * id_produto (Chave Primária)
+  * nome_carta
+  * colecao
+  * raridade
+
+[7] FORNECEDOR (Entidade Forte)
+- Por que existe: Os lojistas/usuários que vendem cartas para o Hub.
+- Justificativa: Como é um Marketplace, precisamos saber para quem repassar o dinheiro da venda.
+- Atributos:
+  * id_fornecedor (Chave Primária)
+  * nome_loja
+  * cnpj_cpf
+  * email_contato
+
+[8] ORDEM_SERVIÇO (Entidade Forte)
+- Por que existe: Representa o trabalho de inspeção no galpão do Hub.
+- Justificativa: Quando a carta chega do fornecedor, um funcionário precisa atestar a originalidade. É a entidade que justifica a existência da Associativa.
+- Atributos:
+  * numero_os (Chave Primária)
+  * data_inspecao
+  * status_avaliacao
+  * matricula_funcionario
+  * observacoes
+
+[9] ITEM_PEDIDO (Entidade Associativa)
+- Por que existe: É a linha do recibo. Diz exatamente o que foi comprado, de quem, e para qual pedido.
+- Justificativa Teórica: Nasceu do relacionamento ternário entre Pedido, Produto e Fornecedor. Foi "promovida" a Entidade Associativa por duas regras:
+  1) Guarda atributos pesados (preço, quantidade).
+  2) Regra de Ouro: Precisava se relacionar com a Ordem_Servico. Como losangos não se relacionam com entidades, ela virou Associativa (retângulo).
+- Atributos:
+  * quantidade
+  * preco_unitario
+  * condicao_carta (Near Mint, Played, etc.)
+  * idioma_carta
+
+--------------------------------------------------------------------------------
+2. RELACIONAMENTOS E CARDINALIDADES (MÍNIMO, MÁXIMO)
+--------------------------------------------------------------------------------
+
+R1. Usuário (1,n) <-> possui <-> (1,1) Endereço
+- Leitura: Um usuário pode ter de 1 a N endereços salvos. Aquele endereço específico pertence a apenas 1 usuário.
+
+R2. Usuário (0,n) <-> realiza <-> (1,1) Pedido
+- Leitura: Um usuário recém-criado pode ter 0 pedidos, mas fará até N. Um Pedido pertence sempre a 1 usuário.
+
+R3. Pedido (1,n) <-> dividido_em <-> (1,1) Parcela_Pagamento
+- Leitura: Um pedido tem no mínimo 1 parcela (à vista) ou N parcelas. A parcela pertence a exatamente 1 pedido (Entidade Fraca).
+
+R4. Pedido (1,n) <-> gera <-> (1,1) Remessa
+- Leitura: Um pedido gera de 1 a N caixas (se houver divisão logística). Uma caixa/remessa pertence a 1 pedido.
+
+R5. Remessa (1,1) <-> entregue_em <-> (0,n) Endereço
+- Leitura: A caixa física viaja para apenas 1 endereço. Um endereço na agenda do cliente pode receber de 0 a N remessas ao longo do tempo.
+
+R6. O RELACIONAMENTO TERNÁRIO ("contém")
+- Pedido (1,n): Todo pedido tem que ter de 1 a N itens dentro dele.
+- Produto (0,n): Uma carta do catálogo pode nunca ter sido vendida (0), ou vendida N vezes.
+- Fornecedor (0,n): Um fornecedor pode estar cadastrado e ter vendido 0 itens, ou N itens.
+
+R7. Item_Pedido (0,1) <-> inspecionado_por <-> (1,1) Ordem_Servico
+- Leitura: Quando o cliente compra, a carta ainda está longe (0 O.S.). Quando chega ao Hub, gera 1 O.S. A O.S. existe para inspecionar exatamente 1 item específico.
