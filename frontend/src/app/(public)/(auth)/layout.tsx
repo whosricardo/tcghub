@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import BackgroundImage from '../../../public/background2.png'
+import BackgroundImage from '../../../../public/background2.png'
 
 export default function AuthLayout({
     children,

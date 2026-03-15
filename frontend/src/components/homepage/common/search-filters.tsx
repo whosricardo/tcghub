@@ -6,8 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { cn } from "@/lib/utils";
-
 
 interface SearchFilterProps {
     filter: string;
@@ -23,7 +21,8 @@ export default function SeachFilter ({filter , className}: SearchFilterProps){
             <SelectContent>
                 <SelectGroup>
                     <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="magic">Magic: The Gathering</SelectItem>
+                    <SelectItem value="onepiece">One Piece</SelectItem>
+                    <SelectItem value="magic">Magic</SelectItem>
                     <SelectItem value="pokemon">Pokémon TCG</SelectItem>
                     <SelectItem value="yugioh">Yu-Gi-Oh!</SelectItem>
                 </SelectGroup>
