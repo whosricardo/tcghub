@@ -37,6 +37,7 @@ de negócio do diagrama Entidade-Relacionamento (Padrão Peter Chen).
   * data_compra
   * valor_total
   * status_pagamento
+  * metodo_pagamento
 
 [4] PARCELA_PAGAMENTO (Entidade Fraca)
 - Por que existe: Registra como o usuário dividiu o pagamento no cartão.
@@ -71,7 +72,7 @@ de negócio do diagrama Entidade-Relacionamento (Padrão Peter Chen).
 - Atributos:
   * id_fornecedor (Chave Primária)
   * nome_loja
-  * cnpj_cpf
+  * cnpj
   * email_contato
 
 [8] ORDEM_SERVIÇO (Entidade Forte)
