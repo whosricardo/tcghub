@@ -1,90 +1,118 @@
+import { Button } from '@/components/ui/button'
 import {
-  Sidebar,
-  SidebarTrigger,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import {
-  LayoutGrid,
-  Database,
-  Users,
-  WalletCards 
-} from "lucide-react"
-import Link from "next/link"
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupContent,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarTrigger,
+} from '@/components/ui/sidebar'
+import { LayoutGrid, Database, Users, WalletCards , User , LogOut} from 'lucide-react'
+import Link from 'next/link'
+import { AvatarAdmin } from './avatarAdmin'
+import AvatarImage from '../../../../public/bolsonaro_png.png'
 
 const navItems = [
-  {
-    title: "Dashboard",
-    url: "/admin",
-    icon: LayoutGrid,
-    isActive: false,
-  },
-  {
-    title: "Catálogo",
-    url: "/admin/catalog",
-    icon: Database,
-    isActive: true, 
-  },
-  {
-    title: "Usuários",
-    url: "/admin/users",
-    icon: Users,
-    isActive: false,
-  },
+    {
+        title: 'Dashboard',
+        url: '/admin',
+        icon: LayoutGrid,
+        isActive: false,
+    },
+    {
+        title: 'Catálogo',
+        url: '/admin/catalogo',
+        icon: Database,
+        isActive: true,
+    },
+    {
+        title: 'Usuários',
+        url: '/admin/users',
+        icon: Users,
+        isActive: false,
+    },
 ]
+const isUser = true
 
 export function AdminSidebar() {
-  return (
-    <Sidebar collapsible="icon">
-        <section className="flex justify-end group-data-[collapsible=icon]:justify-center">
-            <SidebarTrigger />
-        </section>
-      <SidebarHeader className="p-4 group-data-[collapsible=icon]:p-2 overflow-hidden">
-        <section className="flex items-center justify-between w-full group-data-[collapsible=icon]:justify-center">
-          <section className="flex items-center gap-3 group-data-[collapsible=icon]:hidden">
-            <section className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-600"> 
-              <WalletCards className="h-6 w-6 text-white"/>
-            </section>
-            <section className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-slate-900">TCGhub</span>
-              <span className="text-sm font-medium text-slate-500">Portal do adm</span>
-            </section>
-          </section>
-        </section>
-      </SidebarHeader>
+    return (
+        <Sidebar variant="sidebar" collapsible="icon">
+            <SidebarHeader className="py-4">
+                <div className="flex items-center justify-between px-2 group-data-[collapsible=icon]:justify-center">
+                    <section className="flex items-center gap-4 group-data-[collapsible=icon]:hidden">
+                        <WalletCards className="size-6 text-blue-700" />
+                        <p className="text-xl font-semibold text-black">
+                            TCGhub
+                        </p>
+                    </section>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-2 px-4 mx-auto">
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.isActive}
-                    tooltip={item.title}
-                    className={`h-11 rounded-lg px-4 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center  text-base transition-colors ${
-                      item.isActive
-                        ? "bg-sky-600/10 text-sky-600 hover:bg-sky-600/20 hover:text-sky-600"
-                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
-                  >
-                    <Link href={item.url}>
-                      <item.icon className="h-8 w-8 shrink-0" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
-  )
+                    <SidebarTrigger className="hover:bg-gray-100" />
+                </div>
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarMenu>
+                    {navItems.map((item) => (
+                        <SidebarMenuItem key={item.title} className="group-data-[state=expanded]:px-2">
+                            <SidebarMenuButton asChild tooltip={item.title}>
+                                <Link
+                                    href={item.url}
+                                    className={`w-full py-6 text-gray-700 flex items-center`}
+                                >
+                                    <section className="text-xl">
+                                        <item.icon size={17} className='group-data-[collapsible=icon]:ml-2'/>
+                                    </section>
+                                    <span className="text-md font-medium">
+                                        {item.title}
+                                    </span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
+            </SidebarContent>
+
+            <SidebarFooter className="p-4 group-data-[collapsible=icon]:p-2">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-gray-100 group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:border-none group-data-[collapsible=icon]:p-0">
+                            <div className="flex items-center gap-3 overflow-hidden group-data-[collapsible=icon]:hidden">
+                                <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                                    { isUser ? 
+                                        (
+                                            <AvatarAdmin image={AvatarImage}/>
+                                        )
+                                        :
+                                        (
+                                            <User size={18} />
+                                        )
+                                        
+                                    }
+                                    <User size={18} />
+                                </div>
+                                <div className="grid flex-1 text-left text-sm leading-tight">
+                                    <span className="truncate font-semibold text-gray-900">Thiago Medeiros</span>
+                                    <span className="truncate text-xs text-gray-500">thiago22@gmail.com</span>
+                                </div>
+                            </div>
+
+                            <SidebarMenuButton 
+                                asChild 
+                                tooltip="Sair" 
+                                className="w-fit hover:bg-red-50 hover:text-red-600 transition-colors group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:justify-center"
+                            >
+                                <Link href="/">
+                                    <LogOut size={18} />
+                                </Link>
+                            </SidebarMenuButton>
+                            
+                        </div>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
+        </Sidebar>
+    )
 }

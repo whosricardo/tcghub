@@ -6,9 +6,6 @@ export default function Home() {
         <main className="flex flex-col">
             <Navbar/>
             <Banner/>
-            <section className="h-10">
-                <p>sasasasasasasasasa</p>
-            </section>
         </main>
     )
 }
