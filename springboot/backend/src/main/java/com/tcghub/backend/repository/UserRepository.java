@@ -4,6 +4,7 @@ import com.tcghub.backend.model.User;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,15 @@ public class UserRepository {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;
+    }
+
+    public List<User> findAll(int offset, int size) {
+        String sql = "SELECT * FROM users LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, userRowMapper, size, offset);
+    }
+
+    public int count() {
+        String sql = "SELECT COUNT(*) FROM users";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 }
