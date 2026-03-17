@@ -19,24 +19,26 @@ export function CardDetails() {
             </section>
 
             <FieldGroup className="flex flex-col md:flex-row items-center justify-center p-4">
-                <section className='flex-1'>
+                <section className="flex-1">
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Field className="col-span-2">
                             <FieldLabel htmlFor="nomecarta">
                                 Nome da carta
                             </FieldLabel>
                             <Input
+                                id="nomecarta"
                                 type="text"
                                 placeholder="Carta do luffy"
                                 className="border border-gray-300"
                             />
                         </Field>
-                        
+
                         <Field>
                             <FieldLabel htmlFor="numerocarta">
                                 Número da carta
                             </FieldLabel>
                             <Input
+                                id="numerocarta"
                                 type="text"
                                 placeholder="e.g. 001/188"
                                 className="border border-gray-300"
@@ -44,17 +46,21 @@ export function CardDetails() {
                         </Field>
 
                         <Field>
-                            <FieldLabel htmlFor="raridade">
-                                Raridade
-                            </FieldLabel>
-                            <SelectInput filter='Raridade' defaultValue={onePieceRarities[0]} params={onePieceRarities} className="border border-gray-300" />
+                            <FieldLabel htmlFor="raridade">Raridade</FieldLabel>
+                            <SelectInput
+                                filter="Raridade"
+                                defaultValue={onePieceRarities[0]}
+                                params={onePieceRarities}
+                                className="border border-gray-300"
+                            />
                         </Field>
-                       
-                       <Field>
+
+                        <Field>
                             <FieldLabel htmlFor="custodacarta">
                                 Custo da carta
                             </FieldLabel>
                             <Input
+                                id="custodacarta"
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
@@ -62,29 +68,30 @@ export function CardDetails() {
                         </Field>
 
                         <Field>
-                            <FieldLabel htmlFor="poder">
-                                Poder
-                            </FieldLabel>
+                            <FieldLabel htmlFor="poder">Poder</FieldLabel>
                             <Input
+                                id="poder"
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
                             />
                         </Field>
 
-                        <Field className='col-span-2'>
-                            <FieldLabel htmlFor="cor">
-                                Cor
-                            </FieldLabel>
-                            <SelectInput filter='Cor' defaultValue={onePieceColors[0]} params={onePieceColors} className="border border-gray-300" />
+                        <Field className="col-span-2">
+                            <FieldLabel htmlFor="cor">Cor</FieldLabel>
+                            <SelectInput
+                                filter="Cor"
+                                defaultValue={onePieceColors[0]}
+                                params={onePieceColors}
+                                className="border border-gray-300"
+                            />
                         </Field>
-
                     </section>
                 </section>
 
-                <section className='flex-1'>
+                <section className="flex-1">
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Field className='col-span-2'>
+                        <Field className="col-span-2">
                             <FieldLabel htmlFor="edicao">
                                 Edição / Coleção
                             </FieldLabel>
@@ -121,10 +128,9 @@ export function CardDetails() {
                         </Field>
 
                         <Field>
-                            <FieldLabel htmlFor="counter">
-                                Counter
-                            </FieldLabel>
+                            <FieldLabel htmlFor="counter">Counter</FieldLabel>
                             <Input
+                                id="counter"
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
@@ -142,12 +148,14 @@ export function CardDetails() {
                                 defaultValue={onePieceAttributes[0]}
                             />
                         </Field>
-                            
+
                         <Field className="col-span-2">
-                            <FieldLabel htmlFor="subtipos">
-                                Subtipos
-                            </FieldLabel>
-                            <Input type="text" placeholder="e.g Straw hat Crew, Supernovas"/>
+                            <FieldLabel htmlFor="subtipos">Subtipos</FieldLabel>
+                            <Input
+                                id="subtipos"
+                                type="text"
+                                placeholder="e.g Straw hat Crew, Supernovas"
+                            />
                         </Field>
                     </section>
                 </section>
