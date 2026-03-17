@@ -24,10 +24,13 @@ import com.tcghub.backend.security.JwtService;
 import com.tcghub.backend.service.RefreshTokenService;
 import com.tcghub.backend.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Autenticação", description = "Endpoints para registro, login e gerenciamento de tokens de acesso")
 public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
@@ -45,6 +48,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Registrar novo usuário", description = "Cria uma nova conta de usuário no sistema.")
     public ApiResponse registerUser(@Valid @RequestBody RegisterRequest request) {
         userService.registerUser(request);
         return new ApiResponse("Usuário registrado com sucesso");
@@ -52,6 +56,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Autenticar usuário", description = "Realiza o login e retorna o Access Token (JWT) e o Refresh Token.")
     public LoginResponse loginUser(@Valid @RequestBody LoginRequest request) {
         UsernamePasswordAuthenticationToken uPasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 request.email(), request.password());
@@ -71,6 +76,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Atualizar Token", description = "Gera um novo Access Token a partir de um Refresh Token válido.")
     public AuthResponse refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken());
         String newAcessToken = jwtService.generateToken(refreshToken.getEmail());
@@ -78,6 +84,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "Fazer Logout", description = "Revoga o Refresh Token do usuário, encerrando a sessão de renovação automática.")
     public ApiResponse logoutUser(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         RefreshToken refreshToken = refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken());
         refreshTokenService.revokeByEmail(refreshToken.getEmail());

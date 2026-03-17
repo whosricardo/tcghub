@@ -56,7 +56,12 @@ public class SecurityConfig {
                                 "/auth/login",
                                 "/h2-console/**",
                                 "/auth/refresh",
-                                "/auth/logout")
+                                "/auth/logout",
+                                // Swagger
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs")
                         .permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

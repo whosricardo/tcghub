@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGenericException(Exception ex) {
+        ex.printStackTrace(); // temporário para debug
         ApiError aError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno do servidor");
         return new ResponseEntity<>(aError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
