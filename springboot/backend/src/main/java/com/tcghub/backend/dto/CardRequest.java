@@ -16,5 +16,6 @@ public record CardRequest(
         Integer counter,
         String combatAttribute,
         @NotBlank String colors,
-        String subtypes) {
+        String subtypes,
+        String description) {
 }

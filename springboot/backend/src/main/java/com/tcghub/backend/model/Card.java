@@ -25,4 +25,5 @@ public class Card {
     private String combatAttribute;
     private String colors;
     private String subtypes;
+    private String description;
 }

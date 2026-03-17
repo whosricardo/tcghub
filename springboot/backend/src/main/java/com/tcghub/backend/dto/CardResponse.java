@@ -15,5 +15,6 @@ public record CardResponse(
         Integer counter,
         String combatAttribute,
         String colors,
-        String subtypes) {
+        String subtypes,
+        String description) {
 }

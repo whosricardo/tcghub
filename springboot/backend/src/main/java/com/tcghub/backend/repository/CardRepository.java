@@ -36,15 +36,16 @@ public class CardRepository {
             rs.getObject("counter", Integer.class),
             rs.getString("combat_attribute"),
             rs.getString("colors"),
-            rs.getString("subtypes"));
+            rs.getString("subtypes"),
+            rs.getString("description"));
 
     public Card save(Card card) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO cards (name, collection, card_number, rarity, treatment, card_type, cost, power, counter, combat_attribute, colors, subtypes) "
+                    "INSERT INTO cards (name, collection, card_number, rarity, treatment, card_type, cost, power, counter, combat_attribute, colors, subtypes, description) "
                             +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, card.getName());
             ps.setString(2, card.getCollection());
@@ -58,6 +59,7 @@ public class CardRepository {
             ps.setString(10, card.getCombatAttribute());
             ps.setString(11, card.getColors());
             ps.setString(12, card.getSubtypes());
+            ps.setString(13, card.getDescription());
             return ps;
         }, keyHolder);
         card.setId(keyHolder.getKey().longValue());

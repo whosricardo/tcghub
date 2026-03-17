@@ -33,7 +33,8 @@ public class CardService {
                 request.counter(),
                 request.combatAttribute(),
                 request.colors(),
-                request.subtypes());
+                request.subtypes(),
+                request.description());
         Card saved = cardRepository.save(card);
         return toResponse(saved);
     }
@@ -70,6 +71,7 @@ public class CardService {
                 card.getCounter(),
                 card.getCombatAttribute(),
                 card.getColors(),
-                card.getSubtypes());
+                card.getSubtypes(),
+                card.getDescription());
     }
 }
