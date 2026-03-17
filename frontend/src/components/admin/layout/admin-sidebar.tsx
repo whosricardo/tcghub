@@ -1,10 +1,10 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
-    SidebarGroup,
-    SidebarGroupContent,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -15,6 +15,7 @@ import { LayoutGrid, Database, Users, WalletCards , User , LogOut} from 'lucide-
 import Link from 'next/link'
 import { AvatarAdmin } from './avatarAdmin'
 import AvatarImage from '../../../../public/bolsonaro_png.png'
+import { usePathname } from 'next/navigation'
 
 const navItems = [
     {
@@ -38,7 +39,11 @@ const navItems = [
 ]
 const isUser = true
 
+
 export function AdminSidebar() {
+    const path = usePathname();
+    console.log (path)
+    console.log (navItems[1].url)
     return (
         <Sidebar variant="sidebar" collapsible="icon">
             <SidebarHeader className="py-4">
@@ -54,13 +59,13 @@ export function AdminSidebar() {
                 </div>
             </SidebarHeader>
             <SidebarContent>
-                <SidebarMenu>
+                <SidebarMenu className='space-y-1 mt-4'>
                     {navItems.map((item) => (
                         <SidebarMenuItem key={item.title} className="group-data-[state=expanded]:px-2">
                             <SidebarMenuButton asChild tooltip={item.title}>
                                 <Link
                                     href={item.url}
-                                    className={`w-full py-6 text-gray-700 flex items-center`}
+                                    className={`w-full py-6 text-gray-700 flex items-center hover:bg-sky-600/10 gap-3 ${path === item.url ? 'bg-sky-600/10' : ''} transition-colors`}
                                 >
                                     <section className="text-xl">
                                         <item.icon size={17} className='group-data-[collapsible=icon]:ml-2'/>
