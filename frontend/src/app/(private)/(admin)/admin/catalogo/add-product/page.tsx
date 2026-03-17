@@ -30,11 +30,6 @@ export default function AddProduct (){
 
             <section className="lg:col-span-1 flex flex-col gap-6">
                 <section className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h2 className="font-bold text-gray-800 mb-4">Card Art</h2>
-                    <section className="h-64 bg-gray-50 rounded border border-dashed border-gray-300 flex items-center justify-center text-gray-400">Área de Upload</section>
-                </section>
-
-                <section className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
                     <h2 className="font-bold text-gray-800 mb-4">Price Estimates (MSRP)</h2>
                     <section className="h-20 bg-gray-50 rounded border border-gray-200"></section>
                 </section>

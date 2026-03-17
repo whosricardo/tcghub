@@ -25,3 +25,40 @@ export const onePieceCardTypes = [
   "Stage",
   "DON!!"
 ];
+
+
+
+export const onePieceRarities = [
+  "Common",
+  "Uncommon",
+  "Rare",
+  "Super Rare",
+  "Secret Rare",
+  "Leader",
+  "Special",
+  "Treasure Rare",
+  "Promo"
+];
+
+export const onePieceColors = [
+  "Red",
+  "Green",
+  "Blue",
+  "Purple",
+  "Black",
+  "Yellow"
+];
+
+export const onePieceTreatments = [
+  "Non-foil",
+  "Foil",
+  "Textured Foil"
+];
+
+export const onePieceAttributes = [
+  "Strike",
+  "Slash",
+  "Ranged",
+  "Special",
+  "Wisdom"
+];

@@ -2,9 +2,14 @@ import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 
 import { Input } from '@/components/ui/input'
 import SelectInput from '../common/selectInput'
-import { onePieceTcgSetNames, onePieceCardTypes } from '@/mockedData/MockedCardDetails'
-
-
+import {
+    onePieceTcgSetNames,
+    onePieceCardTypes,
+    onePieceRarities,
+    onePieceColors,
+    onePieceTreatments,
+    onePieceAttributes,
+} from '@/mockedData/MockedCardDetails'
 
 export function CardDetails() {
     return (
@@ -13,43 +18,138 @@ export function CardDetails() {
                 <p className="font-semibold text-md">Detalhes da carta</p>
             </section>
 
-            <FieldGroup className='p-4'>
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Field className="col-span-2">
-                        <FieldLabel htmlFor="nomecarta">
-                            Nome da carta
-                        </FieldLabel>
-                        <Input type="text" placeholder="Carta do luffy" className='border border-gray-300' />
-                    </Field>
+            <FieldGroup className="flex flex-col md:flex-row items-center justify-center p-4">
+                <section className='flex-1'>
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Field className="col-span-2">
+                            <FieldLabel htmlFor="nomecarta">
+                                Nome da carta
+                            </FieldLabel>
+                            <Input
+                                type="text"
+                                placeholder="Carta do luffy"
+                                className="border border-gray-300"
+                            />
+                        </Field>
+                        
+                        <Field>
+                            <FieldLabel htmlFor="numerocarta">
+                                Número da carta
+                            </FieldLabel>
+                            <Input
+                                type="text"
+                                placeholder="e.g. 001/188"
+                                className="border border-gray-300"
+                            />
+                        </Field>
 
-                    <Field>
-                        <FieldLabel htmlFor="edicao">
-                            Edição / set
-                        </FieldLabel>
-                        <SelectInput filter='Edições' className='border border-gray-300' params={onePieceTcgSetNames}/>
-                    </Field>
+                        <Field>
+                            <FieldLabel htmlFor="raridade">
+                                Raridade
+                            </FieldLabel>
+                            <SelectInput filter='Raridade' defaultValue={onePieceRarities[0]} params={onePieceRarities} className="border border-gray-300" />
+                        </Field>
+                       
+                       <Field>
+                            <FieldLabel htmlFor="custodacarta">
+                                Custo da carta
+                            </FieldLabel>
+                            <Input
+                                type="text"
+                                placeholder="0"
+                                className="border border-gray-300"
+                            />
+                        </Field>
 
-                    <Field>
-                        <FieldLabel htmlFor="tipocarta">
-                            Tipo da carta
-                        </FieldLabel>
-                        <SelectInput filter='Tipo da carta' className='border border-gray-300' params={onePieceCardTypes}/>
-                    </Field>
+                        <Field>
+                            <FieldLabel htmlFor="poder">
+                                Poder
+                            </FieldLabel>
+                            <Input
+                                type="text"
+                                placeholder="0"
+                                className="border border-gray-300"
+                            />
+                        </Field>
 
-                    <Field>
-                        <FieldLabel htmlFor="hp">
-                            Nome da carta
-                        </FieldLabel>
-                        <Input type="text" placeholder="Carta do luffy" />
-                    </Field>
+                        <Field className='col-span-2'>
+                            <FieldLabel htmlFor="cor">
+                                Cor
+                            </FieldLabel>
+                            <SelectInput filter='Cor' defaultValue={onePieceColors[0]} params={onePieceColors} className="border border-gray-300" />
+                        </Field>
 
-                    <Field>
-                        <FieldLabel htmlFor="nomecarta">
-                            Nome da carta
-                        </FieldLabel>
-                        <Input type="text" placeholder="Carta do luffy" />
-                    </Field>
+                    </section>
+                </section>
 
+                <section className='flex-1'>
+                    <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Field className='col-span-2'>
+                            <FieldLabel htmlFor="edicao">
+                                Edição / Coleção
+                            </FieldLabel>
+                            <SelectInput
+                                filter="Edições"
+                                className="border border-gray-300"
+                                params={onePieceTcgSetNames}
+                                defaultValue={onePieceTcgSetNames[0]}
+                            />
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="tratamento">
+                                Tratamento
+                            </FieldLabel>
+                            <SelectInput
+                                filter="Character"
+                                className="border border-gray-300"
+                                params={onePieceTreatments}
+                                defaultValue={onePieceTreatments[0]}
+                            />
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="tipocarta">
+                                Tipo da carta
+                            </FieldLabel>
+                            <SelectInput
+                                filter="Tipo da carta"
+                                className="border border-gray-300"
+                                params={onePieceCardTypes}
+                                defaultValue={onePieceCardTypes[0]}
+                            />
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="counter">
+                                Counter
+                            </FieldLabel>
+                            <Input
+                                type="text"
+                                placeholder="0"
+                                className="border border-gray-300"
+                            />
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="atributocombate">
+                                Atributo de combate
+                            </FieldLabel>
+                            <SelectInput
+                                filter="Atributo de combate"
+                                className="border border-gray-300"
+                                params={onePieceAttributes}
+                                defaultValue={onePieceAttributes[0]}
+                            />
+                        </Field>
+                            
+                        <Field className="col-span-2">
+                            <FieldLabel htmlFor="subtipos">
+                                Subtipos
+                            </FieldLabel>
+                            <Input type="text" placeholder="e.g Straw hat Crew, Supernovas"/>
+                        </Field>
+                    </section>
                 </section>
             </FieldGroup>
         </section>
