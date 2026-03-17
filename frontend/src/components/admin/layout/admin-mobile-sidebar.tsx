@@ -1,3 +1,5 @@
+'use client'
+
 import {
     Sheet,
     SheetContent,
@@ -9,6 +11,7 @@ import { LayoutGrid, Database, Users, WalletCards, Menu, User, LogOut } from 'lu
 import Link from 'next/link'
 import { AvatarAdmin } from './avatarAdmin'
 import AvatarImage from '../../../../public/bolsonaro_png.png'
+import { usePathname } from 'next/navigation'
 
 
 const navItems = [
@@ -20,7 +23,7 @@ const navItems = [
     },
     {
         title: 'Catálogo',
-        url: '/admin/catalog',
+        url: '/admin/catalogo',
         icon: Database,
         isActive: true,
     },
@@ -34,6 +37,7 @@ const navItems = [
 
 export function AdminMobileSidebar() {
     const isUser = true; 
+    const path = usePathname();
 
     return (
         <Sheet>
@@ -60,9 +64,9 @@ export function AdminMobileSidebar() {
                             <li key={item.title}>
                                 <Link
                                     href={item.url}
-                                    className={`flex items-center gap-3 px-4 py-3 rounded-md text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors ${
-                                        item.isActive ? 'bg-gray-100 font-medium text-blue-700' : ''
-                                    }`}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-md text-gray-700  hover:bg-sky-600/10 hover:text-gray-900 transition-colors 
+                                        ${path === item.url ? 'bg-sky-600/10' : ''}
+                                    `}
                                 >
                                     <item.icon className="size-5" />
                                     <span>{item.title}</span>
@@ -76,7 +80,7 @@ export function AdminMobileSidebar() {
                     <div className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-gray-100">        
                         <div className="flex items-center gap-3 overflow-hidden">
                             <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700">
-                                {!isUser ? (
+                                {isUser ? (
                                     <AvatarAdmin image={AvatarImage} /> 
                                 ) : (
                                     <User size={18} />
