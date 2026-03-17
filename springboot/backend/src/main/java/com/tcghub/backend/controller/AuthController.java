@@ -76,4 +76,11 @@ public class AuthController {
         String newAcessToken = jwtService.generateToken(refreshToken.getEmail());
         return new AuthResponse(newAcessToken);
     }
+
+    @PostMapping("/logout")
+    public ApiResponse logoutUser(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        RefreshToken refreshToken = refreshTokenService.validateRefreshToken(refreshTokenRequest.refreshToken());
+        refreshTokenService.revokeByEmail(refreshToken.getEmail());
+        return new ApiResponse("Token revogado");
+    }
 }

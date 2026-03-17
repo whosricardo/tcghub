@@ -15,16 +15,16 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
 
 CREATE TABLE IF NOT EXISTS cards (
     id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    nome_produto VARCHAR(255) NOT NULL,
-    colecao VARCHAR(50) NOT NULL,
-    numero_carta VARCHAR(20) NOT NULL UNIQUE,
-    raridade VARCHAR(10) NOT NULL,
-    tratamento VARCHAR(50) NOT NULL,
-    tipo_carta VARCHAR(50) NOT NULL,
-    custo INT,
-    poder INT,
+    name VARCHAR(255) NOT NULL,
+    collection VARCHAR(50) NOT NULL,
+    card_number VARCHAR(20) NOT NULL UNIQUE,
+    rarity VARCHAR(10) NOT NULL,
+    treatment VARCHAR(50) NOT NULL,
+    card_type VARCHAR(50) NOT NULL,
+    cost INT,
+    power INT,
     counter INT,
-    atributo_combate VARCHAR(50),
-    cores VARCHAR(255) NOT NULL, -- Infelizmente por enquanto vai ser uma string ("vermelho, azul") - teria que ser uma tabela a parte
-    subtipos VARCHAR(255) -- Mesma questão acima
+    combat_attribute VARCHAR(50),
+    colors VARCHAR(255) NOT NULL,
+    subtypes VARCHAR(255)
 );

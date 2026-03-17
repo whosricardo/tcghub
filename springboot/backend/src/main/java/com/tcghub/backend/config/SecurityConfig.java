@@ -54,7 +54,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/register",
                                 "/auth/login",
-                                "/h2-console/**")
+                                "/h2-console/**",
+                                "/auth/refresh",
+                                "/auth/logout")
                         .permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

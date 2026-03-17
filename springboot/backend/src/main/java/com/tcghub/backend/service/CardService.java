@@ -6,6 +6,7 @@ import com.tcghub.backend.exception.NotFoundException;
 import com.tcghub.backend.model.Card;
 import com.tcghub.backend.repository.CardRepository;
 import org.springframework.stereotype.Service;
+import com.tcghub.backend.dto.PageResponse;
 
 import java.util.List;
 
