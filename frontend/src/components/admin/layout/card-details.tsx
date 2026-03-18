@@ -18,8 +18,8 @@ export function CardDetails() {
                 <p className="font-semibold text-md">Detalhes da carta</p>
             </section>
 
-            <FieldGroup className="flex flex-col md:flex-row items-center justify-center p-4">
-                <section className="flex-1">
+            <FieldGroup className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4">
+                <section className="">
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Field className="col-span-2">
                             <FieldLabel htmlFor="nomecarta">
@@ -89,7 +89,7 @@ export function CardDetails() {
                     </section>
                 </section>
 
-                <section className="flex-1">
+                <section className="">
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <Field className="col-span-2">
                             <FieldLabel htmlFor="edicao">
