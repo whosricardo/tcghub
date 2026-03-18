@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import dynamic from "next/dynamic";
+import { CardDescription } from "./card-description";
 
 const CardDetails = dynamic(() => import('@/components/admin/layout/card-details').then((mod) => mod.CardDetails),
     {
@@ -27,13 +28,9 @@ export function FormAddProduct (){
                 <section className="lg:col-span-2 flex">
                     <CardDetails/>
                 </section>
-
-                <section className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <h2 className="font-bold text-gray-800 mb-4">Abilities & Description</h2>
-                    <textarea className="w-full h-24 border rounded"></textarea>
-                </section>
-
+                <CardDescription/>
             </section>
+            
         </form>
     )
 }
