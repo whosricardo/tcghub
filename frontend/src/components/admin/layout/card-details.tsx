@@ -1,5 +1,6 @@
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
+'use client'
 
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import SelectInput from '../common/selectInput'
 import {
@@ -10,8 +11,22 @@ import {
     onePieceTreatments,
     onePieceAttributes,
 } from '@/mockedData/MockedCardDetails'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+    formAddProductSchema,
+    formAddProductType,
+} from '../schemas/formAddProductSchema'
 
 export function CardDetails() {
+    const {
+        register,
+        formState: { errors },
+    } = useForm<formAddProductType>({
+        resolver: zodResolver(formAddProductSchema),
+    })
+
+    
     return (
         <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm">
             <section className="w-full flex justify-start items-center bg-gray-50 border-b border-b-gray-300  p-4 rounded-t-2xl">
@@ -30,7 +45,13 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="Carta do luffy"
                                 className="border border-gray-300"
+                                {...register('nomeCarta')}
                             />
+                            {errors.nomeCarta && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.nomeCarta?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -42,7 +63,13 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="e.g. 001/188"
                                 className="border border-gray-300"
+                                {...register('numeroCarta')}
                             />
+                            {errors.numeroCarta && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.numeroCarta?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -52,7 +79,13 @@ export function CardDetails() {
                                 defaultValue={onePieceRarities[0]}
                                 params={onePieceRarities}
                                 className="border border-gray-300"
+                                {...register('raridade')}
                             />
+                            {errors.raridade && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.raridade?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -64,7 +97,13 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
+                                {...register('custoCarta')}
                             />
+                            {errors.custoCarta && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.custoCarta?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -74,7 +113,13 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
+                                {...register('poder')}
                             />
+                            {errors.poder && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.poder?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field className="col-span-2">
@@ -84,7 +129,13 @@ export function CardDetails() {
                                 defaultValue={onePieceColors[0]}
                                 params={onePieceColors}
                                 className="border border-gray-300"
+                                {...register('cor')}
                             />
+                            {errors.cor && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.cor?.message}
+                                </span>
+                            )}
                         </Field>
                     </section>
                 </section>
@@ -100,7 +151,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 params={onePieceTcgSetNames}
                                 defaultValue={onePieceTcgSetNames[0]}
+                                {...register('colecao')}
                             />
+                            {errors.colecao && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.colecao?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -112,7 +169,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 params={onePieceTreatments}
                                 defaultValue={onePieceTreatments[0]}
+                                {...register('tratamento')}
                             />
+                            {errors.tratamento && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.tratamento?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -124,7 +187,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 params={onePieceCardTypes}
                                 defaultValue={onePieceCardTypes[0]}
+                                {...register('tipoCarta')}
                             />
+                            {errors.tipoCarta && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.tipoCarta?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -134,7 +203,13 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
+                                {...register('counter')}
                             />
+                            {errors.counter && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.counter?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field>
@@ -146,7 +221,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 params={onePieceAttributes}
                                 defaultValue={onePieceAttributes[0]}
+                                {...register('atributoCombate')}
                             />
+                            {errors.atributoCombate && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.atributoCombate?.message}
+                                </span>
+                            )}
                         </Field>
 
                         <Field className="col-span-2">
@@ -155,7 +236,13 @@ export function CardDetails() {
                                 id="subtipos"
                                 type="text"
                                 placeholder="e.g Straw hat Crew, Supernovas"
+                                {...register('subtipos')}
                             />
+                            {errors.subtipos && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.subtipos?.message}
+                                </span>
+                            )}
                         </Field>
                     </section>
                 </section>
