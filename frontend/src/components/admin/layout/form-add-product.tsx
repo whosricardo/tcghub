@@ -40,7 +40,7 @@ export function FormAddProduct() {
                     </section>
 
                     <section className="flex gap-1">
-                        <Button className="bg-gray-300 hover:bg-gray-400 text-accent-foreground">
+                        <Button type='button' onClick={() => methods.reset()} className="bg-gray-300 hover:bg-gray-400 text-accent-foreground">
                             Descartar
                         </Button>
                         <Button type="submit">

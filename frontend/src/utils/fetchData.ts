@@ -3,9 +3,9 @@ import { redirect } from "next/navigation";
 
 
 export async function fetchData (endpoint: string , options: RequestInit = {}){
-    const cookieStore = cookies();
-    const token = (await cookieStore).get('access_token')?.value;
-    const refreshToken = (await cookieStore).get('refresh_token')?.value
+    const cookieStore = await cookies();
+    const token = cookieStore.get('access_token')?.value;
+    const refreshToken = cookieStore.get('refresh_token')?.value
 
     const headers = {
         'Content-Type' : 'application/json',
@@ -13,10 +13,18 @@ export async function fetchData (endpoint: string , options: RequestInit = {}){
         ...options.headers,
     }
 
-    const response = await fetch(`http://localhost:8080${endpoint}` , {
-        ...options,
-        headers,
-    })
+    let response: Response;
+    try{
+        response = await fetch(`http://localhost:8080${endpoint}` , {
+            ...options,
+            headers,
+        })
+    }
+    catch (error){
+        cookieStore.delete('access_token');
+        cookieStore.delete('refresh_token');
+        return redirect('/');
+    }
 
 
     if (response.status === 401){
@@ -29,16 +37,17 @@ export async function fetchData (endpoint: string , options: RequestInit = {}){
         })
 
         if (!refreshResponse.ok){
-            (await cookieStore).delete('access_token');
-            (await cookieStore).delete('refresh_token');
+            cookieStore.delete('access_token');
+            cookieStore.delete('refresh_token');
             redirect('/');
         }
         const refreshResData = await refreshResponse.json()
         const refreshData = refreshResData.access_token;
 
-        ;(await cookieStore).set({
+        cookieStore.set({
             name: 'access_token',
             value: refreshData,
+            path: '/'
         })
 
 
