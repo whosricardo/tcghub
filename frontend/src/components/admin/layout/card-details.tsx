@@ -70,7 +70,7 @@ export function CardDetails() {
                             <FieldLabel htmlFor="raridade">Raridade</FieldLabel>
                             <Controller
                                 control={control}
-                                name="rarity" // ATUALIZADO
+                                name="rarity" 
                                 defaultValue={onePieceRarities[0]}
                                 render={({ field }) => (
                                     <SelectInput
@@ -98,7 +98,7 @@ export function CardDetails() {
                                 type="number"
                                 placeholder="0"
                                 className="border border-gray-300"
-                                {...register('cost' , {valueAsNumber: true})} // ATUALIZADO
+                                {...register('cost' , {valueAsNumber: true})}
                             />
                             {errors.cost && (
                                 <span className="text-red-500 text-xs">
@@ -114,7 +114,7 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
-                                {...register('power')} // ATUALIZADO
+                                {...register('power')} 
                             />
                             {errors.power && (
                                 <span className="text-red-500 text-xs">
@@ -127,7 +127,7 @@ export function CardDetails() {
                             <FieldLabel htmlFor="cor">Cor</FieldLabel>
                             <Controller
                                 control={control}
-                                name="colors" // ATUALIZADO
+                                name="colors" 
                                 defaultValue={onePieceColors[0]}
                                 render={({ field }) => (
                                     <SelectInput
