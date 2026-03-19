@@ -8,3 +8,7 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/discord.xml
+/encodings.xml
+/jarRepositories.xml
+/compiler.xml
