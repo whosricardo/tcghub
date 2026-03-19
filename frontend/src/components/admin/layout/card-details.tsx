@@ -23,7 +23,7 @@ export function CardDetails() {
     
     return (
         <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm">
-            <section className="w-full flex justify-start items-center bg-gray-50 border-b border-b-gray-300  p-4 rounded-t-2xl">
+            <section className="w-full flex justify-start items-center bg-gray-50 border-b border-b-gray-300 p-4 rounded-t-2xl">
                 <p className="font-semibold text-md">Detalhes da carta</p>
             </section>
 
@@ -41,11 +41,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 {...register('name')}
                             />
-                            {errors.name && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.name?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.name && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.name?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -59,11 +61,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 {...register('cardNumber')}
                             />
-                            {errors.cardNumber && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.cardNumber?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.cardNumber && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.cardNumber?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -82,11 +86,13 @@ export function CardDetails() {
                                     />
                                 )}
                             />
-                            {errors.rarity && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.rarity?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.rarity && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.rarity?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -100,11 +106,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 {...register('cost' , {valueAsNumber: true})}
                             />
-                            {errors.cost && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.cost?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.cost && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.cost?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -116,11 +124,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 {...register('power')} 
                             />
-                            {errors.power && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.power?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.power && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.power?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field className="col-span-2">
@@ -139,11 +149,13 @@ export function CardDetails() {
                                     />
                                 )}
                             />
-                            {errors.colors && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.colors?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.colors && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.colors?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
                     </section>
                 </section>
@@ -169,11 +181,13 @@ export function CardDetails() {
                                     />
                                 )}
                             />
-                            {errors.collection && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.collection?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.collection && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.collection?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -194,11 +208,13 @@ export function CardDetails() {
                                     />
                                 )}
                             />
-                            {errors.treatment && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.treatment?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.treatment && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.treatment?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -219,11 +235,13 @@ export function CardDetails() {
                                     />
                                 )}
                             />
-                            {errors.cardType && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.cardType?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.cardType && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.cardType?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -235,11 +253,13 @@ export function CardDetails() {
                                 className="border border-gray-300"
                                 {...register('counter' , {valueAsNumber: true})}
                             />
-                            {errors.counter && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.counter?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.counter && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.counter?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field>
@@ -260,11 +280,13 @@ export function CardDetails() {
                                     />
                                 )}
                             />
-                            {errors.combatAttribute && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.combatAttribute?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.combatAttribute && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.combatAttribute?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
 
                         <Field className="col-span-2">
@@ -275,11 +297,13 @@ export function CardDetails() {
                                 placeholder="e.g Straw hat Crew, Supernovas"
                                 {...register('subTypes')} 
                             />
-                            {errors.subTypes && (
-                                <span className="text-red-500 text-xs">
-                                    {errors.subTypes?.message}
-                                </span>
-                            )}
+                            <div className="min-h-4 mt-1">
+                                {errors.subTypes && (
+                                    <span className="text-red-500 text-xs flex">
+                                        {errors.subTypes?.message}
+                                    </span>
+                                )}
+                            </div>
                         </Field>
                     </section>
                 </section>
