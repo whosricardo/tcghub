@@ -1,16 +1,16 @@
 'use client'
 
 import { useFormContext } from 'react-hook-form'
-import {
-    formAddProductType,
-} from '../schemas/formAddProductSchema'
+import { formAddProductType } from '../schemas/formAddProductSchema'
 
 export function CardDescription() {
     const {
         register,
         formState: { errors },
+        watch,
     } = useFormContext<formAddProductType>()
 
+    const textValue = watch('description') || ''
 
     return (
         <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm">
@@ -26,6 +26,17 @@ export function CardDescription() {
                     placeholder="Insira uma descrição da carta/produto"
                     {...register('description')}
                 ></textarea>
+
+                <section className="ml-auto text-sm flex flex-row items-center justify-between gap-1">
+                    <span>Número de caracteres:</span>
+                    <span
+                        className={`${textValue.length <= 20 ? 'text-green-600' : 'text-red-600'}`}
+                    >
+                        {textValue.length}
+                        <span className="text-black text-sm">/30</span>
+                    </span>
+                </section>
+
                 {errors.description && (
                     <span className="text-red-500 text-xs">
                         {errors.description?.message}
