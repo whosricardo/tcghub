@@ -50,9 +50,11 @@ export const onePieceColors = [
 ];
 
 export const onePieceTreatments = [
-  "Non-foil",
-  "Foil",
-  "Textured Foil"
+  "SPECIAL_RARE",
+  "FOIL",
+  "ALTERNATE_ART",
+  "NORMAL",
+  "PARALLEL",
 ];
 
 export const onePieceAttributes = [

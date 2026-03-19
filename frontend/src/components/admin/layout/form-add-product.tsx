@@ -5,16 +5,30 @@ import { Spinner } from '@/components/ui/spinner'
 import { CardDetails } from '@/components/admin/layout/card-details'
 import { CardDescription } from './card-description'
 import { FormProvider, useForm } from 'react-hook-form'
-import { formAddProductSchema, formAddProductType } from '../schemas/formAddProductSchema'
+import {
+    formAddProductSchema,
+    formAddProductType,
+} from '../schemas/formAddProductSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useFormCard } from '../hooks/useFormCard'
 
 export function FormAddProduct() {
     const methods = useForm<formAddProductType>({
-        resolver: zodResolver(formAddProductSchema)
-    }) 
+        resolver: zodResolver(formAddProductSchema),
+    })
+
+    const { mutate: registerCard, isPending, isError, error } = useFormCard()
+
+    const onSubmit = (data: formAddProductType) => {
+        registerCard(data)
+    }
+
     return (
         <FormProvider {...methods}>
-            <form className="flex flex-col gap-2">
+            <form
+                className="flex flex-col gap-2"
+                onSubmit={methods.handleSubmit(onSubmit)}
+            >
                 <header className="flex flex-col md:flex-row justify-start items-center md:justify-between gap-3 mb-3">
                     <section>
                         <h1 className="text-2xl font-bold text-black">
@@ -29,7 +43,18 @@ export function FormAddProduct() {
                         <Button className="bg-gray-300 hover:bg-gray-400 text-accent-foreground">
                             Descartar
                         </Button>
-                        <Button className="">Publicar Produto</Button>
+                        <Button type="submit">
+                            {isPending ? (
+                                <Spinner className="text-white/80 h-6 w-6" />
+                            ) : (
+                                <span>Adicionar Produto</span>
+                            )}
+                        </Button>
+                        {isError && (
+                            <p className="text-red-500 text-xs">
+                                {error.message}
+                            </p>
+                        )}
                     </section>
                 </header>
 

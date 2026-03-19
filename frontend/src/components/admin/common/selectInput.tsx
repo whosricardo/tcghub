@@ -12,11 +12,13 @@ interface SearchFilterProps {
     className?: string;
     defaultValue?: string;
     params?: string[];
+    value?: string;
+    onValueChange?: (value: string) => void;
 }
 
-export default function SelectInput ({filter , className , defaultValue, params}: SearchFilterProps){
+export default function SelectInput ({filter , className , defaultValue, params , value , onValueChange}: SearchFilterProps){
     return (
-        <Select defaultValue={defaultValue}>
+        <Select defaultValue={defaultValue} value={value} onValueChange={onValueChange}>
             <SelectTrigger className={`w-fit focus-visible:ring-0 focus-visible:ring-offset-0 ${className} cursor-pointer`}>
                 <SelectValue placeholder={filter} />
             </SelectTrigger>

@@ -11,21 +11,15 @@ import {
     onePieceTreatments,
     onePieceAttributes,
 } from '@/mockedData/MockedCardDetails'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    formAddProductSchema,
-    formAddProductType,
-} from '../schemas/formAddProductSchema'
+import { useFormContext, Controller } from 'react-hook-form'
+import { formAddProductType } from '../schemas/formAddProductSchema'
 
 export function CardDetails() {
     const {
         register,
+        control,
         formState: { errors },
-    } = useForm<formAddProductType>({
-        resolver: zodResolver(formAddProductSchema),
-    })
-
+    } = useFormContext<formAddProductType>()
     
     return (
         <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm">
@@ -45,11 +39,11 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="Carta do luffy"
                                 className="border border-gray-300"
-                                {...register('nomeCarta')}
+                                {...register('name')}
                             />
-                            {errors.nomeCarta && (
+                            {errors.name && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.nomeCarta?.message}
+                                    {errors.name?.message}
                                 </span>
                             )}
                         </Field>
@@ -63,27 +57,34 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="e.g. 001/188"
                                 className="border border-gray-300"
-                                {...register('numeroCarta')}
+                                {...register('cardNumber')}
                             />
-                            {errors.numeroCarta && (
+                            {errors.cardNumber && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.numeroCarta?.message}
+                                    {errors.cardNumber?.message}
                                 </span>
                             )}
                         </Field>
 
                         <Field>
                             <FieldLabel htmlFor="raridade">Raridade</FieldLabel>
-                            <SelectInput
-                                filter="Raridade"
+                            <Controller
+                                control={control}
+                                name="rarity" // ATUALIZADO
                                 defaultValue={onePieceRarities[0]}
-                                params={onePieceRarities}
-                                className="border border-gray-300"
-                                {...register('raridade')}
+                                render={({ field }) => (
+                                    <SelectInput
+                                        filter="Raridade"
+                                        params={onePieceRarities}
+                                        className="border border-gray-300"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
                             />
-                            {errors.raridade && (
+                            {errors.rarity && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.raridade?.message}
+                                    {errors.rarity?.message}
                                 </span>
                             )}
                         </Field>
@@ -94,14 +95,14 @@ export function CardDetails() {
                             </FieldLabel>
                             <Input
                                 id="custodacarta"
-                                type="text"
+                                type="number"
                                 placeholder="0"
                                 className="border border-gray-300"
-                                {...register('custoCarta')}
+                                {...register('cost' , {valueAsNumber: true})} // ATUALIZADO
                             />
-                            {errors.custoCarta && (
+                            {errors.cost && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.custoCarta?.message}
+                                    {errors.cost?.message}
                                 </span>
                             )}
                         </Field>
@@ -113,27 +114,34 @@ export function CardDetails() {
                                 type="text"
                                 placeholder="0"
                                 className="border border-gray-300"
-                                {...register('poder')}
+                                {...register('power')} // ATUALIZADO
                             />
-                            {errors.poder && (
+                            {errors.power && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.poder?.message}
+                                    {errors.power?.message}
                                 </span>
                             )}
                         </Field>
 
                         <Field className="col-span-2">
                             <FieldLabel htmlFor="cor">Cor</FieldLabel>
-                            <SelectInput
-                                filter="Cor"
+                            <Controller
+                                control={control}
+                                name="colors" // ATUALIZADO
                                 defaultValue={onePieceColors[0]}
-                                params={onePieceColors}
-                                className="border border-gray-300"
-                                {...register('cor')}
+                                render={({ field }) => (
+                                    <SelectInput
+                                        filter="Cor"
+                                        params={onePieceColors}
+                                        className="border border-gray-300"
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
                             />
-                            {errors.cor && (
+                            {errors.colors && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.cor?.message}
+                                    {errors.colors?.message}
                                 </span>
                             )}
                         </Field>
@@ -142,20 +150,28 @@ export function CardDetails() {
 
                 <section className="">
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        
                         <Field className="col-span-2">
                             <FieldLabel htmlFor="edicao">
                                 Edição / Coleção
                             </FieldLabel>
-                            <SelectInput
-                                filter="Edições"
-                                className="border border-gray-300"
-                                params={onePieceTcgSetNames}
+                            <Controller
+                                control={control}
+                                name="collection" 
                                 defaultValue={onePieceTcgSetNames[0]}
-                                {...register('colecao')}
+                                render={({ field }) => (
+                                    <SelectInput
+                                        filter="Edições"
+                                        className="border border-gray-300"
+                                        params={onePieceTcgSetNames}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
                             />
-                            {errors.colecao && (
+                            {errors.collection && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.colecao?.message}
+                                    {errors.collection?.message}
                                 </span>
                             )}
                         </Field>
@@ -164,16 +180,23 @@ export function CardDetails() {
                             <FieldLabel htmlFor="tratamento">
                                 Tratamento
                             </FieldLabel>
-                            <SelectInput
-                                filter="Character"
-                                className="border border-gray-300"
-                                params={onePieceTreatments}
+                            <Controller
+                                control={control}
+                                name="treatment" 
                                 defaultValue={onePieceTreatments[0]}
-                                {...register('tratamento')}
+                                render={({ field }) => (
+                                    <SelectInput
+                                        filter="Tratamento"
+                                        className="border border-gray-300"
+                                        params={onePieceTreatments}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
                             />
-                            {errors.tratamento && (
+                            {errors.treatment && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.tratamento?.message}
+                                    {errors.treatment?.message}
                                 </span>
                             )}
                         </Field>
@@ -182,16 +205,23 @@ export function CardDetails() {
                             <FieldLabel htmlFor="tipocarta">
                                 Tipo da carta
                             </FieldLabel>
-                            <SelectInput
-                                filter="Tipo da carta"
-                                className="border border-gray-300"
-                                params={onePieceCardTypes}
+                            <Controller
+                                control={control}
+                                name="cardType" 
                                 defaultValue={onePieceCardTypes[0]}
-                                {...register('tipoCarta')}
+                                render={({ field }) => (
+                                    <SelectInput
+                                        filter="Tipo da carta"
+                                        className="border border-gray-300"
+                                        params={onePieceCardTypes}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
                             />
-                            {errors.tipoCarta && (
+                            {errors.cardType && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.tipoCarta?.message}
+                                    {errors.cardType?.message}
                                 </span>
                             )}
                         </Field>
@@ -200,10 +230,10 @@ export function CardDetails() {
                             <FieldLabel htmlFor="counter">Counter</FieldLabel>
                             <Input
                                 id="counter"
-                                type="text"
+                                type="number"
                                 placeholder="0"
                                 className="border border-gray-300"
-                                {...register('counter')}
+                                {...register('counter' , {valueAsNumber: true})}
                             />
                             {errors.counter && (
                                 <span className="text-red-500 text-xs">
@@ -216,16 +246,23 @@ export function CardDetails() {
                             <FieldLabel htmlFor="atributocombate">
                                 Atributo de combate
                             </FieldLabel>
-                            <SelectInput
-                                filter="Atributo de combate"
-                                className="border border-gray-300"
-                                params={onePieceAttributes}
+                            <Controller
+                                control={control}
+                                name="combatAttribute" 
                                 defaultValue={onePieceAttributes[0]}
-                                {...register('atributoCombate')}
+                                render={({ field }) => (
+                                    <SelectInput
+                                        filter="Atributo de combate"
+                                        className="border border-gray-300"
+                                        params={onePieceAttributes}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    />
+                                )}
                             />
-                            {errors.atributoCombate && (
+                            {errors.combatAttribute && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.atributoCombate?.message}
+                                    {errors.combatAttribute?.message}
                                 </span>
                             )}
                         </Field>
@@ -236,11 +273,11 @@ export function CardDetails() {
                                 id="subtipos"
                                 type="text"
                                 placeholder="e.g Straw hat Crew, Supernovas"
-                                {...register('subtipos')}
+                                {...register('subTypes')} 
                             />
-                            {errors.subtipos && (
+                            {errors.subTypes && (
                                 <span className="text-red-500 text-xs">
-                                    {errors.subtipos?.message}
+                                    {errors.subTypes?.message}
                                 </span>
                             )}
                         </Field>
