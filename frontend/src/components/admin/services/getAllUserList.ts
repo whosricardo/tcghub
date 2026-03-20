@@ -4,22 +4,23 @@ import { fetchData } from "@/utils/fetchData"
 
 
 export interface UserResponse<T>{
-    data: T[];
-    currentPage: string;
-    totalPages: string;
-    totalElements: string;
+    content: T[];
+    currentPage: number;
+    totalPages: number;
+    totalElements: number;
 }
 
 export interface User {
     id: string;
-    name : string;
+    username : string;
     email: string;
 }
 
 
 export async function getAllUserList (page: number , limit: number):Promise<UserResponse<User>>{
     try {
-        const res = await fetchData(`/users?page=${page}&limit=${limit}` , {
+        const apiPage  = page - 1;
+        const res = await fetchData(`/users?page=${apiPage}&limit=${limit}` , {
             method: 'GET',
             headers: {
                 'Content-Type' : 'application/json'
@@ -28,9 +29,11 @@ export async function getAllUserList (page: number , limit: number):Promise<User
 
         if (!res.ok){
             const errorData = await res.json().catch(() => ({}));
-            throw new Error (errorData || 'Algo inesperado aconteceu');
+            const errorMessage = errorData?.message || JSON.stringify(errorData);
+            throw new Error (errorMessage || 'Algo inesperado aconteceu');
         }
         const resData = await res.json();
+        console.log("response: ", resData )
         return resData;
     }
     catch (error){
