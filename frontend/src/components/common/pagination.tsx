@@ -20,18 +20,7 @@ export function Pagination({ currentPage, setPage, limit = 10, isFetching, total
     })
     
     return (
-        <section className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-            <section className="text-sm text-gray-500">
-                Mostrando{' '}
-                <span className="font-medium text-gray-900">{startItem}</span>{' '}
-                de <span className="font-medium text-gray-900">{endItem}</span>{' '}
-                de{' '}
-                <span className="font-medium text-gray-900">
-                    {totalElements}
-                </span>{' '}
-                usuários
-            </section>
-
+        <section className="flex items-center justify-between mt-6 pt-4">
             <section className="flex items-center gap-1">
                 <button
                     onClick={() => setPage((old) => Math.max(old - 1, 1))}

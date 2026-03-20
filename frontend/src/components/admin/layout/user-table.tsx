@@ -18,8 +18,8 @@ export function UserTable() {
     const limit = 10
 
     const { data, isLoading, isError, isFetching } = useUserList(page, limit)
-    console.log('data: ', data?.content) 
-    
+    console.log('data: ', data?.content)
+
     if (isLoading)
         return <Spinner className="h-15 w-15 text-sky-600 mx-auto mt-10" />
     if (isError)
@@ -29,8 +29,11 @@ export function UserTable() {
             </section>
         )
     return (
-        <section className="w-full bg-white rounded-lg shadow-sm border p-4">
-            <section className="overflow-x-auto relative">
+        <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm">
+            <section className="w-full flex justify-start items-center bg-gray-50 border-b border-b-gray-300 p-4 rounded-t-2xl">
+                <p className="font-semibold text-md">Tabela de usuários</p>
+            </section>
+            <section className="overflow-x-auto relative px-6 pt-6">
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -54,16 +57,17 @@ export function UserTable() {
                 </Table>
             </section>
 
-            <Pagination 
-                currentPage={page} 
-                setPage={setPage} 
-                limit={limit} 
-                isFetching={isFetching}
-                data={data} 
-                totalElements={data?.totalElements || 0} 
-                totalPages={data?.totalPages || 1} 
-            />
-            
+            <section className='flex justify-end p-4'>
+                <Pagination
+                    currentPage={page}
+                    setPage={setPage}
+                    limit={limit}
+                    isFetching={isFetching}
+                    data={data}
+                    totalElements={data?.totalElements || 0}
+                    totalPages={data?.totalPages || 1}
+                />
+            </section>
         </section>
     )
 }
