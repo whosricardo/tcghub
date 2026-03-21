@@ -1,3 +1,5 @@
+'use server'
+
 import { fetchData } from "@/utils/fetchData";
 
 interface CardResponse<T>{
@@ -23,7 +25,7 @@ export interface CardProps {
     description: string;
 }
 
-interface CardSearchParams {
+export interface CardSearchParams {
     name?: string;
     collection?: string;
     color?: string;
@@ -42,10 +44,11 @@ const buildSearch = (param:CardSearchParams) => {
 
 
 
-export async function getAllCardList (param: CardSearchParams):Promise<CardResponse<CardProps>>{
+export async function getAllCardList (param: CardSearchParams, page: number , limit: number):Promise<CardResponse<CardProps>>{
+    const apiPage  = page - 1;
     const searchParams = buildSearch(param).toString();
-    const url_base = '/cards'
-    const url_final = `${url_base}?${searchParams}`
+    const url_base = `/cards?page=${apiPage}&limit=${limit}`
+    const url_final = `${url_base}&${searchParams}`
 
     try {
         const res = await fetchData(url_final , {
