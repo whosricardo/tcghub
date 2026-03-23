@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -20,7 +19,7 @@ export async function POST(request: Request) {
         }
 
         const resData = await res.json()
-        console.log('Resposta do Java:', resData)
+
         const token = resData.accessToken
         const refreshToken = resData.refreshToken
 

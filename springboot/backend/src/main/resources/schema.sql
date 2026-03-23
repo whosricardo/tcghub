@@ -12,3 +12,20 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
     expiry DATETIME NOT NULL,
     revoked BOOLEAN DEFAULT FALSE
 );
+
+CREATE TABLE IF NOT EXISTS cards (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    collection VARCHAR(50) NOT NULL,
+    card_number VARCHAR(20) NOT NULL UNIQUE,
+    rarity VARCHAR(10) NOT NULL,
+    treatment VARCHAR(50) NOT NULL,
+    card_type VARCHAR(50) NOT NULL,
+    cost INT,
+    power INT,
+    counter INT,
+    combat_attribute VARCHAR(50),
+    colors VARCHAR(255) NOT NULL,
+    subtypes VARCHAR(255),
+    description VARCHAR(255)
+);
