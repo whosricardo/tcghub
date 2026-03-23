@@ -26,6 +26,10 @@ public class User implements UserDetails {
         return List.of();
     }
 
+    public String getDisplayUsername() {
+        return username;
+    }
+
     @Override
     public String getUsername() {
         return email;

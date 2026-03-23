@@ -47,7 +47,7 @@ public class UserService {
         int offset = page * size;
         List<UserResponse> content = userRepository.findAll(offset, size)
                 .stream()
-                .map(user -> new UserResponse(user.getId(), user.getUsername(), user.getEmail()))
+                .map(user -> new UserResponse(user.getId(), user.getDisplayUsername(), user.getEmail()))
                 .toList();
         int totalElements = userRepository.count();
         int totalPages = (int) Math.ceil((double) totalElements / size);
