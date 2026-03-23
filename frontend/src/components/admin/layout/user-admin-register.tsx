@@ -33,7 +33,11 @@ export function UserAdminRegister() {
 
 
     if (isPending){
-        return <Spinner className='w-20 h-20 text-sky-600'/>
+        return (
+            <section className='relative w-full'>
+                <Spinner className='absolute w-20 h-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sky-600'/>
+            </section>
+        )
     }
 
     return (
