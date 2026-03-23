@@ -21,7 +21,7 @@ export async function sendUserRegister (params: UserProps){
         if (!res.ok){
             const error =  await res.json().catch(() => ({}));
             const errorMessage = error.message || JSON.stringify(error);
-            throw new Error (errorMessage || 'ALgum erro inesperado aconteceu.');
+            throw new Error (errorMessage || 'Algum erro inesperado aconteceu.');
         }
     }
     catch (error){

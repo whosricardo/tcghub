@@ -33,7 +33,7 @@ export function UserAdminRegister() {
 
 
     if (isPending){
-        return <Spinner className='text-sky-600' />
+        return <Spinner className='w-20 h-20 text-sky-600'/>
     }
 
     return (
@@ -112,7 +112,7 @@ export function UserAdminRegister() {
                         <Button onClick={() => reset()} className=" bg-gray-300 hover:bg-gray-400 text-accent-foreground">
                             Apagar
                         </Button>
-                        <Button >Enviar</Button>
+                        <Button type='submit'>Enviar</Button>
                     </section>
                 </Field>
             </FieldGroup>

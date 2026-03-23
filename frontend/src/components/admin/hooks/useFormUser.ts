@@ -5,9 +5,9 @@ export function useFormUser (){
     const query = useQueryClient();
     return useMutation({
         mutationFn: sendUserRegister,
-        onSuccess: (data) => {
-            console.log('Envio com sucesso', data);
-            query.invalidateQueries({ queryKey: ['users']})
+        onSuccess: async (data) => {
+            console.log('ENvio de formulárip', data);
+            await query.invalidateQueries({ queryKey: ['users']})
         },
         onError: (error) => {
             console.error('Erro ao enviar dados', error.message)

@@ -7,9 +7,9 @@ export function useFormCard (){
 
     return useMutation ({
         mutationFn: sendCardRegister,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             console.log('Envio com sucesso', data);
-            query.invalidateQueries({ queryKey: ['cards']})
+            await query.invalidateQueries({ queryKey: ['cards']})
         },
         onError: (error) => {
             console.error('Erro ao enviar dados', error.message)
