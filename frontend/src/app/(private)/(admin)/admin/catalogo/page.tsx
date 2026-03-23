@@ -15,7 +15,11 @@ export default function Catalogo() {
                     <Link href={'catalogo/add-product'}>Adicionar produto</Link>
                 </Button>
             </section>
-            <CardTable/>
+
+            <section className='max-w-4xl '>
+                <CardTable/>
+            </section>
+           
         </section>
     )
 }

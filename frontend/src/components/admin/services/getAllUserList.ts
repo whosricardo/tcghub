@@ -33,7 +33,6 @@ export async function getAllUserList (page: number , limit: number):Promise<User
             throw new Error (errorMessage || 'Algo inesperado aconteceu');
         }
         const resData = await res.json();
-        console.log("response: ", resData )
         return resData;
     }
     catch (error){
