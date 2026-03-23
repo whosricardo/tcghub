@@ -10,20 +10,34 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { User, Mail, UserLock, Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
+import { useFormUser } from '../hooks/useFormUser'
+import { Spinner } from '@/components/ui/spinner'
 
 export function UserAdminRegister() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<registerType>({
         resolver: zodResolver(registerSchema),
     })
 
+    const {mutate: registerUser , isPending, isError, error} = useFormUser();
     const [isVisible, setIsVisible] = useState(false)
 
+
+    function onSubmit (data: registerType){
+        registerUser(data);
+    }
+
+
+    if (isPending){
+        return <Spinner className='text-sky-600' />
+    }
+
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="username">Nome de usuário</FieldLabel>
@@ -95,8 +109,8 @@ export function UserAdminRegister() {
                     </section>
 
                     <section className='w-full flex flex-col-reverse md:flex-row justify-end gap-2'>
-                        <Button className=" bg-gray-300 hover:bg-gray-400 text-accent-foreground">
-                            Voltar
+                        <Button onClick={() => reset()} className=" bg-gray-300 hover:bg-gray-400 text-accent-foreground">
+                            Apagar
                         </Button>
                         <Button >Enviar</Button>
                     </section>
