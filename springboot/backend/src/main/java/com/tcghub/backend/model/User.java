@@ -27,7 +27,7 @@ public class User implements UserDetails {
     }
 
     public String getDisplayUsername() {
-        return username;
+        return this.username;
     }
 
     @Override
