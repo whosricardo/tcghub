@@ -35,7 +35,7 @@ public class UserRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, user.getUsername());
+            ps.setString(1, user.getDisplayUsername());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             return ps;
