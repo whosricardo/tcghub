@@ -26,5 +26,6 @@ CREATE TABLE IF NOT EXISTS cards (
     counter INT,
     combat_attribute VARCHAR(50),
     colors VARCHAR(255) NOT NULL,
-    subtypes VARCHAR(255)
+    subtypes VARCHAR(255),
+    description VARCHAR(255)
 );
