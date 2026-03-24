@@ -11,16 +11,21 @@ import {
 } from '../schemas/formAddProductSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFormCard } from '../hooks/useFormCard'
+import { useRouter } from 'next/navigation'
 
 export function FormAddProduct() {
+    const router = useRouter();
     const methods = useForm<formAddProductType>({
         resolver: zodResolver(formAddProductSchema),
     })
-
     const { mutate: registerCard, isPending, isError, error } = useFormCard()
 
     const onSubmit = (data: formAddProductType) => {
-        registerCard(data)
+        registerCard(data, {
+            onSuccess : () => {
+                router.push('/admin/catalogo')
+            }
+        })
     }
 
     return (

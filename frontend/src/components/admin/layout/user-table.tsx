@@ -12,6 +12,7 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { Pagination } from '@/components/common/pagination'
+import TableSkeleton from '@/shared/table-skeleton'
 
 export function UserTable() {
     const [page, setPage] = useState(1)
@@ -20,8 +21,16 @@ export function UserTable() {
     const { data, isLoading, isError, isFetching } = useUserList(page, limit)
     console.log('data: ', data?.content)
 
-    if (isLoading)
-        return <Spinner className="h-15 w-15 text-sky-600 mx-auto mt-10" />
+    if (isLoading){
+        return (
+            <section className='flex min-h-100 items-center justify-center'>
+                <Spinner className="h-15 w-15 text-sky-600 mx-auto mt-10" />
+            </section>
+        )
+    }
+        
+        
+        
     if (isError)
         return (
             <section className="text-sm text-red-500 p-4">
@@ -44,15 +53,23 @@ export function UserTable() {
                     </TableHeader>
 
                     <TableBody>
-                        {data?.content?.map((user) => (
-                            <TableRow key={user.id}>
-                                <TableCell className="font-medium">
-                                    {user.id}
-                                </TableCell>
-                                <TableCell>{user.username}</TableCell>
-                                <TableCell>{user.email}</TableCell>
-                            </TableRow>
-                        ))}
+                        {
+                            isFetching ? (
+                                Array.from({length: 4}).map((_ , index) => (
+                                    <TableSkeleton key={index}/>
+                                ))
+                            ): (
+                                    data?.content?.map((user) => (
+                                    <TableRow key={user.id}>
+                                        <TableCell className="font-medium">
+                                            {user.id}
+                                        </TableCell>
+                                        <TableCell>{user.username}</TableCell>
+                                        <TableCell>{user.email}</TableCell>
+                                    </TableRow>
+                                ))
+                            )
+                        }
                     </TableBody>
                 </Table>
             </section>

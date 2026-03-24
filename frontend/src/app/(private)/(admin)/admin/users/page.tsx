@@ -31,7 +31,7 @@ export default function Users() {
 
             <Modal isOpen={modalOpen} isClose={() => setModalOpen(false)}>
                 <h1 className='text-xl font-semibold pb-2'>Cadastro de usuários</h1>
-                <UserAdminRegister/>
+                <UserAdminRegister onClose={() => setModalOpen(false)}/>
             </Modal>
 
         </section>
