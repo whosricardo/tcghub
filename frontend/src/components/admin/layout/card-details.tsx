@@ -16,6 +16,7 @@ import { formAddProductType } from '../schemas/formAddProductSchema'
 import { useDebounce } from 'use-debounce'
 import { useQueryCardVerification } from '../hooks/useQueryCardVerification'
 import { useEffect, useState } from 'react'
+import TableSkeleton from '@/shared/table-skeleton'
 
 export function CardDetails() {
     const {
@@ -27,9 +28,10 @@ export function CardDetails() {
     } = useFormContext<formAddProductType>()
 
     const cardNameValue = watch('name') || ''
+    const cardType = watch('cardType') || ''
     const [debouncedValue] = useDebounce(cardNameValue, 500)
     const { data: cardSuggestion, isLoading } =
-        useQueryCardVerification(debouncedValue)
+        useQueryCardVerification(debouncedValue, cardType)
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     useEffect(() => {
@@ -94,14 +96,12 @@ export function CardDetails() {
                                 <ul className="absolute top-full mt-1 z-50 w-full bg-white border border-gray-200 max-h-60 overflow-y-auto rounded-md shadow-lg">
                                     {isLoading && (
                                         <li className="p-3 text-gray-500 text-sm">
-                                            Buscando na API...
+                                            <TableSkeleton/>
                                         </li>
                                     )}
                                     {cardSuggestion?.length === 0 &&
                                         !isLoading && (
-                                            <li className="p-3 text-gray-500 text-sm">
-                                                Nenhuma carta encontrada.
-                                            </li>
+                                            <TableSkeleton/>
                                         )}
                                     {cardSuggestion?.map(
                                         (card: any, index: number) => (
