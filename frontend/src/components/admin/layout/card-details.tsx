@@ -97,8 +97,8 @@ export function CardDetails() {
                                     {isLoading && (
                                         Array.from({length: debouncedValue.length}).map((_ , index) =>(
                                             
-                                            <section className='py-3'>
-                                                <TableSkeleton key={index}/>
+                                            <section key={index} className='p-3'>
+                                                <TableSkeleton/>
                                             </section>
                                         ))
                                     )}
