@@ -95,9 +95,12 @@ export function CardDetails() {
                             {isDropdownOpen && debouncedValue.length > 2 && (
                                 <ul className="absolute top-full mt-1 z-50 w-full bg-white border border-gray-200 max-h-60 overflow-y-auto rounded-md shadow-lg">
                                     {isLoading && (
-                                        <li className="p-3 text-gray-500 text-sm">
-                                            <TableSkeleton/>
-                                        </li>
+                                        Array.from({length: debouncedValue.length}).map((_ , index) =>(
+                                            
+                                            <section className='py-3'>
+                                                <TableSkeleton key={index}/>
+                                            </section>
+                                        ))
                                     )}
                                     {cardSuggestion?.length === 0 &&
                                         !isLoading && (
