@@ -43,6 +43,6 @@ CREATE TABLE IF NOT EXISTS single_cards (
          CHECK (power IS NULL OR power >= 0),
      CONSTRAINT chk_single_cards_counter
          CHECK (counter IS NULL OR counter >= 0)
-)
+);
 
 
