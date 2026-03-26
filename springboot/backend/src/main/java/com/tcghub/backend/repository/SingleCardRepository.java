@@ -23,6 +23,26 @@ public class SingleCardRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    private static final String CARD_SELECT = """
+        SELECT
+            p.id AS id,
+            p.name AS name,
+            p.collection AS collection,
+            sc.card_number AS card_number,
+            sc.rarity AS rarity,
+            sc.treatment AS treatment,
+            sc.card_type AS card_type,
+            sc.cost AS cost,
+            sc.power AS power,
+            sc.counter AS counter,
+            sc.combat_attribute AS combat_attribute,
+            sc.colors AS colors,
+            sc.subtypes AS subtypes,
+            sc.description AS description
+        FROM products p
+        JOIN single_cards sc ON sc.product_id = p.id
+        """;
+
     private final RowMapper<SingleCard> cardRowMapper = (rs, rowNum) -> new SingleCard(
             rs.getLong("id"),
             rs.getString("name"),
@@ -37,60 +57,79 @@ public class SingleCardRepository {
             rs.getString("combat_attribute"),
             rs.getString("colors"),
             rs.getString("subtypes"),
-            rs.getString("description"));
+            rs.getString("description")
+    );
 
     public SingleCard save(SingleCard singleCard) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        // 1) salva a parte base em products
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO cards (name, collection, card_number, rarity, treatment, card_type, cost, power, counter, combat_attribute, colors, subtypes, description) "
-                            +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+                    "INSERT INTO products (name, collection) VALUES (?, ?)",
+                    Statement.RETURN_GENERATED_KEYS
+            );
             ps.setString(1, singleCard.getName());
             ps.setString(2, singleCard.getCollection());
-            ps.setString(3, singleCard.getCardNumber());
-            ps.setString(4, singleCard.getRarity());
-            ps.setString(5, singleCard.getTreatment().name());
-            ps.setString(6, singleCard.getCardType());
-            ps.setObject(7, singleCard.getCost());
-            ps.setObject(8, singleCard.getPower());
-            ps.setObject(9, singleCard.getCounter());
-            ps.setString(10, singleCard.getCombatAttribute());
-            ps.setString(11, singleCard.getColors());
-            ps.setString(12, singleCard.getSubtypes());
-            ps.setString(13, singleCard.getDescription());
             return ps;
         }, keyHolder);
-        singleCard.setId(keyHolder.getKey().longValue());
+
+        Number key = keyHolder.getKey();
+        if (key == null) {
+            throw new IllegalStateException("Failed to obtain generated product ID");
+        }
+
+        Long productId = key.longValue();
+
+        // 2) salva a parte específica em single_cards
+        jdbcTemplate.update("""
+                INSERT INTO single_cards (
+                    product_id, card_number, rarity, treatment, card_type,
+                    cost, power, counter, combat_attribute, colors, subtypes, description
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                productId,
+                singleCard.getCardNumber(),
+                singleCard.getRarity(),
+                singleCard.getTreatment().name(),
+                singleCard.getCardType(),
+                singleCard.getCost(),
+                singleCard.getPower(),
+                singleCard.getCounter(),
+                singleCard.getCombatAttribute(),
+                singleCard.getColors(),
+                singleCard.getSubtypes(),
+                singleCard.getDescription()
+        );
+
+        singleCard.setId(productId);
         return singleCard;
     }
 
     public Optional<SingleCard> findById(Long id) {
-        List<SingleCard> result = jdbcTemplate.query(
-                "SELECT * FROM cards WHERE id = ?",
-                cardRowMapper, id);
+        String sql = CARD_SELECT + " WHERE p.id = ?";
+        List<SingleCard> result = jdbcTemplate.query(sql, cardRowMapper, id);
         return result.stream().findFirst();
     }
 
     public List<SingleCard> findAll(String name, String collection, String color, String cardType, int offset, int size) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM cards WHERE 1=1");
+        StringBuilder sql = new StringBuilder(CARD_SELECT + " WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
         if (name != null && !name.isBlank()) {
-            sql.append(" AND name LIKE ?");
+            sql.append(" AND p.name LIKE ?");
             params.add("%" + name + "%");
         }
         if (collection != null && !collection.isBlank()) {
-            sql.append(" AND collection = ?");
+            sql.append(" AND p.collection = ?");
             params.add(collection);
         }
         if (color != null && !color.isBlank()) {
-            sql.append(" AND colors LIKE ?");
+            sql.append(" AND sc.colors LIKE ?");
             params.add("%" + color + "%");
         }
         if (cardType != null && !cardType.isBlank()) {
-            sql.append(" AND card_type = ?");
+            sql.append(" AND sc.card_type = ?");
             params.add(cardType);
         }
 
@@ -102,26 +141,75 @@ public class SingleCardRepository {
     }
 
     public int count(String name, String collection, String color, String cardType) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM cards WHERE 1=1");
+        StringBuilder sql = new StringBuilder("""
+            SELECT COUNT(*)
+            FROM products p
+            JOIN single_cards sc ON sc.product_id = p.id
+            WHERE 1=1
+            """);
+
         List<Object> params = new ArrayList<>();
 
         if (name != null && !name.isBlank()) {
-            sql.append(" AND name LIKE ?");
+            sql.append(" AND p.name LIKE ?");
             params.add("%" + name + "%");
         }
         if (collection != null && !collection.isBlank()) {
-            sql.append(" AND collection = ?");
+            sql.append(" AND p.collection = ?");
             params.add(collection);
         }
         if (color != null && !color.isBlank()) {
-            sql.append(" AND colors LIKE ?");
+            sql.append(" AND sc.colors LIKE ?");
             params.add("%" + color + "%");
         }
         if (cardType != null && !cardType.isBlank()) {
-            sql.append(" AND card_type = ?");
+            sql.append(" AND sc.card_type = ?");
             params.add(cardType);
         }
 
-        return jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
+        Integer count = jdbcTemplate.queryForObject(sql.toString(), Integer.class, params.toArray());
+        return count != null ? count : 0;
+    }
+
+    public boolean update(SingleCard card) {
+        int updatedProducts = jdbcTemplate.update("""
+                UPDATE products
+                SET name = ?, collection = ?
+                WHERE id = ?
+                """,
+                card.getName(),
+                card.getCollection(),
+                card.getId()
+        );
+
+        int updatedSingleCards = jdbcTemplate.update("""
+                UPDATE single_cards
+                SET card_number = ?, rarity = ?, treatment = ?, card_type = ?,
+                    cost = ?, power = ?, counter = ?, combat_attribute = ?,
+                    colors = ?, subtypes = ?, description = ?
+                WHERE product_id = ?
+                """,
+                card.getCardNumber(),
+                card.getRarity(),
+                card.getTreatment().name(),
+                card.getCardType(),
+                card.getCost(),
+                card.getPower(),
+                card.getCounter(),
+                card.getCombatAttribute(),
+                card.getColors(),
+                card.getSubtypes(),
+                card.getDescription(),
+                card.getId()
+        );
+
+        return updatedProducts > 0 && updatedSingleCards > 0;
+    }
+
+    public boolean deleteById(Long id) {
+        // como single_cards depende de products com ON DELETE CASCADE,
+        // apagar em products já remove o registro filho
+        int rowsAffected = jdbcTemplate.update("DELETE FROM products WHERE id = ?", id);
+        return rowsAffected > 0;
     }
 }

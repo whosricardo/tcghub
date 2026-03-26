@@ -13,19 +13,36 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
     revoked BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE IF NOT EXISTS cards (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+CREATE TABLE IF NOT EXISTS products (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
-    collection VARCHAR(50) NOT NULL,
-    card_number VARCHAR(20) NOT NULL UNIQUE,
-    rarity VARCHAR(10) NOT NULL,
-    treatment VARCHAR(50) NOT NULL,
-    card_type VARCHAR(50) NOT NULL,
-    cost INT,
-    power INT,
-    counter INT,
-    combat_attribute VARCHAR(50),
-    colors VARCHAR(255) NOT NULL,
-    subtypes VARCHAR(255),
-    description VARCHAR(255)
+    collection VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS single_cards (
+     product_id BIGINT PRIMARY KEY,
+     card_number VARCHAR(20) NOT NULL UNIQUE,
+     rarity VARCHAR(10) NOT NULL,
+     treatment VARCHAR(50) NOT NULL,
+     card_type VARCHAR(50) NOT NULL,
+     cost INT,
+     power INT,
+     counter INT,
+     combat_attribute VARCHAR(50),
+     colors VARCHAR(255) NOT NULL,
+     subtypes VARCHAR(255),
+     description VARCHAR(255),
+     CONSTRAINT fk_single_cards_product
+         FOREIGN KEY (product_id)
+         REFERENCES products(id)
+         ON UPDATE CASCADE
+         ON DELETE CASCADE,
+     CONSTRAINT chk_single_cards_cost
+         CHECK (cost IS NULL OR cost >= 0),
+     CONSTRAINT chk_single_cards_power
+         CHECK (power IS NULL OR power >= 0),
+     CONSTRAINT chk_single_cards_counter
+         CHECK (counter IS NULL OR counter >= 0)
+)
+
+
