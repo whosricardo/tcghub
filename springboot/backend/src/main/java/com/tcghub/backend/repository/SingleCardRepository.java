@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CardRepository {
+public class SingleCardRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public CardRepository(JdbcTemplate jdbcTemplate) {
+    public SingleCardRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

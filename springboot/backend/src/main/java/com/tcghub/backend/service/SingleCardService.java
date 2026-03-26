@@ -1,7 +1,7 @@
 package com.tcghub.backend.service;
 
-import com.tcghub.backend.dto.CardRequest;
-import com.tcghub.backend.dto.CardResponse;
+import com.tcghub.backend.dto.SingleCardRequest;
+import com.tcghub.backend.dto.SingleCardResponse;
 import com.tcghub.backend.exception.NotFoundException;
 import com.tcghub.backend.model.SingleCard;
 import com.tcghub.backend.repository.SingleCardRepository;
@@ -11,15 +11,15 @@ import com.tcghub.backend.dto.PageResponse;
 import java.util.List;
 
 @Service
-public class CardService {
+public class SingleCardService {
 
     private final SingleCardRepository singleCardRepository;
 
-    public CardService(SingleCardRepository singleCardRepository) {
+    public SingleCardService(SingleCardRepository singleCardRepository) {
         this.singleCardRepository = singleCardRepository;
     }
 
-    public CardResponse createCard(CardRequest request) {
+    public SingleCardResponse createCard(SingleCardRequest request) {
         SingleCard singleCard = new SingleCard(
                 null,
                 request.name(),
@@ -39,16 +39,16 @@ public class CardService {
         return toResponse(saved);
     }
 
-    public CardResponse findById(Long id) {
+    public SingleCardResponse findById(Long id) {
         SingleCard singleCard = singleCardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Carta não encontrada"));
         return toResponse(singleCard);
     }
 
-    public PageResponse<CardResponse> findAll(String name, String collection, String color, String cardType, int page,
-            int size) {
+    public PageResponse<SingleCardResponse> findAll(String name, String collection, String color, String cardType, int page,
+                                                    int size) {
         int offset = page * size;
-        List<CardResponse> content = singleCardRepository.findAll(name, collection, color, cardType, offset, size)
+        List<SingleCardResponse> content = singleCardRepository.findAll(name, collection, color, cardType, offset, size)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -57,8 +57,8 @@ public class CardService {
         return new PageResponse<>(content, page, totalPages, totalElements);
     }
 
-    private CardResponse toResponse(SingleCard singleCard) {
-        return new CardResponse(
+    private SingleCardResponse toResponse(SingleCard singleCard) {
+        return new SingleCardResponse(
                 singleCard.getId(),
                 singleCard.getName(),
                 singleCard.getCollection(),
