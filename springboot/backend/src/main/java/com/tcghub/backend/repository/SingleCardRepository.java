@@ -1,6 +1,6 @@
 package com.tcghub.backend.repository;
 
-import com.tcghub.backend.model.Card;
+import com.tcghub.backend.model.SingleCard;
 import com.tcghub.backend.model.enums.Treatment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,7 +23,7 @@ public class CardRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<Card> cardRowMapper = (rs, rowNum) -> new Card(
+    private final RowMapper<SingleCard> cardRowMapper = (rs, rowNum) -> new SingleCard(
             rs.getLong("id"),
             rs.getString("name"),
             rs.getString("collection"),
@@ -39,7 +39,7 @@ public class CardRepository {
             rs.getString("subtypes"),
             rs.getString("description"));
 
-    public Card save(Card card) {
+    public SingleCard save(SingleCard singleCard) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
@@ -47,33 +47,33 @@ public class CardRepository {
                             +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, card.getName());
-            ps.setString(2, card.getCollection());
-            ps.setString(3, card.getCardNumber());
-            ps.setString(4, card.getRarity());
-            ps.setString(5, card.getTreatment().name());
-            ps.setString(6, card.getCardType());
-            ps.setObject(7, card.getCost());
-            ps.setObject(8, card.getPower());
-            ps.setObject(9, card.getCounter());
-            ps.setString(10, card.getCombatAttribute());
-            ps.setString(11, card.getColors());
-            ps.setString(12, card.getSubtypes());
-            ps.setString(13, card.getDescription());
+            ps.setString(1, singleCard.getName());
+            ps.setString(2, singleCard.getCollection());
+            ps.setString(3, singleCard.getCardNumber());
+            ps.setString(4, singleCard.getRarity());
+            ps.setString(5, singleCard.getTreatment().name());
+            ps.setString(6, singleCard.getCardType());
+            ps.setObject(7, singleCard.getCost());
+            ps.setObject(8, singleCard.getPower());
+            ps.setObject(9, singleCard.getCounter());
+            ps.setString(10, singleCard.getCombatAttribute());
+            ps.setString(11, singleCard.getColors());
+            ps.setString(12, singleCard.getSubtypes());
+            ps.setString(13, singleCard.getDescription());
             return ps;
         }, keyHolder);
-        card.setId(keyHolder.getKey().longValue());
-        return card;
+        singleCard.setId(keyHolder.getKey().longValue());
+        return singleCard;
     }
 
-    public Optional<Card> findById(Long id) {
-        List<Card> result = jdbcTemplate.query(
+    public Optional<SingleCard> findById(Long id) {
+        List<SingleCard> result = jdbcTemplate.query(
                 "SELECT * FROM cards WHERE id = ?",
                 cardRowMapper, id);
         return result.stream().findFirst();
     }
 
-    public List<Card> findAll(String name, String collection, String color, String cardType, int offset, int size) {
+    public List<SingleCard> findAll(String name, String collection, String color, String cardType, int offset, int size) {
         StringBuilder sql = new StringBuilder("SELECT * FROM cards WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
