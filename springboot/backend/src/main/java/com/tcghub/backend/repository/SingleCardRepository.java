@@ -63,7 +63,6 @@ public class SingleCardRepository {
     public SingleCard save(SingleCard singleCard) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        // 1) salva a parte base em products
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
                     "INSERT INTO products (name, collection) VALUES (?, ?)",
@@ -81,7 +80,6 @@ public class SingleCardRepository {
 
         Long productId = key.longValue();
 
-        // 2) salva a parte específica em single_cards
         jdbcTemplate.update("""
                 INSERT INTO single_cards (
                     product_id, card_number, rarity, treatment, card_type,
@@ -207,8 +205,6 @@ public class SingleCardRepository {
     }
 
     public boolean deleteById(Long id) {
-        // como single_cards depende de products com ON DELETE CASCADE,
-        // apagar em products já remove o registro filho
         int rowsAffected = jdbcTemplate.update("DELETE FROM products WHERE id = ?", id);
         return rowsAffected > 0;
     }
