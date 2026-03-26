@@ -7,6 +7,7 @@ import com.tcghub.backend.model.SingleCard;
 import com.tcghub.backend.repository.SingleCardRepository;
 import org.springframework.stereotype.Service;
 import com.tcghub.backend.dto.PageResponse;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class SingleCardService {
         this.singleCardRepository = singleCardRepository;
     }
 
+    @Transactional
     public SingleCardResponse createCard(SingleCardRequest request) {
         SingleCard singleCard = new SingleCard(
                 null,
@@ -39,12 +41,14 @@ public class SingleCardService {
         return toResponse(saved);
     }
 
+    @Transactional(readOnly = true)
     public SingleCardResponse findById(Long id) {
         SingleCard singleCard = singleCardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Carta não encontrada"));
         return toResponse(singleCard);
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<SingleCardResponse> findAll(String name, String collection, String color, String cardType, int page,
                                                     int size) {
         int offset = page * size;
