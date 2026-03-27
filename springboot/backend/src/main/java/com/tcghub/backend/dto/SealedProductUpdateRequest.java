@@ -1,4 +1,6 @@
 package com.tcghub.backend.dto;
 
-public record SealedProductUpdateRequest(String description) {
+import jakarta.validation.constraints.NotBlank;
+
+public record SealedProductUpdateRequest(@NotBlank String description) {
 }
