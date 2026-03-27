@@ -169,39 +169,16 @@ public class SingleCardRepository {
         return count != null ? count : 0;
     }
 
-    public boolean update(SingleCard card) {
-        int updatedProducts = jdbcTemplate.update("""
-                UPDATE products
-                SET name = ?, collection = ?
-                WHERE id = ?
-                """,
-                card.getName(),
-                card.getCollection(),
-                card.getId()
+    public boolean updateDescription(Long id, String description) {
+        int rowsAffected = jdbcTemplate.update("""
+            UPDATE single_cards
+            SET description = ?
+            WHERE product_id = ?
+            """,
+                description,
+                id
         );
-
-        int updatedSingleCards = jdbcTemplate.update("""
-                UPDATE single_cards
-                SET card_number = ?, rarity = ?, treatment = ?, card_type = ?,
-                    cost = ?, power = ?, counter = ?, combat_attribute = ?,
-                    colors = ?, subtypes = ?, description = ?
-                WHERE product_id = ?
-                """,
-                card.getCardNumber(),
-                card.getRarity(),
-                card.getTreatment().name(),
-                card.getCardType(),
-                card.getCost(),
-                card.getPower(),
-                card.getCounter(),
-                card.getCombatAttribute(),
-                card.getColors(),
-                card.getSubtypes(),
-                card.getDescription(),
-                card.getId()
-        );
-
-        return updatedProducts > 0 && updatedSingleCards > 0;
+        return rowsAffected > 0;
     }
 
     public boolean deleteById(Long id) {

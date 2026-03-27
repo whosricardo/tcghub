@@ -2,6 +2,7 @@ package com.tcghub.backend.service;
 
 import com.tcghub.backend.dto.SingleCardRequest;
 import com.tcghub.backend.dto.SingleCardResponse;
+import com.tcghub.backend.dto.SingleCardUpdateRequest;
 import com.tcghub.backend.exception.NotFoundException;
 import com.tcghub.backend.model.SingleCard;
 import com.tcghub.backend.repository.SingleCardRepository;
@@ -77,5 +78,19 @@ public class SingleCardService {
                 singleCard.getColors(),
                 singleCard.getSubtypes(),
                 singleCard.getDescription());
+    }
+
+    @Transactional
+    public SingleCardResponse updateDescription(Long id, SingleCardUpdateRequest request) {
+        singleCardRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Carta não encontrada"));
+        singleCardRepository.updateDescription(id, request.description());
+        return toResponse(singleCardRepository.findById(id).get());
+    }
+
+    public void deleteById(Long id) {
+        singleCardRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Carta não encontrada"));
+        singleCardRepository.deleteById(id);
     }
 }

@@ -3,6 +3,7 @@ package com.tcghub.backend.controller;
 import com.tcghub.backend.dto.SingleCardRequest;
 import com.tcghub.backend.dto.SingleCardResponse;
 import com.tcghub.backend.dto.PageResponse;
+import com.tcghub.backend.dto.SingleCardUpdateRequest;
 import com.tcghub.backend.service.SingleCardService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,14 +14,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/single-cards")
@@ -57,5 +51,20 @@ public class SingleCardController {
     @Operation(summary = "Buscar carta por ID", description = "Retorna os detalhes de uma carta específica baseada no seu ID.")
     public SingleCardResponse findById(@Parameter(description = "ID único da carta") @PathVariable Long id) {
         return singleCardService.findById(id);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Atualizar descrição da carta", description = "Atualiza apenas a descrição de uma carta existente.")
+    public SingleCardResponse updateDescription(
+            @Parameter(description = "ID único da carta") @PathVariable Long id,
+            @Valid @RequestBody SingleCardUpdateRequest request) {
+        return singleCardService.updateDescription(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Deletar carta", description = "Remove uma carta do banco de dados.")
+    public void deleteById(@Parameter(description = "ID único da carta") @PathVariable Long id) {
+        singleCardService.deleteById(id);
     }
 }
