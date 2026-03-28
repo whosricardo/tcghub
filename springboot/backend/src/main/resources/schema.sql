@@ -45,4 +45,13 @@ CREATE TABLE IF NOT EXISTS single_cards (
          CHECK (counter IS NULL OR counter >= 0)
 );
 
-
+CREATE TABLE IF NOT EXISTS sealed_products (
+    product_id BIGINT PRIMARY KEY,
+    sealed_type VARCHAR(50) NOT NULL,
+    description VARCHAR(255),
+    CONSTRAINT fk_sealed_products_product
+    FOREIGN KEY (product_id)
+    REFERENCES products(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
