@@ -4,7 +4,7 @@ import com.tcghub.backend.model.enums.Treatment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CardRequest(
+public record SingleCardRequest(
         @NotBlank String name,
         @NotBlank String collection,
         @NotBlank String cardNumber,

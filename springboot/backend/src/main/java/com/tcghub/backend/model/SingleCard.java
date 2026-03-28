@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Card {
+public class SingleCard {
     private Long id;
     private String name;
     private String collection;

@@ -2,7 +2,7 @@ package com.tcghub.backend.dto;
 
 import com.tcghub.backend.model.enums.Treatment;
 
-public record CardResponse(
+public record SingleCardResponse(
         Long id,
         String name,
         String collection,
