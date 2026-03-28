@@ -79,3 +79,19 @@ CREATE TABLE IF NOT EXISTS single_card_colors (
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS single_card_subtypes (
+    product_id BIGINT NOT NULL,
+    subtype_id BIGINT NOT NULL,
+    PRIMARY KEY (product_id, subtype_id),
+    CONSTRAINT fk_single_card_subtypes_card
+        FOREIGN KEY (product_id)
+        REFERENCES single_cards(product_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_single_card_subtypes_subtype
+        FOREIGN KEY (subtype_id)
+        REFERENCES subtypes(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
