@@ -2,52 +2,41 @@
 
 import { fetchData } from "@/utils/fetchData";
 
-interface CardResponse<T>{
+interface SealedProductResponse<T>{
     content: T[];
     currentPage: number;
     totalPages: number;
     totalElements: number;
 }
 
-export interface CardProps {
+export interface SealedProductProps {
     id: string | number;
     name: string;
     collection: string;
-    cardNumber: string;
-    rarity: string;
-    treatment: string;
-    cardType: string;
-    cost: number;
-    power: number;
-    combatAttribute: string;
-    colors: string;
-    subtypes: string;
+    sealedType: string;
     description: string;
 }
 
-export interface CardSearchParams {
+export interface SealedProductSearchParams {
     name?: string;
     collection?: string;
-    color?: string;
-    cardType?: string;
+    sealedType?: string;
 }
 
-const buildSearch = (param:CardSearchParams) => {
+const buildSearch = (param: SealedProductSearchParams) => {
     const query = new URLSearchParams();
     Object.entries(param).forEach(([key, value]) => {
         if (value !== undefined && value !== ""){
-            query.append(key,String(value))
+            query.append(key, String(value))
         }
     })
     return query;
 }
 
-
-
-export async function getAllCardList (param: CardSearchParams, page: number , limit: number):Promise<CardResponse<CardProps>>{
+export async function getAllSealedProducts(param: SealedProductSearchParams, page: number, limit: number): Promise<SealedProductResponse<SealedProductProps>>{
     const apiPage  = page - 1;
     const searchParams = buildSearch(param).toString();
-    const url_base = `/single-cards?page=${apiPage}&limit=${limit}`
+    const url_base = `/sealed-products?page=${apiPage}&limit=${limit}`
     const url_final = `${url_base}&${searchParams}`
 
     try {
@@ -59,9 +48,9 @@ export async function getAllCardList (param: CardSearchParams, page: number , li
         })
 
         if (!res.ok){
-            const error = await res.json().catch((e) => ({}));
+            const error = await res.json().catch(() => ({}));
             const errorMessage = error?.message || JSON.stringify(error);
-            throw new Error (errorMessage || 'Algo inesperado aconteceu');
+            throw new Error(errorMessage || 'Algo inesperado aconteceu');
         }
 
         const resData = await res.json();

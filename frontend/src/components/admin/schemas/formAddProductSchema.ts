@@ -14,7 +14,7 @@ export const formAddProductSchema = z.object({
     counter: z.number().int().nonnegative().min(1 , 'Preenchimento Obrigatório'),
     combatAttribute: z.string().min(1 , 'Preenchimento obrigatório'),
     subTypes: z.string().min(1 , 'Preenchimento obrigatório'),
-    description: z.string().min(1 , { message: 'Preenchimento obrigatório'}).max(30 , {message: 'Máximo de 30 caracteres'})
+    description: z.string().min(1 , { message: 'Preenchimento obrigatório'}).max(400 , {message: 'Máximo de 30 caracteres'})
 })
 
 

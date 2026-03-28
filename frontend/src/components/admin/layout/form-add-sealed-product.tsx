@@ -2,28 +2,35 @@
 
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
-import { CardDetails } from '@/components/admin/layout/card-details'
-import { CardDescription } from './card-description'
+import { SealedProductDetails } from '@/components/admin/layout/product-sealed-details'
+import { SealedProductDescription } from './product-sealed-description'
 import { FormProvider, useForm } from 'react-hook-form'
 import {
-    formAddProductSchema,
-    formAddProductType,
-} from '../schemas/formAddProductSchema'
+    formAddSealedProductSchema,
+    formAddSealedProductType,
+} from '../schemas/formAddSealedProductSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFormCard } from '../hooks/useFormCard'
+import { useFormSealedProduct } from '../hooks/useFormSealedProduct'
 import { useRouter } from 'next/navigation'
 
-export function FormAddProduct() {
+export function FormAddSealedProduct() {
     const router = useRouter();
-    const methods = useForm<formAddProductType>({
-        resolver: zodResolver(formAddProductSchema),
+    const methods = useForm<formAddSealedProductType>({
+        resolver: zodResolver(formAddSealedProductSchema),
+        defaultValues: {
+            name: '',
+            collection: '',
+            sealedType: '',
+            description: ''
+        }
     })
-    const { mutate: registerCard, isPending, isError, error } = useFormCard()
+    
+    const { mutate: registerSealedProduct, isPending, isError, error } = useFormSealedProduct()
 
-    const onSubmit = (data: formAddProductType) => {
-        registerCard(data, {
+    const onSubmit = (data: formAddSealedProductType) => {
+        registerSealedProduct(data, {
             onSuccess : () => {
-                router.push('/admin/catalogo')
+                router.push('/admin/sealed-product')
             }
         })
     }
@@ -37,14 +44,14 @@ export function FormAddProduct() {
                 <header className="flex flex-col md:flex-row justify-start items-center md:justify-between gap-3 mb-3">
                     <section>
                         <h1 className="text-2xl font-bold text-black">
-                            Adicionar novo produto{' '}
+                            Adicionar produto selado{' '}
                         </h1>
                         <p className="text-sm text-gray-400 break-after-auto">
-                            Popular banco de dados de cartas/decks/boxes
+                            Popular banco de dados de produtos selados (booster boxes, decks, etc.)
                         </p>
                     </section>
 
-                    <section className="flex gap-1">
+                    <section className="flex gap-1 items-center">
                         <Button type='button' onClick={() => methods.reset()} className="bg-gray-300 hover:bg-gray-400 text-accent-foreground">
                             Descartar
                         </Button>
@@ -56,7 +63,7 @@ export function FormAddProduct() {
                             )}
                         </Button>
                         {isError && (
-                            <p className="text-red-500 text-xs">
+                            <p className="text-red-500 text-xs mt-1">
                                 {error.message}
                             </p>
                         )}
@@ -65,9 +72,9 @@ export function FormAddProduct() {
 
                 <section className="lg:col-span-2 flex flex-col gap-6">
                     <section className="lg:col-span-2 flex">
-                        <CardDetails />
+                        <SealedProductDetails />
                     </section>
-                    <CardDescription />
+                    <SealedProductDescription />
                 </section>
             </form>
         </FormProvider>

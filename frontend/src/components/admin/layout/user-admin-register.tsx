@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { useFormUser } from '../hooks/useFormUser'
 import { Spinner } from '@/components/ui/spinner'
 
-export function UserAdminRegister() {
+export function UserAdminRegister({ onClose }: { onClose: () => void }) {
     const {
         register,
         handleSubmit,
@@ -23,19 +23,21 @@ export function UserAdminRegister() {
         resolver: zodResolver(registerSchema),
     })
 
-    const {mutate: registerUser , isPending, isError, error} = useFormUser();
+    const { mutate: registerUser, isPending, isError, error } = useFormUser()
     const [isVisible, setIsVisible] = useState(false)
 
-
-    function onSubmit (data: registerType){
-        registerUser(data);
+    function onSubmit(data: registerType) {
+        registerUser(data, {
+            onSuccess: () => {
+                onClose()
+            },
+        })
     }
 
-
-    if (isPending){
+    if (isPending) {
         return (
-            <section className='relative w-full'>
-                <Spinner className='absolute w-20 h-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sky-600'/>
+            <section className="flex min-h-100 items-center justify-center">
+                <Spinner className="h-15 w-15 text-sky-600 mx-auto mt-10" />
             </section>
         )
     }
@@ -112,11 +114,14 @@ export function UserAdminRegister() {
                         )}
                     </section>
 
-                    <section className='w-full flex flex-col-reverse md:flex-row justify-end gap-2'>
-                        <Button onClick={() => reset()} className=" bg-gray-300 hover:bg-gray-400 text-accent-foreground">
+                    <section className="w-full flex flex-col-reverse md:flex-row justify-end gap-2">
+                        <Button
+                            onClick={() => reset()}
+                            className=" bg-gray-300 hover:bg-gray-400 text-accent-foreground"
+                        >
                             Apagar
                         </Button>
-                        <Button type='submit'>Enviar</Button>
+                        <Button type="submit">Enviar</Button>
                     </section>
                 </Field>
             </FieldGroup>
