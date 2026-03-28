@@ -12,7 +12,7 @@ export default function SealedProduct() {
                 </section>
                 
                 <Button>
-                    <Link href={'catalogo/add-sealed-product'}>Adicionar produto</Link>
+                    <Link href={'sealed-product/add-sealed-product'}>Adicionar produto</Link>
                 </Button>
             </section>
 

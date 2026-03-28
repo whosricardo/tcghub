@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/table'
 import { Pagination } from '@/components/common/pagination'
 
-import { useFormSealedProduct } from '../hooks/useFormSealedProduct' 
+import { useQuerySealedProduct } from '../hooks/useQuerySealedProduct'
+import { SealedProductSearchParams, SealedProductProps } from '../services/getAllSealedProduct' 
 
 export function SealedProductTable() {
     const [page, setPage] = useState(1)
@@ -20,7 +21,7 @@ export function SealedProductTable() {
     
     const [params, setParams] = useState<SealedProductSearchParams>({})
 
-    const { data, isLoading, isError, isFetching } = useFormSealedProduct(params, page, limit)
+    const { data, isLoading, isError, isFetching } = useQuerySealedProduct(params, page, limit)
 
     if (isLoading)
         return <Spinner className="h-15 w-15 text-sky-600 mx-auto mt-10" />
@@ -52,21 +53,19 @@ export function SealedProductTable() {
                         <TableRow className="whitespace-nowrap">
                             <TableHead>Nome</TableHead>
                             <TableHead>Coleção</TableHead>
-                            <TableHead>Tipo de Produto</TableHead>
-                            <TableHead>Idioma</TableHead>
+                            <TableHead>Tipo de Selado</TableHead>
                             <TableHead>Descrição</TableHead>
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                        {data?.content?.map((product: any) => (
+                        {data?.content?.map((product: SealedProductProps) => (
                             <TableRow key={product.id} className="whitespace-nowrap">
                                 <TableCell className="font-medium">
                                     {product.name}
                                 </TableCell>
                                 <TableCell>{product.collection}</TableCell>
-                                <TableCell>{product.productType || '-'}</TableCell>
-                                <TableCell>{product.language || '-'}</TableCell>
+                                <TableCell>{product.sealedType || '-'}</TableCell>
                                 <TableCell 
                                     className="max-w-62.5 truncate" 
                                     title={product.description}

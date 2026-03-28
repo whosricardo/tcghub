@@ -4,8 +4,7 @@ import { fetchData } from "@/utils/fetchData";
 
 export async function sendSealedProductRegister(data: any) {
     try {
-        // Atualizado para o novo endpoint
-        const res = await fetchData('/sealed-product', {
+        const res = await fetchData('/sealed-products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
