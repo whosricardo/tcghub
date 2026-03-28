@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class SingleCard extends Product {
+
     private String cardNumber;
     private String rarity;
     private Treatment treatment;
@@ -17,8 +20,8 @@ public class SingleCard extends Product {
     private Integer power;
     private Integer counter;
     private String combatAttribute;
-    private String colors;
-    private String subtypes;
+    private List<String> colors;
+    private List<String> subtypes;
     private String description;
 
     public SingleCard(
@@ -33,8 +36,8 @@ public class SingleCard extends Product {
             Integer power,
             Integer counter,
             String combatAttribute,
-            String colors,
-            String subtypes,
+            List<String> colors,
+            List<String> subtypes,
             String description
     ) {
         super(id, name, collection);

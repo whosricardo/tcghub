@@ -88,6 +88,7 @@ public class SingleCardService {
         return toResponse(singleCardRepository.findById(id).get());
     }
 
+    @Transactional
     public void deleteById(Long id) {
         singleCardRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Carta não encontrada"));
