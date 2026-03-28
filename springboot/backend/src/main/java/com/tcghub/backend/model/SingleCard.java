@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SingleCard extends Product {
-
     private String cardNumber;
     private String rarity;
     private Treatment treatment;
