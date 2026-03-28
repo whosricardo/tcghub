@@ -1,8 +1,6 @@
 package com.tcghub.backend.model;
 
 import com.tcghub.backend.model.enums.Treatment;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class SingleCard {
-    private Long id;
-    private String name;
-    private String collection;
+public class SingleCard extends Product {
+
     private String cardNumber;
     private String rarity;
     private Treatment treatment;
@@ -26,4 +21,34 @@ public class SingleCard {
     private String colors;
     private String subtypes;
     private String description;
+
+    public SingleCard(
+            Long id,
+            String name,
+            String collection,
+            String cardNumber,
+            String rarity,
+            Treatment treatment,
+            String cardType,
+            Integer cost,
+            Integer power,
+            Integer counter,
+            String combatAttribute,
+            String colors,
+            String subtypes,
+            String description
+    ) {
+        super(id, name, collection);
+        this.cardNumber = cardNumber;
+        this.rarity = rarity;
+        this.treatment = treatment;
+        this.cardType = cardType;
+        this.cost = cost;
+        this.power = power;
+        this.counter = counter;
+        this.combatAttribute = combatAttribute;
+        this.colors = colors;
+        this.subtypes = subtypes;
+        this.description = description;
+    }
 }
