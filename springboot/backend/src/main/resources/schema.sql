@@ -29,8 +29,6 @@ CREATE TABLE IF NOT EXISTS single_cards (
      power INT,
      counter INT,
      combat_attribute VARCHAR(50),
-     colors VARCHAR(255) NOT NULL,
-     subtypes VARCHAR(255),
      description VARCHAR(255),
      CONSTRAINT fk_single_cards_product
          FOREIGN KEY (product_id)
@@ -54,4 +52,30 @@ CREATE TABLE IF NOT EXISTS sealed_products (
     REFERENCES products(id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS colors (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS subtypes (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS single_card_colors (
+    product_id BIGINT NOT NULL,
+    color_id BIGINT NOT NULL,
+    PRIMARY KEY (product_id, color_id),
+    CONSTRAINT fk_single_card_colors_card
+        FOREIGN KEY (product_id)
+        REFERENCES single_cards(product_id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_single_card_colors_color
+        FOREIGN KEY (color_id)
+        REFERENCES colors(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
