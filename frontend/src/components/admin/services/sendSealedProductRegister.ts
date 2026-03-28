@@ -2,17 +2,18 @@
 
 import { fetchData } from "@/utils/fetchData";
 
-export async function sendCardRegister (data: any){
+export async function sendSealedProductRegister(data: any) {
     try {
-        const res = await fetchData('/single-cards' , {
+        // Atualizado para o novo endpoint
+        const res = await fetchData('/sealed-product', {
             method: 'POST',
             headers: {
-                'Content-Type' : 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         })
 
-        if (!res.ok){
+        if (!res.ok) {
             const errorMessage = await res.json().catch(() => ({}))
             throw new Error(errorMessage.error || 'Algo inesperado aconteceu')
         }
@@ -22,7 +23,7 @@ export async function sendCardRegister (data: any){
         console.log(resData)
         return resData
     }
-    catch (error){
+    catch (error) {
         throw error
     }
 }

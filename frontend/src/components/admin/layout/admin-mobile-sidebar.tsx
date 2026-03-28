@@ -7,7 +7,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet'
-import { LayoutGrid, Database, Users, WalletCards, Menu, User, LogOut } from 'lucide-react'
+import { LayoutGrid, Database, Users, WalletCards, Menu, User, LogOut, Box } from 'lucide-react'
 import Link from 'next/link'
 import { AvatarAdmin } from './avatarAdmin'
 import AvatarImage from '../../../../public/bolsonaro_png.png'
@@ -25,6 +25,12 @@ const navItems = [
         title: 'Catálogo',
         url: '/admin/catalogo',
         icon: Database,
+        isActive: true,
+    },
+    {
+        title: 'Produto selado',
+        url: '/admin/sealed-product',
+        icon: Box,
         isActive: true,
     },
     {

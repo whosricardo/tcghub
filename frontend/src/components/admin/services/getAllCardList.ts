@@ -47,7 +47,7 @@ const buildSearch = (param:CardSearchParams) => {
 export async function getAllCardList (param: CardSearchParams, page: number , limit: number):Promise<CardResponse<CardProps>>{
     const apiPage  = page - 1;
     const searchParams = buildSearch(param).toString();
-    const url_base = `/cards?page=${apiPage}&limit=${limit}`
+    const url_base = `/single-cards?page=${apiPage}&limit=${limit}`
     const url_final = `${url_base}&${searchParams}`
 
     try {
