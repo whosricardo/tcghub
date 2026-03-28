@@ -5,6 +5,24 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS user_referrals (
+    referred_user_id BIGINT PRIMARY KEY,
+    referrer_user_id BIGINT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_user_referrals_referred
+    FOREIGN KEY (referred_user_id)
+    REFERENCES users(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+
+    CONSTRAINT fk_user_referrals_referrer
+    FOREIGN KEY (referrer_user_id)
+    REFERENCES users(id)
+    ON UPDATE CASCADE
+    ON DELETE SET NULL
+);
+
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     token VARCHAR(255) NOT NULL UNIQUE,
