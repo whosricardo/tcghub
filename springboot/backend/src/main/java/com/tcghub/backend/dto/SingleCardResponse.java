@@ -2,6 +2,8 @@ package com.tcghub.backend.dto;
 
 import com.tcghub.backend.model.enums.Treatment;
 
+import java.util.List;
+
 public record SingleCardResponse(
         Long id,
         String name,
@@ -14,7 +16,8 @@ public record SingleCardResponse(
         Integer power,
         Integer counter,
         String combatAttribute,
-        String colors,
-        String subtypes,
-        String description) {
+        List<String> colors,
+        List<String> subtypes,
+        String description
+) {
 }
