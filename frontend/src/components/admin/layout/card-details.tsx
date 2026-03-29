@@ -30,8 +30,10 @@ export function CardDetails() {
     const cardNameValue = watch('name') || ''
     const cardType = watch('cardType') || ''
     const [debouncedValue] = useDebounce(cardNameValue, 500)
-    const { data: cardSuggestion, isLoading } =
-        useQueryCardVerification(debouncedValue, cardType)
+    const { data: cardSuggestion, isLoading } = useQueryCardVerification(
+        debouncedValue,
+        cardType
+    )
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
     useEffect(() => {
@@ -43,17 +45,38 @@ export function CardDetails() {
     }, [cardNameValue])
 
     function handleSelected(card: any) {
+        const colorFormat = Array.isArray(card.card_color)
+            ? card.card_color
+            : [card.card_color].filter(Boolean)
+
+        const processedColors = colorFormat
+            .flatMap((color: string) => color.split(/[\s/]+/))
+            .filter((color: string) => onePieceColors.includes(color))
+
+        const finalColors = [...new Set(processedColors)] as string[]
+
+        const subtypesFormat = Array.isArray(card.sub_types)
+            ? card.sub_types
+            : typeof card.sub_types === 'string'
+              ? card.sub_types
+                    .split(',')
+                    .map((s: string) => s.trim())
+                    .filter(Boolean)
+              : []
+
         setValue('name', card.card_name, { shouldValidate: true })
         setValue('cardNumber', card.card_set_id, { shouldValidate: true })
         setValue('rarity', card.rarity, { shouldValidate: true })
         setValue('cost', Number(card.card_cost) || 0, { shouldValidate: true })
-        setValue('power', card.card_power, { shouldValidate: true })
-        setValue('colors', card.card_color, { shouldValidate: true })
+        setValue('power', Number(card.card_power) || 0, { shouldValidate: true })
+        setValue('colors', finalColors, { shouldValidate: true })
         setValue('collection', card.set_name, { shouldValidate: true })
         setValue('cardType', card.card_type, { shouldValidate: true })
-        setValue('counter', card.counter_amount || 0, { shouldValidate: true })
+        setValue('counter', Number(card.counter_amount) || 0, {
+            shouldValidate: true,
+        })
         setValue('combatAttribute', card.attribute, { shouldValidate: true })
-        setValue('subTypes', card.sub_types, { shouldValidate: true })
+        setValue('subtypes', subtypesFormat, { shouldValidate: true })
         setValue('description', card.card_text, { shouldValidate: true })
 
         setIsDropdownOpen(false)
@@ -81,7 +104,7 @@ export function CardDetails() {
                                 {...register('name')}
                                 onFocus={() => {
                                     if (cardNameValue.length > 2) {
-                                        () => setIsDropdownOpen(true)
+                                        ;() => setIsDropdownOpen(true)
                                     }
                                 }}
                                 onBlur={() =>
@@ -94,18 +117,19 @@ export function CardDetails() {
 
                             {isDropdownOpen && debouncedValue.length > 2 && (
                                 <ul className="absolute top-full mt-1 z-50 w-full bg-white border border-gray-200 max-h-60 overflow-y-auto rounded-md shadow-lg">
-                                    {isLoading && (
-                                        Array.from({length: debouncedValue.length}).map((_ , index) =>(
-                                            
-                                            <section key={index} className='p-3'>
-                                                <TableSkeleton/>
+                                    {isLoading &&
+                                        Array.from({
+                                            length: debouncedValue.length,
+                                        }).map((_, index) => (
+                                            <section
+                                                key={index}
+                                                className="p-3"
+                                            >
+                                                <TableSkeleton />
                                             </section>
-                                        ))
-                                    )}
+                                        ))}
                                     {cardSuggestion?.length === 0 &&
-                                        !isLoading && (
-                                            <TableSkeleton/>
-                                        )}
+                                        !isLoading && <TableSkeleton />}
                                     {cardSuggestion?.map(
                                         (card: any, index: number) => (
                                             <li
@@ -217,7 +241,7 @@ export function CardDetails() {
                             <FieldLabel htmlFor="poder">Poder</FieldLabel>
                             <Input
                                 id="poder"
-                                type="text"
+                                type="number"
                                 placeholder="0"
                                 className="border border-gray-300"
                                 {...register('power')}
@@ -232,19 +256,56 @@ export function CardDetails() {
                         </Field>
 
                         <Field className="col-span-2">
-                            <FieldLabel htmlFor="cor">Cor</FieldLabel>
+                            <FieldLabel htmlFor="cor">Cores</FieldLabel>
                             <Controller
                                 control={control}
                                 name="colors"
-                                defaultValue={onePieceColors[0]}
+                                defaultValue={[]}
                                 render={({ field }) => (
-                                    <SelectInput
-                                        filter="Cor"
-                                        params={onePieceColors}
-                                        className="border border-gray-300"
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                    />
+                                    <div className="flex flex-wrap gap-4 mt-2">
+                                        {onePieceColors.map((color) => (
+                                            <label
+                                                key={color}
+                                                className="flex items-center gap-2 cursor-pointer"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    value={color}
+                                                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                                    checked={field.value?.includes(
+                                                        color
+                                                    )}
+                                                    onChange={(e) => {
+                                                        const isChecked =
+                                                            e.target.checked
+                                                        const currentValues =
+                                                            field.value || []
+
+                                                        const newValues =
+                                                            isChecked
+                                                                ? [
+                                                                      ...currentValues,
+                                                                      color,
+                                                                  ]
+                                                                : currentValues.filter(
+                                                                      (
+                                                                          v: string
+                                                                      ) =>
+                                                                          v !==
+                                                                          color
+                                                                  )
+
+                                                        field.onChange(
+                                                            newValues
+                                                        )
+                                                    }}
+                                                />
+                                                <span className="text-sm">
+                                                    {color}
+                                                </span>
+                                            </label>
+                                        ))}
+                                    </div>
                                 )}
                             />
                             <div className="min-h-4 mt-1">
@@ -389,17 +450,35 @@ export function CardDetails() {
                         </Field>
 
                         <Field className="col-span-2">
-                            <FieldLabel htmlFor="subtipos">Subtipos</FieldLabel>
-                            <Input
-                                id="subtipos"
-                                type="text"
-                                placeholder="e.g Straw hat Crew, Supernovas"
-                                {...register('subTypes')}
+                            <FieldLabel htmlFor="subtipos">
+                                Subtipos (separe por vírgula)
+                            </FieldLabel>
+                            <Controller
+                                control={control}
+                                name="subtypes" 
+                                defaultValue={[]}
+                                render={({ field }) => (
+                                    <Input
+                                        id="subtipos"
+                                        type="text"
+                                        placeholder="e.g Straw hat Crew, Supernovas"
+                                      
+                                        value={field.value?.join(', ') || ''}
+
+                                        onChange={(e) => {
+                                            const arrayValue = e.target.value
+                                                .split(',')
+                                                .map((item) => item.trim())
+                                                .filter(Boolean) 
+                                            field.onChange(arrayValue)
+                                        }}
+                                    />
+                                )}
                             />
                             <div className="min-h-4 mt-1">
-                                {errors.subTypes && (
+                                {errors.subtypes && (
                                     <span className="text-red-500 text-xs flex">
-                                        {errors.subTypes?.message}
+                                        {errors.subtypes?.message}
                                     </span>
                                 )}
                             </div>
