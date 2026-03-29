@@ -30,7 +30,7 @@ export function CardDescription() {
                 <section className="ml-auto text-sm flex flex-row items-center justify-between gap-1">
                     <span>Número de caracteres:</span>
                     <span
-                        className={`${textValue.length <= 300 ? 'text-green-600' : 'text-red-600'}`}
+                        className={`${textValue.length <= 255 ? 'text-green-600' : 'text-red-600'}`}
                     >
                         {textValue.length}
                         <span className="text-black text-sm">/400</span>

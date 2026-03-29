@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function PerfilButton (){
     return (
-        <Link href={'/config'}>
+        <Link href={'/admin'}>
             <User size={25} color="black" fill="black"/>
         </Link>
     )

@@ -20,8 +20,8 @@ export interface CardProps {
     cost: number;
     power: number;
     combatAttribute: string;
-    colors: string;
-    subtypes: string;
+    colors: string[];
+    subtypes: string[];
     description: string;
 }
 
