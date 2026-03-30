@@ -1,0 +1,42 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: tcghub-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tcghub
+      MYSQL_USER: tcghub_user
+      MYSQL_PASSWORD: tcghub_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  backend:
+    build: .
+    container_name: tcghub-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/tcghub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: tcghub_user
+      SPRING_DATASOURCE_PASSWORD: tcghub_pass
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_SQL_INIT_MODE: always
+      SPRING_PROFILES_ACTIVE: docker
+      JWT_SECRET: f457b876e5cd295c9070ca2d564cb604ae6aa880acae2c940780f5257e8f9e6b6bc464d6ed24cb945029cd00bcb7be293399c707c53d1fcded775dd094fb2879
+      JWT_EXPIRATION: 3600000
+      JWT_REFRESH_EXPIRATION: 604800000
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
