@@ -21,16 +21,14 @@ export function UserTable() {
     const { data, isLoading, isError, isFetching } = useUserList(page, limit)
     console.log('data: ', data?.content)
 
-    if (isLoading){
+    if (isLoading) {
         return (
-            <section className='flex min-h-100 items-center justify-center'>
+            <section className="flex min-h-100 items-center justify-center">
                 <Spinner className="h-15 w-15 text-sky-600 mx-auto mt-10" />
             </section>
         )
     }
-        
-        
-        
+
     if (isError)
         return (
             <section className="text-sm text-red-500 p-4">
@@ -53,28 +51,20 @@ export function UserTable() {
                     </TableHeader>
 
                     <TableBody>
-                        {
-                            isFetching ? (
-                                Array.from({length: 4}).map((_ , index) => (
-                                    <TableSkeleton key={index}/>
-                                ))
-                            ): (
-                                    data?.content?.map((user) => (
-                                    <TableRow key={user.id}>
-                                        <TableCell className="font-medium">
-                                            {user.id}
-                                        </TableCell>
-                                        <TableCell>{user.username}</TableCell>
-                                        <TableCell>{user.email}</TableCell>
-                                    </TableRow>
-                                ))
-                            )
-                        }
+                        {data?.content?.map((user) => (
+                            <TableRow key={user.id}>
+                                <TableCell className="font-medium">
+                                    {user.id}
+                                </TableCell>
+                                <TableCell>{user.username}</TableCell>
+                                <TableCell>{user.email}</TableCell>
+                            </TableRow>
+                        ))}
                     </TableBody>
                 </Table>
             </section>
 
-            <section className='flex justify-end p-4'>
+            <section className="flex justify-end p-4">
                 <Pagination
                     currentPage={page}
                     setPage={setPage}

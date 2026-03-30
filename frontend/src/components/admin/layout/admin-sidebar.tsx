@@ -14,7 +14,6 @@ import {
 import { LayoutGrid, Database, Users, WalletCards , User , LogOut, Box} from 'lucide-react'
 import Link from 'next/link'
 import { AvatarAdmin } from './avatarAdmin'
-import AvatarImage from '../../../../public/bolsonaro_png.png'
 import { usePathname } from 'next/navigation'
 
 const navItems = [
@@ -94,7 +93,7 @@ export function AdminSidebar() {
                                 <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700">
                                     { isUser ? 
                                         (
-                                            <AvatarAdmin image={AvatarImage}/>
+                                            <AvatarAdmin/>
                                         )
                                         :
                                         (
