@@ -1,3 +1,26 @@
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS payment_installments;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS shipments;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS listings;
+DROP TABLE IF EXISTS constructed_deck_colors;
+DROP TABLE IF EXISTS single_card_colors;
+DROP TABLE IF EXISTS single_card_subtypes;
+DROP TABLE IF EXISTS constructed_decks;
+DROP TABLE IF EXISTS sealed_products;
+DROP TABLE IF EXISTS single_cards;
+DROP TABLE IF EXISTS addresses;
+DROP TABLE IF EXISTS phones;
+DROP TABLE IF EXISTS suppliers;
+DROP TABLE IF EXISTS buyers;
+DROP TABLE IF EXISTS user_referrals;
+DROP TABLE IF EXISTS colors;
+DROP TABLE IF EXISTS subtypes;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS refresh_tokens;
+DROP TABLE IF EXISTS users;
+
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
@@ -309,3 +332,4 @@ CREATE TABLE IF NOT EXISTS order_items (
     CONSTRAINT chk_order_items_unit_price
     CHECK (unit_price_paid >= 0)
 );
+
