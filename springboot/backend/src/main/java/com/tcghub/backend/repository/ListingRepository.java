@@ -1,5 +1,6 @@
 package com.tcghub.backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,5 +35,16 @@ public class ListingRepository {
         String sql = "SELECT COUNT(*) FROM listings WHERE id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
         return count != null && count > 0;
+    }
+
+    public List<Listing> findAll(int offset, int size) {
+        String sql = "SELECT * FROM listings LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, listingRowMapper, size, offset);
+    }
+
+    public boolean deleteById(Long id) {
+        String sql = "SELECT FROM listings WHERE id = ?";
+        int rows = jdbcTemplate.update(sql, id);
+        return rows > 0;
     }
 }
