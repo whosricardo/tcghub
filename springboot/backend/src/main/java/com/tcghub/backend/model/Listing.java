@@ -79,7 +79,11 @@ public class Listing {
         this.productId = productId;
     }
 
-    public Long getSupplierId(Long supplierId) {
+    public Long getSupplierId() {
         return this.supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 }
