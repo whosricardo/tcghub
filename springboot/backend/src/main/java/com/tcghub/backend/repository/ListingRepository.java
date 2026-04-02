@@ -29,4 +29,10 @@ public class ListingRepository {
         String sql = "SELECT * FROM listings WHERE id = ?";
         return jdbcTemplate.query(sql, listingRowMapper, id).stream().findFirst();
     }
+
+    public Boolean existById(Long id) {
+        String sql = "SELECT COUNT(*) FROM listings WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
+    }
 }
