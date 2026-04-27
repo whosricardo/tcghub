@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,5 +19,5 @@ public class OrderItems {
     private Integer quantityPurchased;
     private BigDecimal unitPricePaid;
     private String technicalReport;
-    private LocalDate inspectionDate;
+    private LocalDateTime inspectionDate;
 }
