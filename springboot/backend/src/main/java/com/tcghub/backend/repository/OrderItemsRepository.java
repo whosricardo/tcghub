@@ -4,6 +4,7 @@ package com.tcghub.backend.repository;
 import com.tcghub.backend.model.OrderItems;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import java.sql.Timestamp;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class OrderItemsRepository {
     }
 
     private final RowMapper<OrderItems> orderItemsRowMapper = (rs, rowNum) -> {
-        java.sql.Timestamp inspectionTimestamp = rs.getTimestamp("inspection_date");
+        Timestamp inspectionTimestamp = rs.getTimestamp("inspection_date");
         return new OrderItems(
                 rs.getLong("listing_id"),
                 rs.getLong("order_id"),
