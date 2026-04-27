@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class OrderItems {
     private long idListing;
     private long idOrder;
-    private Integer quantityPurchased;
+    private Integer quantityBought;
     private BigDecimal unitPricePaid;
     private String technicalReport;
     private LocalDateTime inspectionDate;
