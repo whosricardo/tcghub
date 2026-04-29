@@ -39,12 +39,12 @@ public class OrderItemsRepository {
         """;
 
         jdbcTemplate.update(sql,
-                orderItems.getIdListing(),
-                orderItems.getIdOrder(),
+                orderItems.getListingId(),
+                orderItems.getOrderId(),
                 orderItems.getQuantityBought(),
                 orderItems.getUnitPricePaid(),
                 orderItems.getTechnicalReport(),
-                orderItems.getInspectionDate()
+                orderItems.getInspectionDate() != null ? Timestamp.valueOf(orderItems.getInspectionDate()) : null
         );
 
         return orderItems;
@@ -56,7 +56,7 @@ public class OrderItemsRepository {
     }
 
     public List<OrderItems> findAll(int offset, int size) {
-        String sql = "SELECT * FROM order_items LIMIT ? OFFSET ?";
+        String sql = "SELECT * FROM order_items ORDER BY order_id, listing_id LIMIT ? OFFSET ?";
         return jdbcTemplate.query(sql, orderItemsRowMapper, size, offset);
     }
 

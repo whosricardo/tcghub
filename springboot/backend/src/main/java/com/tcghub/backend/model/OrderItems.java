@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 
 public class OrderItems {
-    private long idListing;
-    private long idOrder;
+    private Long listingId;
+    private Long orderId;
     private Integer quantityBought;
     private BigDecimal unitPricePaid;
     private String technicalReport;
