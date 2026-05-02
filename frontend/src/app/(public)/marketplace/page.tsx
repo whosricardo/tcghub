@@ -2,19 +2,10 @@ import { Suspense } from "react";
 import { FilterSidebar } from "@/components/marketplace/FilterSidebar";
 import { MarketplaceHeader } from "@/components/marketplace/MarketplaceHeader";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
-import { MOCK_PRODUCTS } from "@/mockedData/marketplace";
 
 import Navbar from "@/components/homepage/layout/navbar";
 
-// Simulate a database fetch
-async function fetchProducts() {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return MOCK_PRODUCTS;
-}
-
-export default async function MarketplacePage() {
-  const products = await fetchProducts();
-
+export default function MarketplacePage() {
   return (
     <main className="flex min-h-screen flex-col bg-gray-50/50 dark:bg-background">
       <Navbar />
@@ -25,7 +16,7 @@ export default async function MarketplacePage() {
           
           <div className="flex-1 overflow-hidden">
             <MarketplaceHeader />
-            <ProductGrid products={products} />
+            <ProductGrid />
           </div>
         </div>
       </div>

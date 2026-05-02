@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useMarketplaceCards } from "./hooks/useMarketplaceCards";
 
 const TABS = ["Singles", "Booster Boxes", "Collections/Decks"];
 
 export function MarketplaceHeader() {
   const [activeTab, setActiveTab] = useState(TABS[0]);
+  
+  // Usar hook para capturar o total de elementos cacheados do React Query
+  const { data } = useMarketplaceCards({}, 1, 12);
+  const totalElements = data?.totalElements || 0;
 
   return (
     <div className="mb-8 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
@@ -15,7 +20,7 @@ export function MarketplaceHeader() {
           Marketplace
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Showing 1,248 cards from verified collections
+          Mostrando {totalElements} cartas do banco de dados
         </p>
         
         {/* Tabs */}

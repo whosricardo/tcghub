@@ -1,32 +1,35 @@
 "use client";
 
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { useState, useTransition, useOptimistic } from "react";
+import { Heart, ShoppingCart, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Product } from "@/mockedData/marketplace";
-import { Flame, Heart, ShoppingCart } from "lucide-react";
-import { useOptimistic, useTransition } from "react";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  // Optimistic UI for Favorite
   const [optimisticFavorite, addOptimisticFavorite] = useOptimistic(
     product.isFavorite,
     (state, newFavorite: boolean) => newFavorite
   );
 
-  // Optimistic UI for Add to Cart
   const [optimisticAdded, addOptimisticCart] = useOptimistic(
     false,
     (state, added: boolean) => added
   );
 
-  const toggleFavorite = () => {
+  const [imgSrc, setImgSrc] = useState(product.image);
+
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
     startTransition(async () => {
       addOptimisticFavorite(!optimisticFavorite);
       // Simulate API call
@@ -34,7 +37,8 @@ export function ProductCard({ product }: ProductCardProps) {
     });
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
     startTransition(async () => {
       addOptimisticCart(true);
       // Simulate API call
@@ -42,12 +46,24 @@ export function ProductCard({ product }: ProductCardProps) {
     });
   };
 
+  const getBadgeVariant = (rarity: string) => {
+    const r = rarity?.toUpperCase() || "";
+    if (r.includes("SEC") || r.includes("SR") || r.includes("MYTHIC")) return "mythic";
+    if (r.includes("R") || r.includes("RARE")) return "rare";
+    return "common";
+  };
+
   return (
-    <div className="group relative flex flex-col rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-card">
+    <Link
+      href={`/marketplace/${product.id}`}
+      className="group relative flex flex-col rounded-2xl border border-gray-200 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-950 dark:hover:border-blue-900"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Top Badges */}
-      <div className="mb-3 flex items-center justify-between">
+      <div className="absolute left-4 right-4 top-4 z-10 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Badge variant={product.rarity.includes("MYTHIC") ? "mythic" : product.rarity.includes("RARE") ? "rare" : "common"}>
+          <Badge variant={getBadgeVariant(product.rarity)}>
             {product.rarity}
           </Badge>
           {product.isHot && (
@@ -61,22 +77,20 @@ export function ProductCard({ product }: ProductCardProps) {
           className="rounded-full p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-red-500 dark:hover:bg-gray-800"
           aria-label={optimisticFavorite ? "Remove from favorites" : "Add to favorites"}
         >
-          <Heart
-            className={`h-5 w-5 ${
-              optimisticFavorite ? "fill-red-500 text-red-500" : ""
-            }`}
-          />
+          <Heart className={`h-5 w-5 ${optimisticFavorite ? "fill-red-500 text-red-500" : ""}`} />
         </button>
       </div>
 
       {/* Product Image */}
       <div className="relative mb-4 aspect-[4/5] w-full overflow-hidden rounded-xl bg-gray-50/50 dark:bg-gray-900/50">
         <Image
-          src={product.image}
+          src={imgSrc || "https://images.unsplash.com/photo-1618331835717-801e976710b2?w=500&q=80"}
           alt={product.title}
           fill
+          loading="lazy"
           className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          onError={() => setImgSrc("https://images.unsplash.com/photo-1618331835717-801e976710b2?w=500&q=80")}
         />
       </div>
 
@@ -93,27 +107,24 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex flex-col">
             <span className="text-xs text-gray-500 dark:text-gray-400">Current Price</span>
             <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
-              ${product.price.toFixed(2)}
+              ${(Number(product.price) || 0).toFixed(2)}
             </span>
           </div>
           
           <Button 
-            variant="default"
-            size="sm" 
-            onClick={handleAddToCart}
+            className={`rounded-full transition-all duration-300 ${
+              isHovered 
+                ? 'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600' 
+                : 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400'
+            }`}
+            size="icon"
             disabled={optimisticAdded || isPending}
-            className="w-24 bg-linear-to-r from-[#0070c9] to-[#60a5fa] font-semibold text-white transition-all"
+            onClick={handleAddToCart}
           >
-            {optimisticAdded ? (
-              "Added!"
-            ) : (
-              <>
-                <ShoppingCart className="mr-1 h-4 w-4" /> Add
-              </>
-            )}
+            {optimisticAdded ? <ShoppingCart className="h-4 w-4 fill-current" /> : <ShoppingCart className="h-4 w-4" />}
           </Button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
