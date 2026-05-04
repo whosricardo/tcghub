@@ -65,6 +65,7 @@ public class SecurityConfig {
                         "/h2-console/**",
                         "/auth/refresh",
                         "/auth/logout",
+                        "/single-cards/**",
                         // Swagger
                         "/swagger-ui.html",
                         "/swagger-ui/**",
