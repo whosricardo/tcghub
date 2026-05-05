@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { ProductCard } from "./ProductCard";
+import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import { Pagination } from "@/components/common/pagination";
 import { usePagination } from "@/hooks/use-pagination";
 import { useMarketplaceCards } from "./hooks/useMarketplaceCards";
-import { Loader2 } from "lucide-react";
+
+const SKELETON_COUNT = 12;
 
 export function ProductGrid() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,13 +26,8 @@ export function ProductGrid() {
     limit,
   });
 
-  if (isLoading) {
-    return (
-      <div className="flex w-full items-center justify-center p-12">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    );
-  }
+  // Exibe skeleton tanto no carregamento inicial quanto nas transições de página
+  const showSkeleton = isLoading || isFetching;
 
   if (isError) {
     return (
@@ -40,7 +37,7 @@ export function ProductGrid() {
     );
   }
 
-  if (currentProducts.length === 0) {
+  if (!showSkeleton && currentProducts.length === 0) {
     return (
       <div className="flex w-full items-center justify-center p-12">
         <p className="text-gray-500">Nenhuma carta encontrada.</p>
@@ -53,28 +50,36 @@ export function ProductGrid() {
       {/* Contador */}
       <div className="mb-4 flex items-center justify-between">
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Mostrando{" "}
-          <span className="font-medium text-gray-900 dark:text-gray-100">{startItem}</span>
-          {" "}a{" "}
-          <span className="font-medium text-gray-900 dark:text-gray-100">{endItem}</span>
-          {" "}de{" "}
-          <span className="font-medium text-gray-900 dark:text-gray-100">{totalElements}</span>
-          {" "}cartas
+          {showSkeleton ? (
+            <span className="inline-block h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+          ) : (
+            <>
+              Mostrando{" "}
+              <span className="font-medium text-gray-900 dark:text-gray-100">{startItem}</span>
+              {" "}a{" "}
+              <span className="font-medium text-gray-900 dark:text-gray-100">{endItem}</span>
+              {" "}de{" "}
+              <span className="font-medium text-gray-900 dark:text-gray-100">{totalElements}</span>
+              {" "}cartas
+            </>
+          )}
         </p>
-        {isFetching && (
-          <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-        )}
       </div>
 
-      {/* Grid de cards */}
+      {/* Grid — skeletons ou cards reais, sempre no mesmo container */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {currentProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {showSkeleton
+          ? Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))
+          : currentProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
       </div>
 
-      {/* Paginação: componente compartilhado (usa usePagination internamente) */}
-      <section className="flex flex-row justify-center items-center">
+      {/* Paginação — só aparece quando temos dados reais */}
+      {!isLoading && totalPages > 1 && (
+        <section className="flex w-full items-center justify-center">
           <Pagination
             currentPage={currentPage}
             setPage={setCurrentPage}
@@ -84,8 +89,8 @@ export function ProductGrid() {
             totalElements={totalElements}
             totalPages={totalPages}
           />
-      </section>
-      
+        </section>
+      )}
     </div>
   );
 }
