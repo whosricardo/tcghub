@@ -9,7 +9,6 @@ const TABS = ["Singles", "Booster Boxes", "Collections/Decks"];
 export function MarketplaceHeader() {
   const [activeTab, setActiveTab] = useState(TABS[0]);
   
-  // Usar hook para capturar o total de elementos cacheados do React Query
   const { data } = useMarketplaceCards({}, 1, 12);
   const totalElements = data?.totalElements || 0;
 
@@ -20,10 +19,9 @@ export function MarketplaceHeader() {
           Marketplace
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          Mostrando {totalElements} cartas do banco de dados
+          Encontre tudo o que você precisa para sua coleção
         </p>
         
-        {/* Tabs */}
         <div className="mt-4 flex flex-wrap gap-2">
           {TABS.map((tab) => (
             <button
@@ -42,7 +40,6 @@ export function MarketplaceHeader() {
         </div>
       </div>
 
-      {/* Sorting */}
       <div className="w-full md:w-auto">
         <select 
           className="w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-sm outline-none dark:border-gray-800 dark:bg-card md:w-48"

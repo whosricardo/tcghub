@@ -56,7 +56,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/marketplace/${product.id}`}
-      className="group relative flex flex-col rounded-2xl border border-gray-200 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl dark:border-gray-800 dark:bg-gray-950 dark:hover:border-blue-900"
+      className="group relative flex flex-col rounded-2xl border border-gray-200 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-100 hover:shadow-xl dark:border-gray-800 dark:bg-gray-950 dark:hover:border-blue-900"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
