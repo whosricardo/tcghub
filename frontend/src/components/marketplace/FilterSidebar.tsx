@@ -1,6 +1,8 @@
 "use client";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { motion } from "motion/react";
+import { smooth } from "@/motion/transitions";
 
 const EDITIONS = [
   "Romance Dawn",
@@ -36,7 +38,12 @@ const COLORS = ["Red", "Green", "Blue", "Purple", "Black", "Yellow"];
 
 export function FilterSidebar() {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col gap-8 md:flex sticky top-[100px] h-[calc(100vh-100px)] overflow-y-auto pb-8">
+    <motion.aside 
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={smooth}
+      className="hidden w-64 shrink-0 flex-col gap-8 md:flex sticky top-[100px] h-[calc(100vh-100px)] overflow-y-auto pb-8"
+    >
       <div>
         <h2 className="mb-6 text-xl font-bold">Filters</h2>
         
@@ -113,6 +120,6 @@ export function FilterSidebar() {
           </button>
         </div>
       </div>
-    </aside>
+    </motion.aside>
   );
 }

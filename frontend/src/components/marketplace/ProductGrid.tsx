@@ -6,6 +6,8 @@ import { ProductCardSkeleton } from "./ProductCardSkeleton";
 import { Pagination } from "@/components/common/pagination";
 import { usePagination } from "@/hooks/use-pagination";
 import { useMarketplaceCards } from "./hooks/useMarketplaceCards";
+import { motion } from "motion/react";
+import { gentle, smooth } from "@/motion/transitions";
 
 const SKELETON_COUNT = 12;
 
@@ -67,15 +69,27 @@ export function ProductGrid() {
       </div>
 
       {/* Grid — skeletons ou cards reais, sempre no mesmo container */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <motion.div 
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { staggerChildren: 0.05, ...gentle } }
+        }}
+      >
         {showSkeleton
           ? Array.from({ length: SKELETON_COUNT }).map((_, i) => (
-              <ProductCardSkeleton key={i} />
+              <motion.div key={i} variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: smooth } }}>
+                <ProductCardSkeleton />
+              </motion.div>
             ))
           : currentProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <motion.div key={product.id} variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0, transition: smooth } }}>
+                <ProductCard product={product} />
+              </motion.div>
             ))}
-      </div>
+      </motion.div>
 
       {/* Paginação — só aparece quando temos dados reais */}
       {!isLoading && totalPages > 1 && (

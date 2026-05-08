@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { ZoomIn } from 'lucide-react';
 import { useMarketplaceCardById } from './hooks/useMarketplaceCardById';
 import { Skeleton } from '@/components/ui/skeleton';
+import { motion } from 'motion/react';
+import { gentle, smooth, snappy } from '@/motion/transitions';
 
 interface ProductDetailsProps {
     cardId: string;
@@ -18,16 +20,26 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
     }
 
     return (
-        <div className="w-full max-w-6xl mx-auto p-4 md:p-6 lg:p-8">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={gentle}
+            className="w-full max-w-6xl mx-auto p-4 md:p-6 lg:p-8"
+        >
             <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
                 {/* Coluna da Imagem (Aprox 30%) */}
-                <div className="w-full md:w-1/3 lg:w-[30%] flex flex-col items-center">
-                    <div className="relative w-full aspect-[2.5/3.5] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900">
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={smooth}
+                    className="w-full md:w-1/3 lg:w-[30%] flex flex-col items-center"
+                >
+                    <div className="relative w-full aspect-[2.5/3.5] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 group">
                         <Image
                             src={card.image}
                             alt={card.title}
                             fill
-                            className="object-cover"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 30vw"
                         />
                     </div>
@@ -35,10 +47,15 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                         <ZoomIn size={16} />
                         <span>Expandir carta</span>
                     </button>
-                </div>
+                </motion.div>
 
                 {/* Coluna de Detalhes (Aprox 70%) */}
-                <div className="w-full md:w-2/3 lg:w-[70%]">
+                <motion.div 
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={smooth}
+                    className="w-full md:w-2/3 lg:w-[70%]"
+                >
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
                         {card.title}
                     </h1>
@@ -68,56 +85,69 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                     </div>
 
                     {/* Grid de Atributos */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-                        <div>
+                    <motion.div 
+                        initial="hidden"
+                        animate="visible"
+                        variants={{
+                            hidden: { opacity: 0 },
+                            visible: { opacity: 1, transition: { staggerChildren: 0.05, ...smooth } }
+                        }}
+                        className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 border-t border-gray-200 dark:border-gray-800"
+                    >
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Rarity</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.rarity}</span>
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Card Number</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.cardNumber || 'N/A'}</span>
-                        </div>
+                        </motion.div>
             
-                        <div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Card Type</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.cardType || 'N/A'}</span>
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Cost</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.cost || 'N/A'}</span>
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Power</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.power || 'N/A'}</span>
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Attribute</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.combatAttribute || 'N/A'}</span>
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Life</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.life || 'N/A'}</span>
-                        </div>
-                        <div>
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Counter</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.counter || 'N/A'}</span>
-                        </div>
-                        <div className="col-span-2 sm:col-span-3">
+                        </motion.div>
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }} className="col-span-2 sm:col-span-3">
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Subtypes</span>
                             <span className="font-medium text-gray-900 dark:text-white">
                                 {Array.isArray(card.subtypes) ? card.subtypes.join(', ') : (card.subtypes || 'N/A')}
                             </span>
-                        </div>
-                    </div>
-                </div>
+                        </motion.div>
+                    </motion.div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
 function ProductDetailsSkeleton() {
     return (
-        <div className="w-full max-w-6xl mx-auto p-4 md:p-6 lg:p-8 animate-pulse">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={gentle}
+            className="w-full max-w-6xl mx-auto p-4 md:p-6 lg:p-8 animate-pulse"
+        >
             <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
                 <div className="w-full md:w-1/3 lg:w-[30%] flex flex-col items-center">
                     <Skeleton className="w-full aspect-[2.5/3.5] rounded-xl dark:bg-gray-800" />
@@ -157,6 +187,6 @@ function ProductDetailsSkeleton() {
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

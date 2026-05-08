@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useMarketplaceCards } from "./hooks/useMarketplaceCards";
+import { motion } from "motion/react";
+import { gentle } from "@/motion/transitions";
 
 const TABS = ["Singles", "Booster Boxes", "Collections/Decks"];
 
@@ -13,7 +15,12 @@ export function MarketplaceHeader() {
   const totalElements = data?.totalElements || 0;
 
   return (
-    <div className="mb-8 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+    <motion.div 
+      initial={{ opacity: 0, y: -15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={gentle}
+      className="mb-8 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end"
+    >
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-50">
           Marketplace
@@ -51,6 +58,6 @@ export function MarketplaceHeader() {
           <option value="popular">Most Popular</option>
         </select>
       </div>
-    </div>
+    </motion.div>
   );
 }
