@@ -7,6 +7,17 @@ export type Product = {
     isHot?: boolean;
     image: string;
     isFavorite: boolean;
+    colors?: string[];
+    cardType?: string;
+    description?: string;
+    cardNumber?: string;
+    artist?: string;
+    cost?: number | string;
+    power?: number | string;
+    combatAttribute?: string;
+    subtypes?: string[];
+    life?: string;
+    counter?: string | number;
 };
 
 export const MOCK_PRODUCTS: Product[] = [

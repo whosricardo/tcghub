@@ -18,6 +18,8 @@ export function useMarketplaceCards(params: CardSearchParams, page: number, limi
                 content.map(async (dbCard) => {
                     let imageUrl = "https://images.unsplash.com/photo-1618331835717-801e976710b2?w=500&q=80"; // Fallback image valid
                     let externalPrice = 0;
+                    let externalDescription = "";
+                    let externalCardNumber = "";
 
                     try {
                         const extCards = await CardVerification(dbCard.name, dbCard.cardType);
@@ -29,6 +31,12 @@ export function useMarketplaceCards(params: CardSearchParams, page: number, limi
                             }
                             if (extCard.market_price) {
                                 externalPrice = extCard.market_price;
+                            }
+                            if (extCard.card_text) {
+                                externalDescription = extCard.card_text;
+                            }
+                            if (extCard.card_set_id) {
+                                externalCardNumber = extCard.card_set_id;
                             }
                         }
                     } catch (error) {
@@ -44,6 +52,10 @@ export function useMarketplaceCards(params: CardSearchParams, page: number, limi
                         isHot: false,
                         image: imageUrl,
                         isFavorite: false,
+                        colors: dbCard.colors || [],
+                        cardType: dbCard.cardType || '',
+                        description: dbCard.description || externalDescription || '',
+                        cardNumber: dbCard.cardNumber || externalCardNumber || '',
                     };
                 })
             );
