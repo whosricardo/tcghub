@@ -1,12 +1,12 @@
 "use client"
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ZoomIn } from 'lucide-react';
 import { useMarketplaceCardById } from './hooks/useMarketplaceCardById';
 import { Skeleton } from '@/components/ui/skeleton';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { gentle, smooth, snappy } from '@/motion/transitions';
 import { BuyingOptions } from './BuyingOptions';
 
@@ -16,6 +16,8 @@ interface ProductDetailsProps {
 
 export function ProductDetails({ cardId }: ProductDetailsProps) {
     const { data: card, isLoading, error } = useMarketplaceCardById(cardId);
+    const [isExpanded, setIsExpanded] = useState(false);
+
     if (error || !card) {
         return <div className="p-8 text-center text-red-500">Erro ao carregar os detalhes da carta.</div>;
     }
@@ -46,7 +48,10 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                             sizes="(max-width: 768px) 100vw, 30vw"
                         />
                     </div>
-                    <button className="mt-4 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                    <button 
+                        onClick={() => setIsExpanded(true)}
+                        className="mt-4 flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                    >
                         <ZoomIn size={16} />
                         <span>Expandir carta</span>
                     </button>
@@ -87,7 +92,6 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                         </div>
                     </div>
 
-                    {/* Grid de Atributos */}
                     <motion.div 
                         initial="hidden"
                         animate="visible"
@@ -95,7 +99,7 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                             hidden: { opacity: 0 },
                             visible: { opacity: 1, transition: { staggerChildren: 0.05, ...smooth } }
                         }}
-                        className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 border-t border-gray-200 dark:border-gray-800"
+                        className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-gray-200 dark:border-gray-800"
                     >
                         <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }}>
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Rarity</span>
@@ -130,7 +134,7 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Counter</span>
                             <span className="font-medium text-gray-900 dark:text-white">{card.counter || 'N/A'}</span>
                         </motion.div>
-                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }} className="col-span-2 sm:col-span-3">
+                        <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: snappy } }} className="col-span-2 md:col-span-4">
                             <span className="block text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Subtypes</span>
                             <span className="font-medium text-gray-900 dark:text-white">
                                 {Array.isArray(card.subtypes) ? card.subtypes.join(', ') : (card.subtypes || 'N/A')}
@@ -147,9 +151,48 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                     transition={smooth}
                     className="w-full lg:w-[320px] xl:w-[360px] shrink-0"
                 >
-                    <BuyingOptions />
+                    <BuyingOptions price={card.price} />
                 </motion.div>
             </div>
+
+            {/* Modal de Imagem Expandida */}
+            <AnimatePresence>
+                {isExpanded && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8"
+                        onClick={() => setIsExpanded(false)}
+                    >
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            transition={smooth}
+                            className="relative w-full max-w-[400px] lg:max-w-[400px] bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 flex flex-col items-center"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className="relative w-full aspect-[2.5/3.5] max-h-[80vh] rounded-lg overflow-hidden bg-gray-50 dark:bg-black/20 mb-3">
+                                <Image
+                                    src={card.image}
+                                    alt={card.title}
+                                    fill
+                                    className="object-contain"
+                                    sizes="(max-width: 768px) 100vw, 600px"
+                                />
+                            </div>
+                            <button 
+                                onClick={() => setIsExpanded(false)}
+                                className="absolute top-1 right-2 text-sky-600 hover:text-sky-800 dark:text-sky-400 dark:hover:text-blue-300 font-semibold uppercase tracking-wide text-sm transition-colors py-1"
+                            >
+                                Fechar
+                            </button>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }
@@ -188,14 +231,14 @@ function ProductDetailsSkeleton() {
                             <Skeleton className="w-3/4 h-4 dark:bg-gray-800" />
                         </div>
 
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-                            {Array.from({ length: 9 }).map((_, i) => (
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-gray-200 dark:border-gray-800">
+                            {Array.from({ length: 8 }).map((_, i) => (
                                 <div key={i}>
                                     <Skeleton className="w-16 h-3 mb-2 dark:bg-gray-800" />
                                     <Skeleton className="w-24 h-5 dark:bg-gray-800" />
                                 </div>
                             ))}
-                            <div className="col-span-2 sm:col-span-3">
+                            <div className="col-span-2 md:col-span-4">
                                 <Skeleton className="w-16 h-3 mb-2 dark:bg-gray-800" />
                                 <Skeleton className="w-48 h-5 dark:bg-gray-800" />
                             </div>
