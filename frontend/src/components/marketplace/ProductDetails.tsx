@@ -8,6 +8,7 @@ import { useMarketplaceCardById } from './hooks/useMarketplaceCardById';
 import { Skeleton } from '@/components/ui/skeleton';
 import { motion } from 'motion/react';
 import { gentle, smooth, snappy } from '@/motion/transitions';
+import { BuyingOptions } from './BuyingOptions';
 
 interface ProductDetailsProps {
     cardId: string;
@@ -24,16 +25,18 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={gentle}
-            className="w-full max-w-6xl mx-auto p-4 md:p-6 lg:p-8"
+            className="w-full max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8"
         >
-            <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-                {/* Coluna da Imagem (Aprox 30%) */}
-                <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={smooth}
-                    className="w-full md:w-1/3 lg:w-[30%] flex flex-col items-center"
-                >
+            <div className="flex flex-col lg:flex-row gap-8 xl:gap-12">
+                {/* Coluna Principal (Imagem e Detalhes) */}
+                <div className="flex flex-col md:flex-row gap-8 lg:flex-1">
+                    {/* Coluna da Imagem */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={smooth}
+                        className="w-full md:w-[40%] lg:w-[35%] xl:w-[30%] shrink-0 flex flex-col items-center"
+                    >
                     <div className="relative w-full aspect-[2.5/3.5] rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900 group">
                         <Image
                             src={card.image}
@@ -49,12 +52,12 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                     </button>
                 </motion.div>
 
-                {/* Coluna de Detalhes (Aprox 70%) */}
+                {/* Coluna de Detalhes */}
                 <motion.div 
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={smooth}
-                    className="w-full md:w-2/3 lg:w-[70%]"
+                    className="w-full md:flex-1"
                 >
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
                         {card.title}
@@ -136,6 +139,17 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                     </motion.div>
                 </motion.div>
             </div>
+
+                {/* Coluna Opções de Compra */}
+                <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={smooth}
+                    className="w-full lg:w-[320px] xl:w-[360px] shrink-0"
+                >
+                    <BuyingOptions />
+                </motion.div>
+            </div>
         </motion.div>
     );
 }
@@ -146,45 +160,51 @@ function ProductDetailsSkeleton() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={gentle}
-            className="w-full max-w-6xl mx-auto p-4 md:p-6 lg:p-8 animate-pulse"
+            className="w-full max-w-[1400px] mx-auto p-4 md:p-6 lg:p-8 animate-pulse"
         >
-            <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-                <div className="w-full md:w-1/3 lg:w-[30%] flex flex-col items-center">
-                    <Skeleton className="w-full aspect-[2.5/3.5] rounded-xl dark:bg-gray-800" />
-                    <Skeleton className="w-32 h-4 mt-4 dark:bg-gray-800" />
-                </div>
-                <div className="w-full md:w-2/3 lg:w-[70%]">
-                    <Skeleton className="w-3/4 h-10 mb-4 dark:bg-gray-800" />
-                    <Skeleton className="w-1/2 h-5 mb-8 dark:bg-gray-800" />
-                    
-                    <h2 className="text-xl font-semibold mb-4 border-b border-gray-200 dark:border-gray-800 pb-2 text-transparent">
-                        Product Details
-                    </h2>
-
-                    <div className="space-y-2 mb-8">
-                        <Skeleton className="w-full h-4 dark:bg-gray-800" />
-                        <Skeleton className="w-full h-4 dark:bg-gray-800" />
-                        <Skeleton className="w-3/4 h-4 dark:bg-gray-800" />
+            <div className="flex flex-col lg:flex-row gap-8 xl:gap-12">
+                <div className="flex flex-col md:flex-row gap-8 lg:flex-1">
+                    <div className="w-full md:w-[40%] lg:w-[35%] xl:w-[30%] shrink-0 flex flex-col items-center">
+                        <Skeleton className="w-full aspect-[2.5/3.5] rounded-xl dark:bg-gray-800" />
+                        <Skeleton className="w-32 h-4 mt-4 dark:bg-gray-800" />
                     </div>
+                    <div className="w-full md:flex-1">
+                        <Skeleton className="w-3/4 h-10 mb-4 dark:bg-gray-800" />
+                        <Skeleton className="w-1/2 h-5 mb-8 dark:bg-gray-800" />
+                        
+                        <h2 className="text-xl font-semibold mb-4 border-b border-gray-200 dark:border-gray-800 pb-2 text-transparent">
+                            Product Details
+                        </h2>
 
-                    <div className="space-y-2 mb-8">
-                        <Skeleton className="w-full h-4 dark:bg-gray-800" />
-                        <Skeleton className="w-full h-4 dark:bg-gray-800" />
-                        <Skeleton className="w-3/4 h-4 dark:bg-gray-800" />
-                    </div>
+                        <div className="space-y-2 mb-8">
+                            <Skeleton className="w-full h-4 dark:bg-gray-800" />
+                            <Skeleton className="w-full h-4 dark:bg-gray-800" />
+                            <Skeleton className="w-3/4 h-4 dark:bg-gray-800" />
+                        </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 border-t border-gray-200 dark:border-gray-800">
-                        {Array.from({ length: 9 }).map((_, i) => (
-                            <div key={i}>
+                        <div className="space-y-2 mb-8">
+                            <Skeleton className="w-full h-4 dark:bg-gray-800" />
+                            <Skeleton className="w-full h-4 dark:bg-gray-800" />
+                            <Skeleton className="w-3/4 h-4 dark:bg-gray-800" />
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+                            {Array.from({ length: 9 }).map((_, i) => (
+                                <div key={i}>
+                                    <Skeleton className="w-16 h-3 mb-2 dark:bg-gray-800" />
+                                    <Skeleton className="w-24 h-5 dark:bg-gray-800" />
+                                </div>
+                            ))}
+                            <div className="col-span-2 sm:col-span-3">
                                 <Skeleton className="w-16 h-3 mb-2 dark:bg-gray-800" />
-                                <Skeleton className="w-24 h-5 dark:bg-gray-800" />
+                                <Skeleton className="w-48 h-5 dark:bg-gray-800" />
                             </div>
-                        ))}
-                        <div className="col-span-2 sm:col-span-3">
-                            <Skeleton className="w-16 h-3 mb-2 dark:bg-gray-800" />
-                            <Skeleton className="w-48 h-5 dark:bg-gray-800" />
                         </div>
                     </div>
+                </div>
+                
+                <div className="w-full lg:w-[320px] xl:w-[360px] shrink-0">
+                    <Skeleton className="w-full h-[500px] rounded-xl dark:bg-gray-800" />
                 </div>
             </div>
         </motion.div>
