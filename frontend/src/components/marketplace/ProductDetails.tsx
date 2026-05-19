@@ -149,9 +149,9 @@ export function ProductDetails({ cardId }: ProductDetailsProps) {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={smooth}
-                    className="w-full lg:w-[320px] xl:w-[360px] shrink-0"
+                    className="w-full lg:w-[320px] xl:w-[360px] shrink-0 sticky top-24 self-start"
                 >
-                    <BuyingOptions price={card.price} />
+                    <BuyingOptions card={card} />
                 </motion.div>
             </div>
 
