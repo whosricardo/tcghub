@@ -1,9 +1,7 @@
-export async function CardVerification (card:string , typeCard: string = 'Leader'){
-    const searchParams = new URLSearchParams({
-        card_name: card,
-        card_type: typeCard,
-    })
-
+export async function CardVerification (card:string, typeCard?: string){
+    const searchParams = new URLSearchParams()
+    if (card) searchParams.append('card_name', card)
+    if (typeCard) searchParams.append('card_type', typeCard)
 
     const baseUrl =  `https://www.optcgapi.com/api/sets/filtered/?${searchParams.toString()}`;
     if (!card) return [];
