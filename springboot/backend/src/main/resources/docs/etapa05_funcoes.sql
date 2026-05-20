@@ -1,27 +1,89 @@
 -- =========================================================
 -- FUNÇÃO 01
 -- Tipo: FUNÇÃO MATEMÁTICA
--- Nome: calcular_receita_supplier
+-- Nome: fn_calculate_order_total
 -- Objetivo:
--- Calcula o valor líquido que o supplier recebe após o
--- desconto da taxa de comissão da plataforma.
+-- Calcula o valor total real de um pedido somando
+-- quantity_bought * unit_price_paid de todos os seus itens
+-- em order_items.
 -- Justificativa:
--- Evita recalcular essa lógica em múltiplas queries e
--- garante consistência nos relatórios financeiros.
+-- Garante consistência no cálculo do total do pedido,
+-- podendo ser usada em consultas, views e no backend
+-- via endpoint GET /functions/orders/{id}/total.
 -- =========================================================
 
 DELIMITER $$
 
-CREATE FUNCTION calcular_receita_supplier(preco DECIMAL(10,2), taxa_comissao DECIMAL(5,2))
-    RETURNS DECIMAL(10,2)
-    DETERMINISTIC
+CREATE FUNCTION fn_calculate_order_total(p_order_id BIGINT)
+    RETURNS DECIMAL(10, 2)
+    READS SQL DATA
 BEGIN
-RETURN preco * (1 - taxa_comissao / 100);
+    DECLARE v_total DECIMAL(10, 2);
+
+SELECT SUM(quantity_bought * unit_price_paid)
+INTO v_total
+FROM order_items
+WHERE order_id = p_order_id;
+
+RETURN IFNULL(v_total, 0.00);
 END$$
 
 DELIMITER ;
 
-SELECT l.id, l.current_price, s.commission_rate,
-       calcular_receita_supplier(l.current_price, s.commission_rate) AS receita_liquida
-FROM listings l
-         JOIN suppliers s ON s.user_id = l.supplier_id;
+-- =========================================================
+-- FUNÇÃO 02
+-- Tipo: FUNÇÃO COM ESTRUTURA CONDICIONAL
+-- Nome: fn_can_ship_order
+-- Objetivo:
+-- Verifica se um pedido está apto para envio, checando:
+-- se o pedido existe, se não está cancelado, se tem
+-- pagamento aprovado e se ainda não possui remessa criada.
+-- Justificativa:
+-- Centraliza a regra de elegibilidade de envio, podendo
+-- ser usada diretamente no ShipmentService e exposta via
+-- GET /functions/orders/{id}/shipping-eligibility.
+-- =========================================================
+
+DELIMITER $$
+
+CREATE FUNCTION fn_can_ship_order(p_order_id BIGINT)
+    RETURNS VARCHAR(30)
+    READS SQL DATA
+BEGIN
+    DECLARE v_status       VARCHAR(50);
+    DECLARE v_pay_approved INT DEFAULT 0;
+    DECLARE v_has_shipment INT DEFAULT 0;
+
+SELECT status INTO v_status
+FROM orders
+WHERE id = p_order_id;
+
+IF v_status IS NULL THEN
+        RETURN 'ORDER_NOT_FOUND';
+END IF;
+
+    IF v_status = 'CANCELLED' THEN
+        RETURN 'ORDER_CANCELLED';
+END IF;
+
+SELECT COUNT(*) INTO v_pay_approved
+FROM payments
+WHERE order_id = p_order_id
+  AND status = 'APPROVED';
+
+IF v_pay_approved = 0 THEN
+        RETURN 'PAYMENT_PENDING';
+END IF;
+
+SELECT COUNT(*) INTO v_has_shipment
+FROM shipments
+WHERE order_id = p_order_id;
+
+IF v_has_shipment > 0 THEN
+        RETURN 'SHIPMENT_ALREADY_EXISTS';
+END IF;
+
+RETURN 'CAN_SHIP';
+END$$
+
+DELIMITER ;
