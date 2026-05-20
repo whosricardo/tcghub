@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
 CREATE TABLE IF NOT EXISTS products (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
+    INDEX idx_product_name (name),
     collection VARCHAR(50) NOT NULL
 );
 
@@ -121,6 +122,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
     store_name VARCHAR(255) NOT NULL,
     contact_email VARCHAR(255) NOT NULL UNIQUE,
     commission_rate DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
+    INDEX idx_suppliers_name (store_name),
     CONSTRAINT fk_suppliers_user
     FOREIGN KEY (user_id)
     REFERENCES users(id)
@@ -309,4 +311,3 @@ CREATE TABLE IF NOT EXISTS order_items (
     CONSTRAINT chk_order_items_unit_price
     CHECK (unit_price_paid >= 0)
 );
-
