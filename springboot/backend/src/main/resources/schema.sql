@@ -311,3 +311,18 @@ CREATE TABLE IF NOT EXISTS order_items (
     CONSTRAINT chk_order_items_unit_price
     CHECK (unit_price_paid >= 0)
 );
+
+CREATE TABLE IF NOT EXISTS payment_logs (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    payment_id  BIGINT NOT NULL,
+    order_id    BIGINT NOT NULL,
+    old_status  VARCHAR(50) NOT NULL,
+    new_status  VARCHAR(50) NOT NULL,
+    changed_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_payment_logs_payment
+    FOREIGN KEY (payment_id) REFERENCES payments(id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_payment_logs_order
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
