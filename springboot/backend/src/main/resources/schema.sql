@@ -326,3 +326,18 @@ CREATE TABLE IF NOT EXISTS payment_logs (
     FOREIGN KEY (order_id) REFERENCES orders(id)
     ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS supplier_sales_snapshot (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    supplier_id BIGINT NOT NULL,
+    store_name VARCHAR(255) NOT NULL,
+    total_orders     INT NOT NULL DEFAULT 0,
+    total_items_sold INT NOT NULL DEFAULT 0,
+    total_revenue    DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    period_start     DATE NOT NULL,
+    period_end       DATE NOT NULL,
+    generated_at     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_snapshot_supplier
+    FOREIGN KEY (supplier_id) REFERENCES suppliers(user_id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+    );
