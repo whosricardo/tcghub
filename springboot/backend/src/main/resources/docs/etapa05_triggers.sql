@@ -1,3 +1,16 @@
+-- =========================================================
+-- TRIGGER 01
+-- Tipo: CONTROLE DE ESTOQUE
+-- Nome: trg_decrement_stock
+-- Evento: AFTER INSERT ON order_items
+-- Objetivo:
+-- Ao inserir um item em um pedido, decrementa automaticamente
+-- a quantidade disponível no listing correspondente.
+-- Justificativa:
+-- Mantém o estoque sempre consistente com os pedidos
+-- realizados, sem depender de lógica manual na aplicação.
+-- =========================================================
+
 DELIMITER $$
 
 CREATE TRIGGER trg_decrement_stock
