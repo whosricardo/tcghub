@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
 CREATE TABLE IF NOT EXISTS products (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
+    INDEX idx_product_name (name),
     collection VARCHAR(50) NOT NULL
 );
 
@@ -121,6 +122,7 @@ CREATE TABLE IF NOT EXISTS suppliers (
     store_name VARCHAR(255) NOT NULL,
     contact_email VARCHAR(255) NOT NULL UNIQUE,
     commission_rate DECIMAL(5, 2) NOT NULL DEFAULT 0.00,
+    INDEX idx_suppliers_name (store_name),
     CONSTRAINT fk_suppliers_user
     FOREIGN KEY (user_id)
     REFERENCES users(id)
@@ -310,3 +312,32 @@ CREATE TABLE IF NOT EXISTS order_items (
     CHECK (unit_price_paid >= 0)
 );
 
+CREATE TABLE IF NOT EXISTS payment_logs (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    payment_id  BIGINT NOT NULL,
+    order_id    BIGINT NOT NULL,
+    old_status  VARCHAR(50) NOT NULL,
+    new_status  VARCHAR(50) NOT NULL,
+    changed_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_payment_logs_payment
+    FOREIGN KEY (payment_id) REFERENCES payments(id)
+    ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_payment_logs_order
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS supplier_sales_snapshot (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    supplier_id BIGINT NOT NULL,
+    store_name VARCHAR(255) NOT NULL,
+    total_orders     INT NOT NULL DEFAULT 0,
+    total_items_sold INT NOT NULL DEFAULT 0,
+    total_revenue    DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    period_start     DATE NOT NULL,
+    period_end       DATE NOT NULL,
+    generated_at     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_snapshot_supplier
+    FOREIGN KEY (supplier_id) REFERENCES suppliers(user_id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+    );
