@@ -66,6 +66,8 @@ public class SecurityConfig {
                         "/auth/refresh",
                         "/auth/logout",
                         "/single-cards/**",
+                        "/reports/**",
+                        "/functions/**",
                         // Swagger
                         "/swagger-ui.html",
                         "/swagger-ui/**",
