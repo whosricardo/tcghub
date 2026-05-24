@@ -93,6 +93,11 @@ public class OrderRepository {
         return rowsAffected > 0;
     }
 
+    public void cancelOrderAndRestoreStock(Long id) {
+        String sql = "CALL sp_cancel_order_and_restore_stock(?)";
+        jdbcTemplate.update(sql, id);
+    }
+
     public boolean deleteById(Long id) {
         String sql = "DELETE FROM orders WHERE id = ?";
         int rowsAffected = jdbcTemplate.update(sql, id);
