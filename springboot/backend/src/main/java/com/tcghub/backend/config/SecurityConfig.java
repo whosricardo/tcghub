@@ -68,6 +68,7 @@ public class SecurityConfig {
                         "/single-cards/**",
                         "/reports/**",
                         "/functions/**",
+                        "/logs/**",
                         // Swagger
                         "/swagger-ui.html",
                         "/swagger-ui/**",

@@ -3,6 +3,7 @@ package com.tcghub.backend.service;
 import com.tcghub.backend.dto.OrderRequest;
 import com.tcghub.backend.dto.OrderResponse;
 import com.tcghub.backend.dto.OrderUpdateRequest;
+import com.tcghub.backend.dto.OrderCancelResponse;
 import com.tcghub.backend.dto.PageResponse;
 import com.tcghub.backend.exception.NotFoundException;
 import com.tcghub.backend.model.Order;
@@ -83,6 +84,21 @@ public class OrderService {
             .orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
 
         return toResponse(updated);
+    }
+
+    @Transactional
+    public OrderCancelResponse cancelOrder(Long id) {
+        orderRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
+
+        orderRepository.cancelOrderAndRestoreStock(id);
+
+        return new OrderCancelResponse(
+            id,
+            true,
+            "Pedido cancelado com sucesso pela procedure sp_cancel_order_and_restore_stock."
+        );
     }
 
     @Transactional

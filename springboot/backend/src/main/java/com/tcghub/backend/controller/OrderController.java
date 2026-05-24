@@ -3,6 +3,7 @@ package com.tcghub.backend.controller;
 import com.tcghub.backend.dto.OrderRequest;
 import com.tcghub.backend.dto.OrderResponse;
 import com.tcghub.backend.dto.OrderUpdateRequest;
+import com.tcghub.backend.dto.OrderCancelResponse;
 import com.tcghub.backend.dto.PageResponse;
 import com.tcghub.backend.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,6 +71,17 @@ public class OrderController {
         @Valid @RequestBody OrderUpdateRequest request
     ) {
         return orderService.updateStatus(id, request);
+    }
+
+    @PostMapping("/{id}/cancel")
+    @Operation(
+        summary = "Cancelar pedido",
+        description = "Executa a procedure sp_cancel_order_and_restore_stock para cancelar o pedido e restaurar o estoque dos itens."
+    )
+    public OrderCancelResponse cancelOrder(
+        @Parameter(description = "ID único do pedido") @PathVariable Long id
+    ) {
+        return orderService.cancelOrder(id);
     }
 
     @DeleteMapping("/{id}")
