@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { motion } from 'motion/react'
+import { smooth } from '@/motion/transitions'
 import { Spinner } from '@/components/ui/spinner'
 import {
     Table,
@@ -39,9 +41,14 @@ export function PaymentLogsTable() {
 
     if (!data || data.length === 0) {
         return (
-            <section className="text-sm text-gray-400 p-4">
+            <motion.section 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={smooth}
+                className="text-sm text-gray-400 p-4"
+            >
                 Nenhum log de pagamento encontrado. (Altere o status de um pagamento para gerar um log via Trigger).
-            </section>
+            </motion.section>
         )
     }
 
@@ -49,7 +56,12 @@ export function PaymentLogsTable() {
     const totalPages = Math.ceil(totalElements / limit) || 1
 
     return (
-        <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm relative overflow-hidden bg-white">
+        <motion.section 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={smooth}
+            className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm relative overflow-hidden bg-white"
+        >
             <section className="w-full flex flex-col justify-start bg-gray-50 border-b border-b-gray-300 p-4">
                 <p className="font-semibold text-md">Logs de Pagamentos (Trigger)</p>
                 <p className="text-xs text-gray-500 mt-1">Gerados automaticamente pelo trigger <strong>trg_log_payment_status_update</strong></p>
@@ -102,6 +114,6 @@ export function PaymentLogsTable() {
                     />
                 </div>
             )}
-        </section>
+        </motion.section>
     )
 }

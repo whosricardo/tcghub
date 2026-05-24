@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'motion/react'
+import { smooth } from '@/motion/transitions'
 import { Spinner } from '@/components/ui/spinner'
 import { AlertTriangle, XCircle } from 'lucide-react'
 import {
@@ -55,14 +57,24 @@ export function OrderTable() {
 
     if (!data || data.content.length === 0) {
         return (
-            <section className="text-sm text-gray-400 p-4">
+            <motion.section 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={smooth}
+                className="text-sm text-gray-400 p-4"
+            >
                 Sem pedidos cadastrados.
-            </section>
+            </motion.section>
         )
     }
 
     return (
-        <section className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm relative">
+        <motion.section 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={smooth}
+            className="w-full flex flex-col border border-gray-300 rounded-2xl shadow-sm relative"
+        >
             <section className="w-full flex justify-start items-center bg-gray-50 border-b border-b-gray-300 p-4 rounded-t-2xl">
                 <p className="font-semibold text-md">Tabela de Pedidos</p>
             </section>
@@ -174,6 +186,6 @@ export function OrderTable() {
                     </div>
                 </div>
             </Modal>
-        </section>
+        </motion.section>
     )
 }

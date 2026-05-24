@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { motion } from 'motion/react'
+import { smooth } from '@/motion/transitions'
 import { Spinner } from '@/components/ui/spinner'
 import {
     Table,
@@ -44,7 +46,12 @@ export function SupplierSalesTable() {
     const totalPages = Math.ceil(totalElements / limit) || 1
 
     return (
-        <section className="flex flex-col">
+        <motion.section 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={smooth}
+            className="flex flex-col"
+        >
             <section className="overflow-x-auto min-h-[280px]">
                 <Table>
                     <TableHeader>
@@ -82,7 +89,7 @@ export function SupplierSalesTable() {
                     />
                 </div>
             )}
-        </section>
+        </motion.section>
     )
 }
 
@@ -105,7 +112,12 @@ export function PendingOrdersTable() {
     const totalPages = Math.ceil(totalElements / limit) || 1
 
     return (
-        <section className="flex flex-col">
+        <motion.section 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={smooth}
+            className="flex flex-col"
+        >
             <section className="overflow-x-auto min-h-[280px]">
                 <Table>
                     <TableHeader>
@@ -143,7 +155,7 @@ export function PendingOrdersTable() {
                     />
                 </div>
             )}
-        </section>
+        </motion.section>
     )
 }
 
@@ -166,7 +178,12 @@ export function ProductsWithoutListingsTable() {
     const totalPages = Math.ceil(totalElements / limit) || 1
 
     return (
-        <section className="flex flex-col">
+        <motion.section 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={smooth}
+            className="flex flex-col"
+        >
             <section className="overflow-x-auto min-h-[280px]">
                 <Table>
                     <TableHeader>
@@ -200,7 +217,7 @@ export function ProductsWithoutListingsTable() {
                     />
                 </div>
             )}
-        </section>
+        </motion.section>
     )
 }
 
@@ -223,7 +240,12 @@ export function OrdersAboveAverageTable() {
     const totalPages = Math.ceil(totalElements / limit) || 1
 
     return (
-        <section className="flex flex-col">
+        <motion.section 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={smooth}
+            className="flex flex-col"
+        >
             <section className="overflow-x-auto min-h-[280px]">
                 <Table>
                     <TableHeader>
@@ -261,6 +283,6 @@ export function OrdersAboveAverageTable() {
                     />
                 </div>
             )}
-        </section>
+        </motion.section>
     )
 }
