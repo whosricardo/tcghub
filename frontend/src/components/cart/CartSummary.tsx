@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export function CartSummary() {
     const { getCartTotal, getShippingTotal, getItemCount, items, clearCart } = useCartStore();
@@ -48,10 +49,13 @@ export function CartSummary() {
             </div>
             
             <div className="space-y-4">
-                <button className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full font-semibold transition-colors">
+                <Link 
+                    href="/checkout"
+                    className="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-full font-semibold transition-colors"
+                >
                     Check Out
                     <ArrowRight size={16} />
-                </button>
+                </Link>
                 
                 <button 
                     onClick={clearCart}

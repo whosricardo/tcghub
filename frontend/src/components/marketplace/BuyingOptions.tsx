@@ -47,8 +47,8 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                 {/* Direto da Loja */}
                 <div className="space-y-3 pb-6 border-b border-gray-100 dark:border-gray-800">
                     <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase">Direto da Loja</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full uppercase">Premium</span>
+                        <span className="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase">Direto da Loja</span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 rounded-full uppercase">Premium</span>
                     </div>
                     
                     <div className="flex items-end gap-2">
@@ -73,7 +73,7 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
 
                     <button 
                         onClick={() => handleAddToCart("TCGHub Direto", card.price, 0)}
-                        className="w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
+                        className="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
                     >
                         <ShoppingCart size={16} />
                         Adicionar ao Carrinho

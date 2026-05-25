@@ -5,6 +5,7 @@ export default function proxy(request: NextRequest) {
     const token = request.cookies.get('access_token')?.value
     const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/cadastro')
     const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
+    const isCheckoutRoute = request.nextUrl.pathname.startsWith('/checkout')
 
     
     if (token && isAuthRoute) {
@@ -12,7 +13,7 @@ export default function proxy(request: NextRequest) {
     }
 
 
-    if (!token && isAdminRoute){
+    if (!token && (isAdminRoute || isCheckoutRoute)){
         return NextResponse.redirect(new URL('/login', request.url))
     }
 
@@ -26,5 +27,6 @@ export const config = {
         '/login/:path*',
         '/cadastro/:path*',
         '/admin/:path*',
+        '/checkout/:path*',
     ],
 }
