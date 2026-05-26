@@ -175,3 +175,25 @@ export interface PageResponseListingResponse {
     totalElements: number;
 }
 
+// View SQL Types (Etapa 04)
+export interface ActiveListingDetailViewResponse {
+    listingId: number;
+    productName: string;
+    collection: string;
+    supplierName: string;
+    commissionRate: number;
+    currentPrice: number;
+    availableQuantity: number;
+    itemCondition: string;
+    productLanguage: string;
+}
+
+export interface AboveAvgCommissionSupplierViewResponse {
+    supplierId: number;
+    storeName: string;
+    contactEmail: string;
+    commissionRate: number;
+    totalProductsListed: number;
+}
+
+
