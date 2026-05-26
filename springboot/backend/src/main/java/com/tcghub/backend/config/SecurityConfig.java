@@ -69,6 +69,8 @@ public class SecurityConfig {
                         "/reports/**",
                         "/functions/**",
                         "/logs/**",
+                        "/dashboard/**",
+                        "/views/**",
                         // Swagger
                         "/swagger-ui.html",
                         "/swagger-ui/**",
