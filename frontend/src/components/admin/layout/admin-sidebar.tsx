@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
     SidebarTrigger,
 } from '@/components/ui/sidebar'
-import { LayoutGrid, Database, Users, WalletCards , User , LogOut, Box, ShoppingCart, Activity, FileText} from 'lucide-react'
+import { LayoutGrid, Database, Users, WalletCards , User , LogOut, Box, ShoppingCart, Activity, FileText, Tag} from 'lucide-react'
 import Link from 'next/link'
 import { AvatarAdmin } from './avatarAdmin'
 import { usePathname } from 'next/navigation'
@@ -34,6 +34,12 @@ const navItems = [
         url: '/admin/sealed-product',
         icon: Box,
         isActive: true,
+    },
+    {
+        title: 'Anúncios',
+        url: '/admin/listings',
+        icon: Tag,
+        isActive: false,
     },
     {
         title: 'Usuários',

@@ -141,3 +141,37 @@ export interface ShipmentResponse {
     addressId?: number;
 }
 
+// Listing Types
+export interface ListingRequest {
+    availableQuantity: number;
+    currentPrice: number;
+    itemCondition: string;
+    productLanguage: string;
+    productId: number;
+    supplierId: number;
+}
+
+export interface ListingResponse {
+    id: number;
+    availableQuantity: number;
+    currentPrice: number;
+    itemCondition: string;
+    productLanguage: string;
+    productId: number;
+    supplierId: number;
+}
+
+export interface ListingUpdateRequest {
+    availableQuantity?: number;
+    currentPrice?: number;
+    itemCondition?: string;
+    productLanguage?: string;
+}
+
+export interface PageResponseListingResponse {
+    content: ListingResponse[];
+    currentPage: number;
+    totalPages: number;
+    totalElements: number;
+}
+

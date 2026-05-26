@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ShoppingCart, Check, ShieldCheck, Star, CheckCircle } from 'lucide-react';
 import { useCartStore } from '@/store/cartStore';
 import { Modal } from '@/shared/modal';
 import { motion } from 'motion/react';
 import { bouncy } from '@/motion/transitions';
 import Link from 'next/link';
+import { useListingsByProductId } from './hooks/useListingsByProductId';
 
 interface BuyingOptionsProps {
     card: {
@@ -19,18 +20,30 @@ interface BuyingOptionsProps {
 export function BuyingOptions({ card }: BuyingOptionsProps) {
     const addItem = useCartStore((state) => state.addItem);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { data: listings } = useListingsByProductId(Number(card.id));
 
-    const handleAddToCart = (sellerName: string, price: number, shippingCost: number) => {
+    const lowestPartnerListing = useMemo(() => {
+        if (!listings || listings.length === 0) return null;
+        return [...listings].sort((a, b) => a.currentPrice - b.currentPrice)[0];
+    }, [listings]);
+
+    const sellerName = lowestPartnerListing ? `Fornecedor #${lowestPartnerListing.supplierId}` : "Kaiser's Kard House";
+    const partnerPrice = lowestPartnerListing ? lowestPartnerListing.currentPrice : 1.80;
+    const partnerCondition = lowestPartnerListing ? lowestPartnerListing.itemCondition : 'NM';
+    const partnerLanguage = lowestPartnerListing ? lowestPartnerListing.productLanguage : '';
+
+    const handleAddToCart = (seller: string, price: number, shippingCost: number, isPartner: boolean = false) => {
         addItem({
-            id: `${card.id}-${sellerName}-${Date.now()}`,
+            id: `${card.id}-${seller}-${Date.now()}`,
             cardId: card.id,
+            listingId: isPartner && lowestPartnerListing ? lowestPartnerListing.id : undefined,
             title: card.title,
             image: card.image,
             edition: card.edition,
-            condition: 'NM', // Mocked condition
+            condition: isPartner ? partnerCondition : 'NM',
             price: price,
             quantity: 1,
-            sellerName: sellerName,
+            sellerName: seller,
             shippingCost: shippingCost
         });
         
@@ -87,23 +100,24 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                     </div>
                     
                     <div className="flex items-end gap-2">
-                        <span className="text-2xl font-bold text-gray-900 dark:text-white">$ 1.80</span>
-                        <span className="text-sm font-bold text-green-600 dark:text-green-400 mb-1">NM</span>
+                        <span className="text-2xl font-bold text-gray-900 dark:text-white">R$ {partnerPrice.toFixed(2)}</span>
+                        <span className="text-sm font-bold text-green-600 dark:text-green-400 mb-1">{partnerCondition}</span>
+                        {partnerLanguage && <span className="text-xs text-gray-400 mb-1">({partnerLanguage})</span>}
                     </div>
 
                     <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
                         <div className="flex items-center gap-1.5">
-                            <span className="font-medium text-gray-900 dark:text-gray-200">Kaiser's Kard House</span>
+                            <span className="font-medium text-gray-900 dark:text-gray-200">{sellerName}</span>
                             <span className="flex items-center text-yellow-500">
                                 <Star size={12} fill="currentColor" />
                                 <span className="ml-0.5 text-gray-500">5.0</span>
                             </span>
                         </div>
-                        <div className="text-gray-500">+ $ 1.31 frete (Grátis acima de R$ 5)</div>
+                        <div className="text-gray-500">+ R$ 2.50 frete (Grátis acima de R$ 50)</div>
                     </div>
 
                     <button 
-                        onClick={() => handleAddToCart("Kaiser's Kard House", 1.80, 1.31)}
+                        onClick={() => handleAddToCart(sellerName, partnerPrice, 2.50, true)}
                         className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
                     >
                         <ShoppingCart size={16} />
