@@ -70,6 +70,7 @@ public class SecurityConfig {
                         "/functions/**",
                         "/logs/**",
                         "/dashboard/**",
+                        "/views/**",
                         // Swagger
                         "/swagger-ui.html",
                         "/swagger-ui/**",
