@@ -50,12 +50,12 @@ export function CheckoutReviewStep() {
                     const shippingMethod = selectedShippingMethod[sellerName] || 'local';
                     const packageSubtotal = sellerItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
                     const isFreeShipping = packageSubtotal >= 50.0;
-                    const shippingPrice = isFreeShipping 
-                        ? 0 
+                    const shippingPrice = isFreeShipping
+                        ? 0
                         : (shippingMethod === 'regional' ? 15.50 : (sellerItems[0]?.shippingCost || 0));
 
                     return (
-                        <div 
+                        <div
                             key={sellerName}
                             className="bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-900 rounded-xl p-5 shadow-xs space-y-4"
                         >
@@ -71,7 +71,7 @@ export function CheckoutReviewStep() {
                                         Frete: {isFreeShipping ? (
                                             <span className="text-green-600 dark:text-green-400 font-semibold">Grátis (acima de R$50)</span>
                                         ) : (
-                                            `R$ ${shippingPrice.toFixed(2)} (${shippingMethod === 'regional' ? 'Regional' : 'Local'})`
+                                            `$ ${shippingPrice.toFixed(2)} (${shippingMethod === 'regional' ? 'Regional' : 'Local'})`
                                         )}
                                     </span>
                                 </div>
@@ -83,9 +83,9 @@ export function CheckoutReviewStep() {
                                     <div key={item.id} className="flex gap-4 py-3 first:pt-0 last:pb-0 items-center">
                                         <div className="relative size-12 shrink-0 rounded-lg overflow-hidden border border-gray-100 dark:border-gray-800 bg-gray-50">
                                             {item.image ? (
-                                                <img 
-                                                    src={item.image} 
-                                                    alt={item.title} 
+                                                <img
+                                                    src={item.image}
+                                                    alt={item.title}
                                                     className="object-contain w-full h-full"
                                                 />
                                             ) : (
@@ -102,7 +102,7 @@ export function CheckoutReviewStep() {
                                         </div>
                                         <div className="text-right shrink-0">
                                             <span className="text-sm font-bold text-gray-900 dark:text-white">
-                                                R$ {item.price.toFixed(2)}
+                                                $ {item.price.toFixed(2)}
                                             </span>
                                             <div className="text-xs text-gray-400 dark:text-gray-600 mt-0.5">
                                                 Qtd: {item.quantity}
@@ -111,12 +111,12 @@ export function CheckoutReviewStep() {
                                     </div>
                                 ))}
                             </div>
-                            
+
                             {/* Seller Package Subtotal */}
                             <div className="flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/30 p-3 rounded-lg border border-gray-50 dark:border-gray-900 text-xs">
                                 <span className="text-gray-500">Subtotal do Pacote</span>
                                 <span className="font-semibold text-gray-900 dark:text-white">
-                                    R$ {(packageSubtotal + shippingPrice).toFixed(2)}
+                                    $ {(packageSubtotal + shippingPrice).toFixed(2)}
                                 </span>
                             </div>
                         </div>
@@ -129,26 +129,26 @@ export function CheckoutReviewStep() {
                 <h4 className="text-sm font-bold text-sky-800 dark:text-sky-400 uppercase tracking-wider">
                     Resumo do Pedido
                 </h4>
-                
+
                 <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex justify-between">
                         <span>Cartas</span>
-                        <span className="font-medium text-gray-900 dark:text-white">R$ {cartTotal.toFixed(2)}</span>
+                        <span className="font-medium text-gray-900 dark:text-white">$ {cartTotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                         <span>Frete Total</span>
-                        <span className="font-medium text-gray-900 dark:text-white">R$ {shippingTotal.toFixed(2)}</span>
+                        <span className="font-medium text-gray-900 dark:text-white">$ {shippingTotal.toFixed(2)}</span>
                     </div>
-                    
+
                     <Separator className="my-2 bg-sky-100/50 dark:bg-sky-950/30" />
-                    
+
                     <div className="flex justify-between text-base font-bold text-gray-900 dark:text-white">
                         <span>Total Geral</span>
-                        <span className="text-sky-600 dark:text-sky-400">R$ {grandTotal.toFixed(2)}</span>
+                        <span className="text-sky-600 dark:text-sky-400">$ {grandTotal.toFixed(2)}</span>
                     </div>
                 </div>
 
-                <Button 
+                <Button
                     onClick={nextStep}
                     className="w-full h-11 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg shadow-sm shadow-sky-600/10"
                 >
