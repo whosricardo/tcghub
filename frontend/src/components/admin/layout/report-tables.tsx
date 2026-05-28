@@ -26,6 +26,8 @@ import {
     ProductWithoutListingReportResponse, 
     OrdersAboveAverageReportResponse 
 } from '@/types/api'
+import { FilterInput } from '../common/FilterInput'
+import { DollarSign } from 'lucide-react'
 
 export function SupplierSalesTable() {
     const { data, isLoading, isError, isFetching } = useQuerySupplierSales()
@@ -50,9 +52,9 @@ export function SupplierSalesTable() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={smooth}
-            className="flex flex-col"
+            className="flex flex-col h-full justify-between"
         >
-            <section className="overflow-x-auto min-h-[280px]">
+            <section className="overflow-x-auto min-h-[190px]">
                 <Table>
                     <TableHeader>
                         <TableRow className="whitespace-nowrap">
@@ -77,7 +79,7 @@ export function SupplierSalesTable() {
                 </Table>
             </section>
             {totalPages > 1 && (
-                <div className="mt-2 border-t border-t-gray-100">
+                <div className="mt-auto border-t border-gray-100">
                     <Pagination
                         currentPage={page}
                         setPage={setPage}
@@ -96,54 +98,95 @@ export function SupplierSalesTable() {
 export function PendingOrdersTable() {
     const { data, isLoading, isError, isFetching } = useQueryPendingOrders()
     const [page, setPage] = useState(1)
+    const [minAmount, setMinAmount] = useState('')
+    const [maxAmount, setMaxAmount] = useState('')
     const limit = 5
 
-    const paginatedData = useMemo(() => {
+    const filteredData = useMemo(() => {
         if (!data) return []
+        return data.filter((item) => {
+            const amount = item.totalAmount ?? 0
+            const min = minAmount ? parseFloat(minAmount) : 0
+            const max = maxAmount ? parseFloat(maxAmount) : Infinity
+            return amount >= min && amount <= max
+        })
+    }, [data, minAmount, maxAmount])
+
+    const paginatedData = useMemo(() => {
         const start = (page - 1) * limit
-        return data.slice(start, start + limit)
-    }, [data, page])
+        return filteredData.slice(start, start + limit)
+    }, [filteredData, page])
 
     if (isLoading) return <Spinner className="h-8 w-8 text-sky-600 mx-auto mt-4" />
     if (isError) return <p className="text-sm text-red-500 p-4">Erro ao carregar relatório.</p>
-    if (!data || data.length === 0) return <p className="text-sm text-gray-400 p-4">Nenhum dado encontrado.</p>
 
-    const totalElements = data.length
+    const totalElements = filteredData.length
     const totalPages = Math.ceil(totalElements / limit) || 1
+
+    const handleMinChange = (val: string) => {
+        setMinAmount(val)
+        setPage(1)
+    }
+
+    const handleMaxChange = (val: string) => {
+        setMaxAmount(val)
+        setPage(1)
+    }
 
     return (
         <motion.section 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={smooth}
-            className="flex flex-col"
+            className="flex flex-col h-full justify-between gap-4"
         >
-            <section className="overflow-x-auto min-h-[280px]">
-                <Table>
-                    <TableHeader>
-                        <TableRow className="whitespace-nowrap">
-                            <TableHead>Pedido ID</TableHead>
-                            <TableHead>Comprador</TableHead>
-                            <TableHead>Data de Criação</TableHead>
-                            <TableHead>Valor Total</TableHead>
-                            <TableHead>Status</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {paginatedData.map((item: PendingOrderReportResponse) => (
-                            <TableRow key={item.orderId} className="whitespace-nowrap">
-                                <TableCell>#{item.orderId}</TableCell>
-                                <TableCell>{item.buyerName} ({item.buyerId})</TableCell>
-                                <TableCell>{new Date(item.createdAt).toLocaleDateString()}</TableCell>
-                                <TableCell>R$ {item.totalAmount?.toFixed(2)}</TableCell>
-                                <TableCell><StatusBadge status={item.status} /></TableCell>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50/50 p-4 border border-gray-200 rounded-xl">
+                <FilterInput
+                    type="number"
+                    placeholder="Valor mínimo (R$)..."
+                    icon={DollarSign}
+                    value={minAmount}
+                    onChange={handleMinChange}
+                />
+                <FilterInput
+                    type="number"
+                    placeholder="Valor máximo (R$)..."
+                    icon={DollarSign}
+                    value={maxAmount}
+                    onChange={handleMaxChange}
+                />
+            </div>
+
+            <section className="overflow-x-auto min-h-[190px]">
+                {totalElements === 0 ? (
+                    <p className="text-sm text-gray-400 p-4 text-center">Nenhum pedido pendente corresponde a estes valores.</p>
+                ) : (
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="whitespace-nowrap">
+                                <TableHead>Pedido ID</TableHead>
+                                <TableHead>Comprador</TableHead>
+                                <TableHead>Data de Criação</TableHead>
+                                <TableHead>Valor Total</TableHead>
+                                <TableHead>Status</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {paginatedData.map((item: PendingOrderReportResponse) => (
+                                <TableRow key={item.orderId} className="whitespace-nowrap hover:bg-gray-50/60 transition-colors">
+                                    <TableCell className="font-semibold text-gray-500">#{item.orderId}</TableCell>
+                                    <TableCell className="font-medium text-gray-900">{item.buyerName} ({item.buyerId})</TableCell>
+                                    <TableCell>{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                                    <TableCell className="font-medium text-sky-600">R$ {item.totalAmount?.toFixed(2)}</TableCell>
+                                    <TableCell><StatusBadge status={item.status} /></TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
             </section>
             {totalPages > 1 && (
-                <div className="mt-2 border-t border-t-gray-100">
+                <div className="mt-auto border-t border-gray-100 pt-2">
                     <Pagination
                         currentPage={page}
                         setPage={setPage}
@@ -182,9 +225,9 @@ export function ProductsWithoutListingsTable() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={smooth}
-            className="flex flex-col"
+            className="flex flex-col h-full justify-between"
         >
-            <section className="overflow-x-auto min-h-[280px]">
+            <section className="overflow-x-auto min-h-[190px]">
                 <Table>
                     <TableHeader>
                         <TableRow className="whitespace-nowrap">
@@ -205,7 +248,7 @@ export function ProductsWithoutListingsTable() {
                 </Table>
             </section>
             {totalPages > 1 && (
-                <div className="mt-2 border-t border-t-gray-100">
+                <div className="mt-auto border-t border-gray-100">
                     <Pagination
                         currentPage={page}
                         setPage={setPage}
@@ -244,9 +287,9 @@ export function OrdersAboveAverageTable() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={smooth}
-            className="flex flex-col"
+            className="flex flex-col h-full justify-between"
         >
-            <section className="overflow-x-auto min-h-[280px]">
+            <section className="overflow-x-auto min-h-[190px]">
                 <Table>
                     <TableHeader>
                         <TableRow className="whitespace-nowrap">
@@ -271,7 +314,7 @@ export function OrdersAboveAverageTable() {
                 </Table>
             </section>
             {totalPages > 1 && (
-                <div className="mt-2 border-t border-t-gray-100">
+                <div className="mt-auto border-t border-gray-100">
                     <Pagination
                         currentPage={page}
                         setPage={setPage}

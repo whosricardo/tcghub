@@ -200,4 +200,58 @@ export interface AboveAvgCommissionSupplierViewResponse {
     totalProductsListed: number;
 }
 
+// Dashboard Types
+export interface DashboardSummaryResponse {
+    totalOrders: number;
+    totalApprovedPayments: number;
+    totalRevenue: number;
+    averageTicket: number;
+    totalSuppliersWithSales: number;
+    totalProductsWithoutListings: number;
+}
 
+export interface SalesTrendPointResponse {
+    label: string;
+    totalRevenue: number;
+}
+
+export interface OrderStatusDistributionResponse {
+    status: string;
+    total: number;
+}
+
+export interface TopSupplierDashboardResponse {
+    supplierId: number;
+    supplierName: string;
+    storeName: string;
+    totalRevenue: number;
+    totalItemsSold: number;
+}
+
+export interface PaymentMethodDistributionResponse {
+    paymentMethod: string;
+    total: number;
+}
+
+export interface OrderValueRangeResponse {
+    rangeLabel: string;
+    totalOrders: number;
+}
+
+export interface OrderStatisticsResponse {
+    average: number;
+    median: number;
+    mode: number;
+    variance: number;
+    standardDeviation: number;
+}
+
+export interface DashboardFilters {
+    startDate?: string;
+    endDate?: string;
+    groupBy?: 'day' | 'month';
+    status?: string;
+    collection?: string;
+    limit?: number;
+    paymentStatus?: string;
+}
