@@ -14,6 +14,7 @@ Este projeto foi desenvolvido no contexto da disciplina de **Banco de Dados** da
 - [Banco de Dados](#banco-de-dados)
 - [Instruções de Uso](#instruções-de-uso)
   - [Como rodar o backend e o banco de dados](#como-rodar-o-backend-e-o-banco-de-dados)
+  - [Configuração de Objetos do Banco de Dados (Views, Funções, etc)](#configuração-de-objetos-do-banco-de-dados-views-funções-etc)
   - [Autenticação e proteção de rotas](#autenticação-e-proteção-de-rotas)
   - [Documentação da API](#documentação-da-api)
   - [Como preparar o front-end](#como-preparar-o-front-end)
@@ -74,23 +75,24 @@ Na raiz do back-end, execute o comando abaixo:
 
 ```bash
 docker compose up --build
+
 ```
 
 Esse processo irá:
 
-- construir as imagens necessárias
-- subir o container do banco de dados MySQL
-- subir o container da aplicação back-end
-- expor o back-end na porta `8080`
-- expor o banco MySQL na porta `3307`
+* construir as imagens necessárias
+* subir o container do banco de dados MySQL
+* subir o container da aplicação back-end
+* expor o back-end na porta `8080`
+* expor o banco MySQL na porta `3307`
 
 ### Endereços de acesso
 
 Após a inicialização dos containers, os seguintes serviços estarão disponíveis:
 
-- **Back-end:** `http://localhost:8080`
-- **Documentação da API (Swagger):** `http://localhost:8080/swagger-ui.html`
-- **MySQL:** `localhost:3307`
+* **Back-end:** `http://localhost:8080`
+* **Documentação da API (Swagger):** `http://localhost:8080/swagger-ui.html`
+* **MySQL:** `localhost:3307`
 
 ### Como parar a execução
 
@@ -98,42 +100,87 @@ Para interromper os containers sem removê-los:
 
 ```bash
 docker compose stop
+
 ```
 
 Para interromper e remover os containers:
 
 ```bash
 docker compose down
-```
 
-Para interromper, remover os containers e excluir também o volume do banco de dados:
-
-```bash
-docker compose down -v
 ```
 
 ### Quando utilizar `docker compose down -v`
 
 Esse comando é indicado quando for necessário recriar completamente o ambiente do banco, especialmente em situações como:
 
-- alteração no arquivo `schema.sql`
-- alteração no arquivo `data.sql`
-- reinicialização completa da base de dados
+* alteração no arquivo `schema.sql`
+* alteração no arquivo `data.sql`
+* reinicialização completa da base de dados
 
 Após a remoção dos volumes, utilize novamente:
 
 ```bash
 docker compose up --build
+
 ```
 
-### Estrutura dos arquivos SQL
+---
 
-A inicialização do banco segue a seguinte organização:
+## Configuração de Objetos do Banco de Dados (Views, Funções, etc)
 
-- `schema.sql`: responsável pela criação da estrutura do banco de dados
-- `data.sql`: responsável pela inserção dos dados iniciais
+Após o banco de dados estar rodando, é necessário executar manualmente os scripts SQL que contêm a lógica de negócio avançada (Etapas 04 e 05).
 
-Durante a execução da aplicação, o Spring Boot processa primeiro o `schema.sql` e, em seguida, o `data.sql`.
+### 1. Habilitar criação de funções/triggers
+
+Para evitar erros de permissão ao criar funções no MySQL via Docker, execute:
+
+```bash
+docker exec -it tcghub-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' -e "SET GLOBAL log_bin_trust_function_creators = 1;"
+
+```
+
+### 2. Importar Views, Funções, Procedures e Triggers
+
+Execute os comandos abaixo na ordem para carregar os arquivos SQL localizados em `src/main/resources/docs/`:
+
+**Views:**
+
+```bash
+docker exec -i tcghub-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' < src/main/resources/docs/etapa04_views.sql
+
+```
+
+**Funções:**
+- Antes, garante que o MySQL permite criar funções:
+
+```bash
+docker exec -it tcghub-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD"'
+
+```
+
+- Entrar no mysql e executar
+```bash
+SET GLOBAL log_bin_trust_function_creators = 1;
+```
+
+- Sair do MySQL e executar
+```bash
+docker exec -i tcghub-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' < src/main/resources/docs/etapa05_funcoes.sql
+```
+**Procedimentos:**
+
+```bash
+docker exec -i tcghub-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' < src/main/resources/docs/etapa05_procedimentos.sql
+
+```
+
+**Triggers:**
+
+```bash
+docker exec -i tcghub-mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE"' < src/main/resources/docs/etapa05_triggers.sql
+
+```
 
 ---
 
@@ -147,39 +194,15 @@ Isso significa que parte dos endpoints está disponível publicamente, enquanto 
 
 As rotas abaixo podem ser acessadas sem autenticação:
 
-- `/auth/register`
-- `/auth/login`
-- `/auth/refresh`
-- `/auth/logout`
-- `/h2-console/**`
-- `/swagger-ui.html`
-- `/swagger-ui/**`
-- `/v3/api-docs`
-- `/v3/api-docs/**`
-
-### Rotas protegidas
-
-Toda rota que não esteja listada na seção anterior é considerada **protegida** e exige autenticação.
-
-Para consumi-la, é necessário enviar o token JWT no cabeçalho da requisição no seguinte formato:
-
-```http
-Authorization: Bearer SEU_TOKEN_JWT
-```
-
-### Exemplo de uso
-
-```http
-GET /alguma-rota-protegida
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
-### Fluxo básico de autenticação
-
-1. O usuário realiza login por meio da rota `/auth/login`
-2. A API retorna um token JWT válido
-3. Esse token deve ser incluído no cabeçalho `Authorization` das requisições subsequentes
-4. Sem o token, o acesso às rotas protegidas será negado
+* `/auth/register`
+* `/auth/login`
+* `/auth/refresh`
+* `/auth/logout`
+* `/h2-console/`
+* `/swagger-ui.html`
+* `/swagger-ui/`
+* `/v3/api-docs`
+* `/v3/api-docs/`
 
 ---
 
@@ -191,9 +214,8 @@ Para consultar os endpoints disponíveis, seus parâmetros, respostas e testar r
 
 ```text
 http://localhost:8080/swagger-ui.html
-```
 
-Essa interface é a principal referência para visualização e validação dos recursos expostos pela API durante o desenvolvimento.
+```
 
 ---
 
@@ -205,19 +227,19 @@ Para execução do front-end localmente, siga os passos abaixo.
 
 Download: https://nodejs.org/en/download
 
-> Recomenda-se a utilização da versão LTS mais recente, como a 20.x.
-
 ### 2. Verificar a instalação
 
 ```bash
 node -v
 npm -v
+
 ```
 
 ### 3. Instalar o pnpm
 
 ```bash
 npm install -g pnpm
+
 ```
 
 ### 4. Instalar as dependências do front-end
@@ -225,12 +247,14 @@ npm install -g pnpm
 ```bash
 cd frontend
 pnpm install
+
 ```
 
 ### 5. Executar o front-end
 
 ```bash
 pnpm dev
+
 ```
 
 ---
@@ -239,11 +263,15 @@ pnpm dev
 
 ### Desenvolvedores
 
-- [Amanda Luz](https://github.com/amandaaluzc) — alc2@cesar.school
-- [Lucas Menezes](https://github.com/Lucasmenezes08) — lms4@cesar.school
-- [Ricardo Sérgio Freitas](https://github.com/whosricardo) — rspff@cesar.school
-- [Thiago Fernandes](https://github.com/ThIagoMedeiros21) — tfm3@cesar.school
+* [Amanda Luz](https://github.com/amandaaluzc) — alc2@cesar.school
+* [Lucas Menezes](https://github.com/Lucasmenezes08) — lms4@cesar.school
+* [Ricardo Sérgio Freitas](https://github.com/whosricardo) — rspff@cesar.school
+* [Thiago Fernandes](https://github.com/ThIagoMedeiros21) — tfm3@cesar.school
 
 ### Orientadora
 
-- Natacha Targino
+* Natacha Targino
+
+```
+
+```
