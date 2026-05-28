@@ -15,6 +15,5 @@ describe('Formulário de login', () => {
         const submitButton = screen.getByRole('button', { name: 'Entrar' })
         await user.click(submitButton)
 
-        expect()
     })
 })
