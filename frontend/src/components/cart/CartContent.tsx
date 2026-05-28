@@ -25,7 +25,7 @@ export function CartContent() {
 
     if (items.length === 0) {
         return (
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={gentle}
@@ -38,7 +38,7 @@ export function CartContent() {
                 <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-md">
                     Looks like you haven't added any cards to your cart yet. Explore the marketplace to find what you're looking for!
                 </p>
-                <Link 
+                <Link
                     href="/marketplace"
                     className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors"
                 >
@@ -57,16 +57,16 @@ export function CartContent() {
                     const isFreeShipping = packageSubtotal >= FREE_SHIPPING_THRESHOLD;
                     const method = selectedShippingMethod[sellerName] || 'local';
                     const packageShipping = isFreeShipping ? 0 : (method === 'regional' ? 15.50 : (sellerItems[0]?.shippingCost || 0));
-                    
+
                     const amountAway = Math.max(0, FREE_SHIPPING_THRESHOLD - packageSubtotal);
                     const progressPercent = Math.min(100, (packageSubtotal / FREE_SHIPPING_THRESHOLD) * 100);
-                    
+
                     return (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ ...smooth, delay: index * 0.1 }}
-                            key={sellerName} 
+                            key={sellerName}
                             className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden"
                         >
                             <div className="bg-[#1e293b] text-white px-6 py-3 flex justify-between items-center">
@@ -76,13 +76,13 @@ export function CartContent() {
                                 </div>
                                 <span className="text-sm text-gray-300">Package {index + 1} of {Object.keys(groupedItems).length}</span>
                             </div>
-                            
+
                             <div className="p-6 flex flex-col gap-6">
                                 <div className="max-h-[280px] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
                                     {sellerItems.map(item => (
-                                        <CartItemCard 
-                                            key={item.id} 
-                                            item={item} 
+                                        <CartItemCard
+                                            key={item.id}
+                                            item={item}
                                             onRemove={() => removeItem(item.id)}
                                             onUpdateQuantity={(q) => updateQuantity(item.id, q)}
                                         />
@@ -93,19 +93,19 @@ export function CartContent() {
                                     <div className="flex-1 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4">
                                         <div className="flex justify-between items-center mb-2">
                                             <span className="text-sm text-gray-600 dark:text-gray-400">Package Subtotal:</span>
-                                            <span className="text-lg font-bold text-gray-900 dark:text-white">R$ {(packageSubtotal + packageShipping).toFixed(2)}</span>
+                                            <span className="text-lg font-bold text-gray-900 dark:text-white">$ {(packageSubtotal + packageShipping).toFixed(2)}</span>
                                         </div>
                                         <div className="space-y-1 text-sm text-gray-500 dark:text-gray-400">
                                             <div className="flex justify-between">
                                                 <span>Items ({sellerItems.reduce((acc, i) => acc + i.quantity, 0)})</span>
-                                                <span>R$ {packageSubtotal.toFixed(2)}</span>
+                                                <span>$ {packageSubtotal.toFixed(2)}</span>
                                             </div>
                                             <div className="flex justify-between">
                                                 <span>Shipping</span>
-                                                <span>R$ {packageShipping.toFixed(2)}</span>
+                                                <span>$ {packageShipping.toFixed(2)}</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-sm">
                                             {isFreeShipping ? (
                                                 <p className="text-green-600 dark:text-green-400 font-semibold">
@@ -116,16 +116,16 @@ export function CartContent() {
                                                     You're <span className="font-semibold text-blue-600 dark:text-blue-400">R$ {amountAway.toFixed(2)} away</span> from free shipping with this seller!
                                                 </p>
                                             )}
-                                            
+
                                             {!isFreeShipping && (
                                                 <button className="text-blue-600 dark:text-blue-400 font-medium hover:underline mt-1">
                                                     Shop this seller
                                                 </button>
                                             )}
-                                            
+
                                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-3">
-                                                <div 
-                                                    className={`h-1.5 rounded-full transition-all duration-500 ${isFreeShipping ? 'bg-green-500' : 'bg-blue-600'}`} 
+                                                <div
+                                                    className={`h-1.5 rounded-full transition-all duration-500 ${isFreeShipping ? 'bg-green-500' : 'bg-blue-600'}`}
                                                     style={{ width: `${progressPercent}%` }}
                                                 ></div>
                                             </div>
@@ -137,12 +137,12 @@ export function CartContent() {
                                         <div className="space-y-2">
                                             <label className="flex items-center justify-between p-3 border border-blue-200 dark:border-blue-900/50 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg cursor-pointer">
                                                 <div className="flex gap-3 items-start">
-                                                    <input 
-                                                        type="radio" 
-                                                        name={`shipping-${sellerName}`} 
+                                                    <input
+                                                        type="radio"
+                                                        name={`shipping-${sellerName}`}
                                                         checked={method === 'local'}
                                                         onChange={() => setShippingMethod(sellerName, 'local')}
-                                                        className="mt-1" 
+                                                        className="mt-1"
                                                     />
                                                     <div>
                                                         <div className="text-sm font-medium text-gray-900 dark:text-white">Local Warehouse</div>
@@ -151,17 +151,17 @@ export function CartContent() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <span className="text-sm font-medium text-gray-900 dark:text-white">R$ {(sellerItems[0]?.shippingCost || 0).toFixed(2)}</span>
+                                                <span className="text-sm font-medium text-gray-900 dark:text-white">$ {(sellerItems[0]?.shippingCost || 0).toFixed(2)}</span>
                                             </label>
-                                            
+
                                             <label className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-800 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                                 <div className="flex gap-3 items-start">
-                                                    <input 
-                                                        type="radio" 
-                                                        name={`shipping-${sellerName}`} 
+                                                    <input
+                                                        type="radio"
+                                                        name={`shipping-${sellerName}`}
                                                         checked={method === 'regional'}
                                                         onChange={() => setShippingMethod(sellerName, 'regional')}
-                                                        className="mt-1" 
+                                                        className="mt-1"
                                                     />
                                                     <div>
                                                         <div className="text-sm font-medium text-gray-900 dark:text-white">Regional Warehouse</div>
@@ -170,7 +170,7 @@ export function CartContent() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <span className="text-sm font-medium text-gray-900 dark:text-white">R$ {isFreeShipping ? '0.00' : '15.50'}</span>
+                                                <span className="text-sm font-medium text-gray-900 dark:text-white">$ {isFreeShipping ? '0.00' : '15.50'}</span>
                                             </label>
                                         </div>
                                     </div>
@@ -179,10 +179,10 @@ export function CartContent() {
                         </motion.div>
                     );
                 })}
-                
+
                 {/* Removed bottom actions */}
             </div>
-            
+
             <div className="w-full lg:w-[380px] shrink-0 space-y-6 sticky top-24 self-start">
                 <CartSummary />
             </div>

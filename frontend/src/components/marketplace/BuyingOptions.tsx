@@ -46,7 +46,7 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
             sellerName: seller,
             shippingCost: shippingCost
         });
-        
+
         setIsModalOpen(true);
     };
 
@@ -63,7 +63,7 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                         <span className="text-xs font-bold text-sky-600 dark:text-sky-400 uppercase">Direto da Loja</span>
                         <span className="text-[10px] font-bold px-2 py-0.5 bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 rounded-full uppercase">Premium</span>
                     </div>
-                    
+
                     <div className="flex items-end gap-2">
                         <span className="text-3xl font-bold text-gray-900 dark:text-white">$ {card.price.toFixed(2)}</span>
                         <span className="text-sm font-bold text-green-600 dark:text-green-400 mb-1">NM</span>
@@ -84,7 +84,7 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                         </li>
                     </ul>
 
-                    <button 
+                    <button
                         onClick={() => handleAddToCart("TCGHub Direto", card.price, 0)}
                         className="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
                     >
@@ -98,9 +98,9 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                     <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase">Menor preço de parceiros</span>
                     </div>
-                    
+
                     <div className="flex items-end gap-2">
-                        <span className="text-2xl font-bold text-gray-900 dark:text-white">R$ {partnerPrice.toFixed(2)}</span>
+                        <span className="text-2xl font-bold text-gray-900 dark:text-white">$ {partnerPrice.toFixed(2)}</span>
                         <span className="text-sm font-bold text-green-600 dark:text-green-400 mb-1">{partnerCondition}</span>
                         {partnerLanguage && <span className="text-xs text-gray-400 mb-1">({partnerLanguage})</span>}
                     </div>
@@ -113,10 +113,10 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                                 <span className="ml-0.5 text-gray-500">5.0</span>
                             </span>
                         </div>
-                        <div className="text-gray-500">+ R$ 2.50 frete (Grátis acima de R$ 50)</div>
+                        <div className="text-gray-500">+ $ 2.50 frete (Grátis acima de $ 50)</div>
                     </div>
 
-                    <button 
+                    <button
                         onClick={() => handleAddToCart(sellerName, partnerPrice, 2.50, true)}
                         className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors text-sm"
                     >
@@ -140,24 +140,24 @@ export function BuyingOptions({ card }: BuyingOptionsProps) {
                     >
                         <CheckCircle size={64} className="text-blue-600 dark:text-blue-400" />
                     </motion.div>
-                    
+
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-900">
                         Produto adicionado!
                     </h2>
-                    
+
                     <p className="text-gray-600">
                         <strong>{card.title}</strong> foi adicionado ao seu carrinho com sucesso.
                     </p>
 
                     <div className="w-full pt-4 flex flex-col gap-3">
-                        <Link 
-                            href="/cart" 
+                        <Link
+                            href="/cart"
                             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
                         >
                             Ir para o carrinho
                         </Link>
-                        
-                        <button 
+
+                        <button
                             onClick={() => setIsModalOpen(false)}
                             className="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 py-3 rounded-lg font-medium transition-colors"
                         >

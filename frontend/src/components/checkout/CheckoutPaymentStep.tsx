@@ -22,29 +22,29 @@ interface MethodOption {
 }
 
 const paymentMethods: MethodOption[] = [
-    { 
-        id: 'CREDIT_CARD', 
-        title: 'Cartão de Crédito', 
-        description: 'Até 12x sem juros (Aprovação imediata)', 
-        icon: <CreditCard className="size-5" /> 
+    {
+        id: 'CREDIT_CARD',
+        title: 'Cartão de Crédito',
+        description: 'Até 12x sem juros (Aprovação imediata)',
+        icon: <CreditCard className="size-5" />
     },
-    { 
-        id: 'PIX', 
-        title: 'Pix', 
-        description: 'Desconto extra e liberação em minutos', 
-        icon: <QrCode className="size-5" /> 
+    {
+        id: 'PIX',
+        title: 'Pix',
+        description: 'Desconto extra e liberação em minutos',
+        icon: <QrCode className="size-5" />
     },
-    { 
-        id: 'BOLETO', 
-        title: 'Boleto Bancário', 
-        description: 'Compensação em até 2 dias úteis', 
-        icon: <Receipt className="size-5" /> 
+    {
+        id: 'BOLETO',
+        title: 'Boleto Bancário',
+        description: 'Compensação em até 2 dias úteis',
+        icon: <Receipt className="size-5" />
     },
-    { 
-        id: 'DEBIT_CARD', 
-        title: 'Cartão de Débito', 
-        description: 'Apenas pagamento à vista', 
-        icon: <CreditCard className="size-5" /> 
+    {
+        id: 'DEBIT_CARD',
+        title: 'Cartão de Débito',
+        description: 'Apenas pagamento à vista',
+        icon: <CreditCard className="size-5" />
     },
 ];
 
@@ -54,11 +54,11 @@ export function CheckoutPaymentStep() {
         payment?.paymentMethod || 'CREDIT_CARD'
     );
 
-    const { 
-        register, 
-        handleSubmit, 
+    const {
+        register,
+        handleSubmit,
         setValue,
-        formState: { errors } 
+        formState: { errors }
     } = useForm<PaymentType>({
         resolver: resolver(paymentSchema),
         defaultValues: payment || {
@@ -96,7 +96,7 @@ export function CheckoutPaymentStep() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <input type="hidden" {...register('paymentMethod')} />
-                
+
                 {/* Method Options Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {paymentMethods.map((method) => {
@@ -111,20 +111,20 @@ export function CheckoutPaymentStep() {
                                 transition={bouncy}
                                 className={cn(
                                     "flex items-start gap-4 p-4 rounded-xl border cursor-pointer select-none transition-all duration-200",
-                                    isSelected 
-                                        ? "bg-sky-50/50 dark:bg-sky-950/10 border-sky-600 shadow-md shadow-sky-600/5 ring-1 ring-sky-600" 
+                                    isSelected
+                                        ? "bg-sky-50/50 dark:bg-sky-950/10 border-sky-600 shadow-md shadow-sky-600/5 ring-1 ring-sky-600"
                                         : "bg-white dark:bg-gray-950 border-gray-100 dark:border-gray-900 hover:border-gray-300 dark:hover:border-gray-700"
                                 )}
                             >
                                 <div className={cn(
                                     "p-2 rounded-lg shrink-0",
-                                    isSelected 
-                                        ? "bg-sky-600 text-white" 
+                                    isSelected
+                                        ? "bg-sky-600 text-white"
                                         : "bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-400"
                                 )}>
                                     {method.icon}
                                 </div>
-                                
+
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between">
                                         <h4 className="font-semibold text-sm text-gray-900 dark:text-white">
@@ -145,7 +145,7 @@ export function CheckoutPaymentStep() {
 
                 {/* Card Fields (AnimatePresence not strictly required as conditional renders are fast enough, but we make it look outstanding) */}
                 {isCardSelected && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="bg-gray-50/50 dark:bg-gray-900/30 p-5 rounded-xl border border-gray-100 dark:border-gray-900 space-y-4"
@@ -158,10 +158,10 @@ export function CheckoutPaymentStep() {
                         <Field data-invalid={!!errors.cardName}>
                             <FieldLabel htmlFor="cardName">Nome Impresso no Cartão</FieldLabel>
                             <FieldContent>
-                                <Input 
-                                    id="cardName" 
-                                    placeholder="Ex: LUCAS S MENEZES" 
-                                    {...register('cardName')} 
+                                <Input
+                                    id="cardName"
+                                    placeholder="Ex: LUCAS S MENEZES"
+                                    {...register('cardName')}
                                     aria-invalid={!!errors.cardName}
                                 />
                                 <FieldError errors={[errors.cardName]} />
@@ -172,11 +172,11 @@ export function CheckoutPaymentStep() {
                         <Field data-invalid={!!errors.cardNumber}>
                             <FieldLabel htmlFor="cardNumber">Número do Cartão</FieldLabel>
                             <FieldContent>
-                                <Input 
-                                    id="cardNumber" 
-                                    placeholder="0000 0000 0000 0000" 
+                                <Input
+                                    id="cardNumber"
+                                    placeholder="0000 0000 0000 0000"
                                     maxLength={16}
-                                    {...register('cardNumber')} 
+                                    {...register('cardNumber')}
                                     aria-invalid={!!errors.cardNumber}
                                 />
                                 <FieldError errors={[errors.cardNumber]} />
@@ -188,11 +188,11 @@ export function CheckoutPaymentStep() {
                             <Field data-invalid={!!errors.expiryDate}>
                                 <FieldLabel htmlFor="expiryDate">Validade</FieldLabel>
                                 <FieldContent>
-                                    <Input 
-                                        id="expiryDate" 
-                                        placeholder="MM/AA" 
+                                    <Input
+                                        id="expiryDate"
+                                        placeholder="MM/AA"
                                         maxLength={5}
-                                        {...register('expiryDate')} 
+                                        {...register('expiryDate')}
                                         aria-invalid={!!errors.expiryDate}
                                     />
                                     <FieldError errors={[errors.expiryDate]} />
@@ -203,12 +203,12 @@ export function CheckoutPaymentStep() {
                             <Field data-invalid={!!errors.cvv}>
                                 <FieldLabel htmlFor="cvv">CVV</FieldLabel>
                                 <FieldContent>
-                                    <Input 
-                                        id="cvv" 
-                                        placeholder="123" 
+                                    <Input
+                                        id="cvv"
+                                        placeholder="123"
                                         maxLength={4}
                                         type="password"
-                                        {...register('cvv')} 
+                                        {...register('cvv')}
                                         aria-invalid={!!errors.cvv}
                                     />
                                     <FieldError errors={[errors.cvv]} />
@@ -219,7 +219,7 @@ export function CheckoutPaymentStep() {
                 )}
 
                 {selectedMethod === 'PIX' && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="bg-green-50/30 dark:bg-green-950/10 p-5 rounded-xl border border-green-100/50 dark:border-green-950/30 text-center py-6"
@@ -235,7 +235,7 @@ export function CheckoutPaymentStep() {
                 )}
 
                 {selectedMethod === 'BOLETO' && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="bg-amber-50/30 dark:bg-amber-950/10 p-5 rounded-xl border border-amber-100/50 dark:border-amber-950/30 text-center py-6"
@@ -251,7 +251,7 @@ export function CheckoutPaymentStep() {
                 )}
 
                 {selectedMethod === 'CASH' && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="bg-sky-50/30 dark:bg-sky-950/10 p-5 rounded-xl border border-sky-100/50 dark:border-sky-950/30 text-center py-6"
@@ -268,18 +268,18 @@ export function CheckoutPaymentStep() {
 
                 {/* Back / Next Buttons */}
                 <div className="flex gap-4 pt-4 border-t border-gray-100 dark:border-gray-900 mt-6">
-                    <Button 
-                        type="button" 
-                        variant="outline" 
+                    <Button
+                        type="button"
+                        variant="outline"
                         onClick={prevStep}
                         className="flex-1 h-11 font-semibold flex items-center justify-center gap-2"
                     >
                         <ArrowLeft className="size-4" />
                         Voltar para Entrega
                     </Button>
-                    
-                    <Button 
-                        type="submit" 
+
+                    <Button
+                        type="submit"
                         className="flex-1 h-11 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg shadow-sm shadow-sky-600/10"
                     >
                         Revisar e Confirmar

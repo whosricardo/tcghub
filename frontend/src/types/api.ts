@@ -119,6 +119,10 @@ export interface PaymentResponse {
     orderId: number;
 }
 
+export interface PaymentUpdateRequest {
+    status: PaymentStatus;
+}
+
 // Shipment DTOs
 export interface ShipmentRequest {
     trackingCode?: string;

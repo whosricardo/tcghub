@@ -7,13 +7,13 @@ import { useCheckoutMutation } from '@/hooks/useCheckout';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
-import { 
-    AlertTriangle, 
-    CheckCircle2, 
-    ArrowLeft, 
-    MapPin, 
-    CreditCard, 
-    Package, 
+import {
+    AlertTriangle,
+    CheckCircle2,
+    ArrowLeft,
+    MapPin,
+    CreditCard,
+    Package,
     Lock,
     QrCode,
     Receipt,
@@ -23,7 +23,7 @@ import {
 export function CheckoutConfirmStep() {
     const { items, getCartTotal, getShippingTotal } = useCartStore();
     const { address, payment, submissionStatus, error, prevStep } = useCheckoutStore();
-    
+
     const checkoutMutation = useCheckoutMutation();
 
     const cartTotal = getCartTotal();
@@ -32,7 +32,7 @@ export function CheckoutConfirmStep() {
 
     const handleConfirmOrder = async () => {
         if (!payment?.paymentMethod) return;
-        
+
         try {
             await checkoutMutation.mutateAsync({
                 paymentMethod: payment.paymentMethod,
@@ -113,7 +113,7 @@ export function CheckoutConfirmStep() {
                         </h4>
                         <div className="text-sm text-gray-700 dark:text-gray-300">
                             <p className="font-semibold text-gray-900 dark:text-white">{getPaymentName()}</p>
-                            
+
                             {(payment?.paymentMethod === 'CREDIT_CARD' || payment?.paymentMethod === 'DEBIT_CARD') && (
                                 <div className="mt-2 text-xs text-gray-500 font-mono space-y-0.5">
                                     <p>Cartão: {getMaskedCardNumber()}</p>
@@ -144,7 +144,7 @@ export function CheckoutConfirmStep() {
                             <Package className="size-3.5 text-sky-600" />
                             Itens do Pedido ({items.length})
                         </h4>
-                        
+
                         <div className="max-h-[160px] overflow-y-auto pr-1 divide-y divide-gray-50 dark:divide-gray-900">
                             {items.map((item) => (
                                 <div key={item.id} className="flex justify-between items-center py-2 first:pt-0 last:pb-0 text-xs">
@@ -154,7 +154,7 @@ export function CheckoutConfirmStep() {
                                     </div>
                                     <div className="text-right shrink-0">
                                         <p className="font-bold text-gray-800 dark:text-gray-200">
-                                            R$ {(item.price * item.quantity).toFixed(2)}
+                                            $ {(item.price * item.quantity).toFixed(2)}
                                         </p>
                                         <p className="text-gray-400 text-[10px]">Qtd: {item.quantity}</p>
                                     </div>
@@ -168,18 +168,18 @@ export function CheckoutConfirmStep() {
                         <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                             <div className="flex justify-between">
                                 <span>Cartas</span>
-                                <span className="font-medium text-gray-900 dark:text-white">R$ {cartTotal.toFixed(2)}</span>
+                                <span className="font-medium text-gray-900 dark:text-white">$ {cartTotal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span>Frete Total</span>
-                                <span className="font-medium text-gray-900 dark:text-white">R$ {shippingTotal.toFixed(2)}</span>
+                                <span className="font-medium text-gray-900 dark:text-white">$ {shippingTotal.toFixed(2)}</span>
                             </div>
-                            
+
                             <Separator className="my-2 bg-sky-100/50 dark:bg-sky-950/30" />
-                            
+
                             <div className="flex justify-between text-base font-bold text-gray-900 dark:text-white">
                                 <span>Total a Pagar</span>
-                                <span className="text-sky-600 dark:text-sky-400">R$ {grandTotal.toFixed(2)}</span>
+                                <span className="text-sky-600 dark:text-sky-400">$ {grandTotal.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>
@@ -199,9 +199,9 @@ export function CheckoutConfirmStep() {
 
             {/* CTA action buttons */}
             <div className="flex gap-4 pt-4 border-t border-gray-100 dark:border-gray-900 mt-6">
-                <Button 
-                    type="button" 
-                    variant="outline" 
+                <Button
+                    type="button"
+                    variant="outline"
                     onClick={prevStep}
                     disabled={isSubmitting}
                     className="flex-1 h-11 font-semibold flex items-center justify-center gap-2"
@@ -209,9 +209,9 @@ export function CheckoutConfirmStep() {
                     <ArrowLeft className="size-4" />
                     Voltar para Pagamento
                 </Button>
-                
-                <Button 
-                    type="button" 
+
+                <Button
+                    type="button"
                     onClick={handleConfirmOrder}
                     disabled={isSubmitting}
                     className="flex-1 h-11 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-lg shadow-sm shadow-sky-600/10 flex items-center justify-center gap-2"
@@ -224,7 +224,7 @@ export function CheckoutConfirmStep() {
                     ) : (
                         <>
                             <Lock className="size-4" />
-                            <span>Finalizar Compra (R$ {grandTotal.toFixed(2)})</span>
+                            <span>Finalizar Compra ($ {grandTotal.toFixed(2)})</span>
                         </>
                     )}
                 </Button>
