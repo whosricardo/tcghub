@@ -1,6 +1,6 @@
 'use client'
 
-import { Logout } from "@/app/api/auth/logout/route"
+import { Logout } from "@/app/api/auth/logout/actions"
 
 export function LogoutButton() {
   return (

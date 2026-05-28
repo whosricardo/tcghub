@@ -13,7 +13,7 @@ export default async function Navbar (){
     const isAuthenticated = cookiesStorage.has('access_token')
 
     return (
-        <nav className="sticky flex flex-wrap items-center min-w-full py-4 px-6 border-b border-b-gray-300">
+        <nav className="sticky top-0 z-[50] flex flex-wrap items-center min-w-full py-4 px-6 border-b border-b-gray-300 bg-white dark:bg-gray-950">
             <NavLogoLink/>
             
             <section className="flex items-center gap-4 ml-auto md:order-last">

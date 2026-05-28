@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
     SidebarTrigger,
 } from '@/components/ui/sidebar'
-import { LayoutGrid, Database, Users, WalletCards , User , LogOut, Box} from 'lucide-react'
+import { LayoutGrid, Database, Users, WalletCards , User , LogOut, Box, ShoppingCart, Activity, FileText, Tag} from 'lucide-react'
 import Link from 'next/link'
 import { AvatarAdmin } from './avatarAdmin'
 import { usePathname } from 'next/navigation'
@@ -36,9 +36,33 @@ const navItems = [
         isActive: true,
     },
     {
+        title: 'Anúncios',
+        url: '/admin/listings',
+        icon: Tag,
+        isActive: false,
+    },
+    {
         title: 'Usuários',
         url: '/admin/users',
         icon: Users,
+        isActive: false,
+    },
+    {
+        title: 'Pedidos',
+        url: '/admin/orders',
+        icon: ShoppingCart,
+        isActive: false,
+    },
+    {
+        title: 'Funções & Triggers',
+        url: '/admin/functions',
+        icon: Activity,
+        isActive: false,
+    },
+    {
+        title: 'Consultas & Views',
+        url: '/admin/reports',
+        icon: FileText,
         isActive: false,
     },
 ]
